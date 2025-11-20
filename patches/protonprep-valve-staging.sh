@@ -23,6 +23,8 @@ apply_all_in_dir() {
     pushd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
+    echo "VKD3D-PROTON: Add busy-wait path for shared semaphores on Nvidia"
+    apply_patch "../patches/vkd3d-proton/vkd3d-Add-busy-wait-path-for-shared-semaphores-on-Nv.patch"
     popd
 
     pushd dxvk-nvapi
