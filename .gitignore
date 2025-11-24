@@ -1,3 +1,5 @@
+/build
+/contrib
 /dist
 /dist-*
 /obj-*
@@ -5,3 +7,5 @@
 
 /.vagrant/
 /vagrant_share/
+
+patchlog.txt
