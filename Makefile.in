@@ -935,6 +935,7 @@ $(OBJ)/.wine-post-source:
 	-cd $(WINE_SRC) && tools/make_specfiles
 	touch $@
 
+WINEOPENXR_aarch64_PE_ARCHS = arm64ec x86_64
 WINEOPENXR64_JSON := $(DST_DIR)/share/openxr/wineopenxr64.json
 WINEOPENXR64_JSON_SRC := $(SRCDIR)/wine/dlls/wineopenxr/wineopenxr64.json
 
