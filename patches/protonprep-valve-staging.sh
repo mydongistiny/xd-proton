@@ -266,6 +266,9 @@ apply_all_in_dir() {
     echo "WINE: -CUSTOM- Dynamically relocate .exes, improving compatibility with modding / hooking tools"
     apply_patch "../patches/proton/0001-server-Dynamically-relocate-.exes-by-default-too.patch"
 
+    echo "WINE: -CUSTOM- Update wine's internal vkd3d version to 1.19"
+    apply_patch "../patches/wine/wine-libs-vkd3d-Update-to-version.patch"
+
     echo "WINE: RUN AUTOCONF TOOLS/MAKE_REQUESTS"
     autoreconf -f
     ./tools/make_requests
