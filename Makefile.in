@@ -27,7 +27,7 @@ SHELL := /bin/bash
 TARGET_ARCH ?= x86_64
 
 ifeq ($(TARGET_ARCH),x86_64)
-	STEAMRT_IMAGE ?= ghcr.io/open-wine-components/umu-sdk:latest
+	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/x86_64:4.0.20260331.220802-0
 else ifeq ($(TARGET_ARCH),arm64)
 	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/arm64-llvm:4.0.20260331.220802-0
 else
@@ -179,6 +179,20 @@ $(eval $(call rules-source,dav1d,$(SRCDIR)/dav1d))
 $(eval $(call rules-meson,dav1d,i386,unix))
 $(eval $(call rules-meson,dav1d,x86_64,unix))
 $(eval $(call rules-meson,dav1d,aarch64,unix))
+
+##
+## libsoup
+##
+
+LIBSOUP_MESON_ARGS = \
+	-Ddocs=disabled \
+	-Dautobahn=disabled \
+	-Dtls_check=false
+
+$(eval $(call rules-source,libsoup,$(SRCDIR)/libsoup))
+$(eval $(call rules-meson,libsoup,i386,unix))
+$(eval $(call rules-meson,libsoup,x86_64,unix))
+$(eval $(call rules-meson,libsoup,aarch64,unix))
 
 ##
 ## libxml2
@@ -414,7 +428,7 @@ GST_GOOD_MESON_ARGS += \
 	-Dtests=disabled \
 	-Ddoc=disabled
 
-GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
+GST_GOOD_DEPENDS = gst_orc gstreamer gst_base libsoup
 GST_GOOD_DEPENDS += libxml2
 GST_GOOD_HOST_DEPENDS = gst_orc
 
