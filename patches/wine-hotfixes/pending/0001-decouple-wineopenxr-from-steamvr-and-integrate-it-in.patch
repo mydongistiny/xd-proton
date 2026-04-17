@@ -90,7 +90,7 @@ index 00000000000..5be3dd264a6
 +MODULE     = wineopenxr.dll
 +UNIXLIB    = wineopenxr.so
 +IMPORTS    = advapi32 user32 dxgi winevulkan
-+UNIX_LIBS  = -lopenxr_loader
++UNIX_LIBS  = -lopenxr_loader -lvulkan
 +
 +EXTRADEFS  = -DWINE_NO_LONG_TYPES
 +
