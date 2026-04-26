@@ -14980,7 +14980,7 @@ index 00000000000..35a64e22dc9
 +  vulkan_create_info = *createInfo->vulkanCreateInfo;
 +  callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_INSTANCE_CALLBACK;
 +  callback.native_create_callback = (UINT64)(ULONG_PTR)g_vk_create_instance_callback;
-+  callback.context = &context;
++  callback.context = (UINT64)&context;
 +  callback.pNext = vulkan_create_info.pNext;
 +  vulkan_create_info.pNext = &callback;
 +
@@ -15015,7 +15015,7 @@ index 00000000000..35a64e22dc9
 +  vulkan_create_info = *createInfo->vulkanCreateInfo;
 +  callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_DEVICE_CALLBACK;
 +  callback.native_create_callback = (UINT64)(ULONG_PTR)g_vk_create_device_callback;
-+  callback.context = &context;
++  callback.context = (UINT64)&context;
 +  callback.pNext = vulkan_create_info.pNext;
 +  vulkan_create_info.pNext = &callback;
 +
