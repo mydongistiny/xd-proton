@@ -1,0 +1,25 @@
+From 72ae1fa9cebc70792b95c345ec2c3cfa82cddaad Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty
+ <45927311+Etaash-mathamsetty@users.noreply.github.com>
+Date: Sat, 15 Nov 2025 23:22:11 -0600
+Subject: [PATCH 019/113] atidxx: Remove unused header.
+
+---
+ dlls/atidxx64/main.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/dlls/atidxx64/main.c b/dlls/atidxx64/main.c
+index b1f3240b219..2f8355cb34f 100644
+--- a/dlls/atidxx64/main.c
++++ b/dlls/atidxx64/main.c
+@@ -26,7 +26,6 @@
+ #include "winbase.h"
+ #include "winternl.h"
+ #include "wine/debug.h"
+-#include "wine/heap.h"
+ 
+ #include "wine/vulkan.h"
+ #include "wine/asm.h"
+-- 
+2.54.0
+

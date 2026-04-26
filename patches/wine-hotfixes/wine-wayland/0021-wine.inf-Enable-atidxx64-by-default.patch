@@ -1,0 +1,26 @@
+From cf043b6ce200a8424232acb2ee26af868b2a8d92 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty
+ <45927311+Etaash-mathamsetty@users.noreply.github.com>
+Date: Mon, 23 Mar 2026 14:39:44 -0500
+Subject: [PATCH 021/113] wine.inf: Enable atidxx64 by default.
+
+bugs incoming ?
+---
+ loader/wine.inf.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 756c2ea2f81..6b8a385e046 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -1491,7 +1491,6 @@ HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vccorlib140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"atiadlxx",,"disabled"
+-HKCU,Software\Wine\DllOverrides,"atidxx64",,"disabled"
+ HKCU,Software\Wine\DllOverrides,"nvcuda",0x2,"disabled"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140_1",0x2,"native,builtin"
+ HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\4.8,"4.8",0x10001,1
+-- 
+2.54.0
+
