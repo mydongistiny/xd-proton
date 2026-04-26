@@ -8,7 +8,7 @@
 >
 > or contact me on Discord about the issue: https://discord.gg/6y3BdzC
 
-# GE-Proton
+# XD-Proton
 
 > [!Warning]
 > **Running non-Steam games with GE-Proton outside of Steam is only supported using [umu](https://github.com/Open-Wine-Components/umu-launcher):**
