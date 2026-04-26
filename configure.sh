@@ -184,7 +184,9 @@ function configure() {
     if [[ -n "$CONTAINER_MOUNT_OPTS" ]]; then
       echo "CONTAINER_MOUNT_OPTS := $CONTAINER_MOUNT_OPTS"
     fi
-    echo "ENABLE_CCACHE := 1"
+    if [[ -n "$arg_enable_ccache" ]]; then
+      echo "ENABLE_CCACHE := 1"
+    fi
 
     # Include base
     echo ""
@@ -205,6 +207,7 @@ arg_target_arch=""
 arg_container_engine=""
 arg_docker_opts=""
 arg_relabel_volumes=""
+arg_enable_ccache=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -252,6 +255,8 @@ function parse_args() {
       val_used=1
     elif [[ $arg = --relabel-volumes ]]; then
       arg_relabel_volumes="1"
+    elif [[ $arg = --enable-ccache ]]; then
+      arg_enable_ccache="1"
     elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
       arg_protonsdk_image="$val"
@@ -306,6 +311,8 @@ usage() {
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""
   "$1" "    --relabel-volumes Bind-mounted volumes will be relabeled. Use with caution."
+  "$1" ""
+  "$1" "    --enable-ccache Mount \$CCACHE_DIR or \$HOME/.ccache inside of the container and use ccache for the build."
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
