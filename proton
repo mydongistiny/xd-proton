@@ -1788,30 +1788,6 @@ class Session:
 
         return app_config
 
-    def get_primary_monitor(self):
-        try:
-            result = subprocess.run(
-                ["xrandr"],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-        except FileNotFoundError:
-            print("Error: xrandr is not installed or not in PATH.", file=sys.stderr)
-            sys.exit(1)
-        except subprocess.CalledProcessError as e:
-            print(f"Error: failed to run xrandr: {e}", file=sys.stderr)
-            sys.exit(1)
-
-        for line in result.stdout.splitlines():
-            # Example:
-            # HDMI-A-1 connected primary 3840x2160+3840+0 ...
-            match = re.match(r"^(\S+)\s+connected\s+primary\b", line)
-            if match:
-                return match.group(1)
-
-        return None
-
     def init_session(self, update_prefix_files):
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
@@ -2213,13 +2189,10 @@ class Session:
             # Set primary monitor if given
             if "PROTON_WAYLAND_MONITOR" in self.env:
                 self.env["WAYLANDDRV_PRIMARY_MONITOR"] = self.env["PROTON_WAYLAND_MONITOR"]
-            # Try to determine the primary monitor if not given.
-            if "WAYLANDDRV_PRIMARY_MONITOR" not in self.env:
-                primary_monitor = self.get_primary_monitor()
-                if primary_monitor:
-                    self.env["WAYLANDDRV_PRIMARY_MONITOR"] = primary_monitor
             self.dlloverrides["winex11.drv"] = "d"
             self.dlloverrides["winewayland.drv"] = "b"
+            # This is required for OpenGL to work on winewayland
+            self.env["WINE_USE_EGL"] = "1"
             if "WINE_WAYLAND_HACKS" not in self.env:
                 self.env["WINE_WAYLAND_HACKS"] = "1"
             """
@@ -2230,6 +2203,14 @@ class Session:
             # Steam input does not work on wayland
             if "PROTON_NO_STEAMINPUT" not in self.env:
                 self.env["PROTON_NO_STEAMINPUT"] = "1"
+                # When steam input is disabled we need the ignored controllers to work again
+                if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
+                    del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
+                # Some other steam input related options we need to remove
+                if "SteamVirtualGamepadInfo" in self.env:
+                    del self.env["SteamVirtualGamepadInfo"]
+                if "SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD" in self.env:
+                    del self.env["SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD"]
             # IME implementation on some compositors is broken
             if "WAYLANDDRV_NO_IME" not in self.env:
                 self.env["WAYLANDDRV_NO_IME"] = "1"
