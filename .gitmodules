@@ -109,3 +109,6 @@
 [submodule "libsoup"]
 	path = libsoup
 	url = https://github.com/GNOME/libsoup.git
+[submodule "pyroveil"]
+	path = pyroveil
+	url = https://github.com/HansKristian-Work/pyroveil.git
