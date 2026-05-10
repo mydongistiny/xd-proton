@@ -1,7 +1,7 @@
-From 4d5c2c7dfc46759e083cf48931206aa6be2a2f2f Mon Sep 17 00:00:00 2001
+From 36e894fef455434ae5cf3ab7719b061361265826 Mon Sep 17 00:00:00 2001
 From: Ashley Hauck <22095-khyperia@users.noreply.gitlab.winehq.org>
 Date: Thu, 1 Jan 2026 16:15:28 +0100
-Subject: [PATCH 002/113] winewayland: Support wl_seat version 8.
+Subject: [PATCH 002/119] winewayland: Support wl_seat version 8.
 
 ---
  dlls/winewayland.drv/wayland.c         |  2 +-

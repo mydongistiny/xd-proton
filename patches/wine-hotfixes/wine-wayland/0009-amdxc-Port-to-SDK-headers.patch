@@ -1,8 +1,8 @@
-From 9b278f52d11e922d3b629d6f9e48f1124fa24119 Mon Sep 17 00:00:00 2001
+From 4061519eb9b93bf422fef46bac5cd7e9270abd5b Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 22 Aug 2025 00:59:57 -0400
-Subject: [PATCH 009/113] amdxc: Port to SDK headers.
+Subject: [PATCH 009/119] amdxc: Port to SDK headers.
 
 ---
  dlls/amdxc64/amdxc_interfaces.idl | 274 +++++++++++++++++++++++++++++-

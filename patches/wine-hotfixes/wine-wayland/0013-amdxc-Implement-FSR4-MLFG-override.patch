@@ -1,8 +1,8 @@
-From 4537a2e984f7652115360e8a624b99b8b0a111f9 Mon Sep 17 00:00:00 2001
+From f4d6226bfc3fc172b9a0c7d4ce5dd4844e7029b9 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 10 Dec 2025 19:25:44 -0600
-Subject: [PATCH 013/113] amdxc: Implement FSR4 MLFG override.
+Subject: [PATCH 013/119] amdxc: Implement FSR4 MLFG override.
 
 ---
  dlls/amdxc64/main.c | 70 ++++++++++++++++++++++++++++++++++++++-------

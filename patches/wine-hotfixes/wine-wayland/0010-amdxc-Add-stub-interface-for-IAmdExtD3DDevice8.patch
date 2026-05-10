@@ -1,8 +1,8 @@
-From 916f3214c9a4165cf2feb76909f8346c43168a96 Mon Sep 17 00:00:00 2001
+From 75614650cdff490b13c39791075897ad9f2068b3 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 23 Aug 2025 10:35:00 -0400
-Subject: [PATCH 010/113] amdxc: Add stub interface for IAmdExtD3DDevice8.
+Subject: [PATCH 010/119] amdxc: Add stub interface for IAmdExtD3DDevice8.
 
 Fixes FSR 4.0.2
 ---
