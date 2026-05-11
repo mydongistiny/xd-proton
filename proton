@@ -1827,6 +1827,7 @@ def default_compat_config():
             "2176900",  # Fablecraft
             "2853730",  # Skull and Bones
             "2079120",  # Warudo
+            "1761380",  # Otherworld Legends (just to disable nvcuda.dll)
         ]:
             ret.add("disablenvapi")
 
