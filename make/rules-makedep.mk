@@ -81,6 +81,10 @@ $$(OBJ)/.$(1)-$(3)-build:
 	$$(MAKE)
 	cd "$$($(2)_$(3)_OBJ)" && env $$($(2)_$(3)_ENV) \
 	$$(MAKE) install
+	if [ "$(3)" == "aarch64" ]; then \
+		mkdir -p $$($(2)_$(3)_DST)/lib/wine/aarch64-windows/ && \
+		mv $$($(2)_$(3)_DST)/lib/wine/arm64ec-windows/* $$($(2)_$(3)_DST)/lib/wine/aarch64-windows/; \
+	fi
 	touch $$@
 endif
 endef
