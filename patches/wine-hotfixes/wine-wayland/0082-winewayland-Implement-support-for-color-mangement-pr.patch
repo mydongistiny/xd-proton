@@ -1,8 +1,8 @@
-From 0364c4200066d546b944dc0d64e613af9f3c4767 Mon Sep 17 00:00:00 2001
+From e6c809757159518abe3e472efde135f98d2bdf01 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 22 Apr 2026 18:59:27 -0500
-Subject: [PATCH 082/119] winewayland: Implement support for color mangement
+Subject: [PATCH 082/121] winewayland: Implement support for color mangement
  protocol.
 
 ---
@@ -2323,7 +2323,7 @@ index 6332247ca50..5708dd73f26 100644
 +                                     &wp_color_manager_listener, NULL);
 +}
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index c734dda2859..d2d61da57aa 100644
+index a63a30ecbea..efc79d940be 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -43,6 +43,7 @@

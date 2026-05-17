@@ -1,7 +1,7 @@
-From daca886eb70c33b07be0e0dafb3276829f816621 Mon Sep 17 00:00:00 2001
+From 7381a987a012fe35ec83dfe00bea0f77f3a26348 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Mon, 1 Jul 2019 09:58:55 +1000
-Subject: [PATCH 105/119] loader: Add Keyboard Layouts registry enteries.
+Subject: [PATCH 105/121] loader: Add Keyboard Layouts registry enteries.
 
 Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 ---

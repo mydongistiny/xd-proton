@@ -1,7 +1,7 @@
-From 77231c8e7c08b92cb76e7efb6044e40d0e77af4f Mon Sep 17 00:00:00 2001
+From 2f9bf3a8fac8fa2f1ed35b490a46216265dfa172 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
 Date: Tue, 3 Feb 2026 22:57:20 -0600
-Subject: [PATCH 030/119] ntoskrnl: Use fastcall for KeInitializeGuardedMutex.
+Subject: [PATCH 030/121] ntoskrnl: Use fastcall for KeInitializeGuardedMutex.
 
 ---
  dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 2 +-

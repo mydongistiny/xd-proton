@@ -1,7 +1,7 @@
-From 1a6802c573c31bd4dfaf0be3b1b41c39bdeaf8a1 Mon Sep 17 00:00:00 2001
+From 572726240443e23edc07f7b69aa184135f0a329d Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Tue, 9 Jul 2019 14:13:28 +1000
-Subject: [PATCH 106/119] user32: Do not enumerate the registry in
+Subject: [PATCH 106/121] user32: Do not enumerate the registry in
  GetKeyboardLayoutList().
 
 This function returns the current list of *installed* Keyboard layouts

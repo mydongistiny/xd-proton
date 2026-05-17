@@ -1,8 +1,8 @@
-From 3764713cb2812277c8215c7d14fe66c12cbcd226 Mon Sep 17 00:00:00 2001
+From 9003f45425aac48f441ca4d9272c031a6fa6b085 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 02:25:53 -0500
-Subject: [PATCH 071/119] winewayland: Move pointer input processing to frame
+Subject: [PATCH 071/121] winewayland: Move pointer input processing to frame
  event.
 
 Also implements raw input
@@ -259,7 +259,7 @@ index fb93407088a..275d8b95139 100644
              zwp_relative_pointer_manager_v1_get_relative_pointer(
                  process_wayland.zwp_relative_pointer_manager_v1,
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 6a05082cc83..a604e3a09af 100644
+index 7c66a5bdfa2..99d4a12b599 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -116,6 +116,24 @@ struct wayland_cursor

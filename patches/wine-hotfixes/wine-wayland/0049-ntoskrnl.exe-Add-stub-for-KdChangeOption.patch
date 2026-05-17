@@ -1,7 +1,7 @@
-From f07b398e8919e6e205b66fbfdf55a330f0664efd Mon Sep 17 00:00:00 2001
+From 7fbec557ea36c2bc780e05a316e02787eb438728 Mon Sep 17 00:00:00 2001
 From: Nello De Gregoris <bluechxindv@gmail.com>
 Date: Tue, 3 Mar 2026 11:55:27 +0100
-Subject: [PATCH 049/119] ntoskrnl.exe: Add stub for KdChangeOption().
+Subject: [PATCH 049/121] ntoskrnl.exe: Add stub for KdChangeOption().
 
 ---
  dlls/ntoskrnl.exe/ntoskrnl.c        | 7 +++++++

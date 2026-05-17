@@ -1,8 +1,8 @@
-From 676e90157915eec399bf4d31b56a7c3b86215a18 Mon Sep 17 00:00:00 2001
+From c7172c98f77f4cfa6f57f6029f87ae8ba4065380 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 1 Oct 2025 12:52:35 -0500
-Subject: [PATCH 100/119] winewayland: Generate KBDTABLES dead key tables.
+Subject: [PATCH 100/121] winewayland: Generate KBDTABLES dead key tables.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -365,7 +365,7 @@ index 2cc605a2d34..958ae03333e 100644
  
  static void keyboard_handle_enter(void *private, struct wl_keyboard *wl_keyboard,
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 60325245135..8c8225a7df1 100644
+index 592aa55c19f..1cefacd9be9 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -29,6 +29,11 @@

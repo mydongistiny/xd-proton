@@ -1,8 +1,8 @@
-From 712970726eb2d13e0602fb8827190f499a4e4d7f Mon Sep 17 00:00:00 2001
+From 03b3be6f84393ca906fc599ef57c0ae6ac57ce9a Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 9 Jun 2025 09:07:33 -0400
-Subject: [PATCH 083/119] winewayland: Implement support for FlashWindow.
+Subject: [PATCH 083/121] winewayland: Implement support for FlashWindow.
 
 ---
  dlls/winewayland.drv/Makefile.in           |   1 +
@@ -54,7 +54,7 @@ index 30b6c33fa9a..e5dc193ed0d 100644
  
      return TRUE;
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 8b9e81fbeda..c671820d0f1 100644
+index 0bf41197e22..fc4bafd1b6e 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -1634,3 +1634,47 @@ void wayland_surface_assign_icon(struct wayland_surface *surface)
@@ -106,7 +106,7 @@ index 8b9e81fbeda..c671820d0f1 100644
 +    }
 +}
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index d2d61da57aa..5fc20369917 100644
+index efc79d940be..0c4154ee5ad 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -44,6 +44,7 @@
@@ -154,7 +154,7 @@ index 81c70f506d7..30af7112193 100644
      .pSetIMEEnabled = WAYLAND_SetIMEEnabled,
      .pKbdLayerDescriptor = WAYLAND_KbdLayerDescriptor,
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index 153238ec95e..b23c6b00a86 100644
+index 52551ef457c..a24cc638e89 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -897,6 +897,23 @@ BOOL WAYLAND_HasWindowManager(const char *name)

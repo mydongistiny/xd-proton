@@ -1,8 +1,8 @@
-From ae513c4170cec2203aad3ed7ea50b88ce24115e2 Mon Sep 17 00:00:00 2001
+From 43fd12ce7754fad65227add735158e192925a92b Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 6 May 2025 09:06:03 -0400
-Subject: [PATCH 025/119] winewayland: Implement fractional scaling protcol.
+Subject: [PATCH 025/121] winewayland: Implement fractional scaling protcol.
 
 ---
  dlls/winewayland.drv/Makefile.in             |   1 +

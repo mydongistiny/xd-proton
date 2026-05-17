@@ -1,8 +1,8 @@
-From 6ce570d7f29eb40c2142a5247c696b8a547b57e7 Mon Sep 17 00:00:00 2001
+From 0fd327c4a543cee27fbfc13befe620f90314411c Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 20 Apr 2026 21:49:29 -0500
-Subject: [PATCH 078/119] winewayland: Change default debug channel to cursor
+Subject: [PATCH 078/121] winewayland: Change default debug channel to cursor
  for pointer.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 078/119] winewayland: Change default debug channel to cursor
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/dlls/winewayland.drv/wayland_pointer.c b/dlls/winewayland.drv/wayland_pointer.c
-index b0cf279ae62..cc6bb308bf4 100644
+index b41c84ee223..2193f8504ba 100644
 --- a/dlls/winewayland.drv/wayland_pointer.c
 +++ b/dlls/winewayland.drv/wayland_pointer.c
 @@ -34,7 +34,7 @@

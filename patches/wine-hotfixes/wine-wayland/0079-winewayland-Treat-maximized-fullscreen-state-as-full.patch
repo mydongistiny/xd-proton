@@ -1,8 +1,8 @@
-From 62895a1f86ca11ebc210dd0e94c877a2c25c15b7 Mon Sep 17 00:00:00 2001
+From 5a756ceb28b5c7bb382093b03d1ab819de4b1ec8 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 20 Apr 2026 22:49:35 -0500
-Subject: [PATCH 079/119] winewayland: Treat maximized,fullscreen state as
+Subject: [PATCH 079/121] winewayland: Treat maximized,fullscreen state as
  fullscreen.
 
 ---
@@ -11,7 +11,7 @@ Subject: [PATCH 079/119] winewayland: Treat maximized,fullscreen state as
  2 files changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index b9688e7fff5..8b9e81fbeda 100644
+index 78be70559ad..0bf41197e22 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -704,6 +704,14 @@ BOOL wayland_surface_config_is_compatible(struct wayland_surface_config *conf,
@@ -50,7 +50,7 @@ index b9688e7fff5..8b9e81fbeda 100644
               rect.bottom - rect.top < surface->current.height))
          {
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index 67c788d19ed..153238ec95e 100644
+index 3ae4eca954c..52551ef457c 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -679,7 +679,8 @@ static void wayland_configure_window(HWND hwnd)

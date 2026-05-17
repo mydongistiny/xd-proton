@@ -1,8 +1,8 @@
-From f9f15b625d5b666fe137173cba665dc302c1bdee Mon Sep 17 00:00:00 2001
+From b12498ff2bd79031b349bdf5fe57cdcca1c7daf6 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 6 Mar 2026 17:02:29 -0600
-Subject: [PATCH 098/119] winewayland: Rework ensure contents to avoid
+Subject: [PATCH 098/121] winewayland: Rework ensure contents to avoid
  compositor bugs.
 
 Not a fan of having to change this but hyprland is hyprland i guess
@@ -11,7 +11,7 @@ Not a fan of having to change this but hyprland is hyprland i guess
  1 file changed, 13 insertions(+), 17 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index c671820d0f1..47660201463 100644
+index fc4bafd1b6e..cd4571aff14 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -1492,7 +1492,7 @@ static const struct wl_buffer_listener dummy_buffer_listener =

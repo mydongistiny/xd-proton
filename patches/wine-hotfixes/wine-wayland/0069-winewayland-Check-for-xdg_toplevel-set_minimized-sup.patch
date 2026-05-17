@@ -1,8 +1,8 @@
-From 30d8c98313c1be53485624080511884ed13e0fc7 Mon Sep 17 00:00:00 2001
+From 896c5804d44f73d355ce7243ad393ce87ffa67f4 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 10 Apr 2026 21:25:37 -0500
-Subject: [PATCH 069/119] winewayland: Check for xdg_toplevel::set_minimized
+Subject: [PATCH 069/121] winewayland: Check for xdg_toplevel::set_minimized
  support
 
 ---
@@ -41,7 +41,7 @@ index 0aebf7550f2..2cc605a2d34 100644
          }
  
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 219b1d9af38..ef8a24eef58 100644
+index e7a8433dd34..e75b0b37f17 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -57,6 +57,8 @@ static void xdg_surface_handle_configure(void *private, struct xdg_surface *xdg_
@@ -123,7 +123,7 @@ index 219b1d9af38..ef8a24eef58 100644
  
  void wp_fractional_scale_handle_scale(void* user_data,
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index dc17a0406c5..6a05082cc83 100644
+index d573d7c815f..7c66a5bdfa2 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -89,6 +89,16 @@ enum wayland_surface_role
@@ -152,7 +152,7 @@ index dc17a0406c5..6a05082cc83 100644
      BOOL processed;
  };
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index b0d3766ed70..67c788d19ed 100644
+index ce49a98a458..3ae4eca954c 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -252,11 +252,15 @@ static BOOL wayland_win_data_create_wayland_surface(struct wayland_win_data *dat

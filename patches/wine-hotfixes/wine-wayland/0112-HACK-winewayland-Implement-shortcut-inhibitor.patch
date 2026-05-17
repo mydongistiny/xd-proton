@@ -1,8 +1,8 @@
-From 13b01728a6973eea6997675dd5768e4d7ff78b9c Mon Sep 17 00:00:00 2001
+From 617b50d6542acbf09945dca1edbffcbf2dccea56 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 1 May 2026 16:19:01 -0500
-Subject: [PATCH 112/119] HACK: winewayland: Implement shortcut inhibitor.
+Subject: [PATCH 112/121] HACK: winewayland: Implement shortcut inhibitor.
 
 ---
  dlls/winewayland.drv/Makefile.in              |   1 +
@@ -192,7 +192,7 @@ index b334f8288f7..21128e7b11b 100644
  
  static void registry_handle_global_remove(void *data, struct wl_registry *registry,
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 47660201463..3cac4d977f8 100644
+index cd4571aff14..38790850c3a 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -571,6 +571,13 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
@@ -253,7 +253,7 @@ index 47660201463..3cac4d977f8 100644
 +    }
 +}
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 8c8225a7df1..33600a5049d 100644
+index 1cefacd9be9..4e89ec963f3 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -51,6 +51,7 @@ struct xkb_compose_table;
@@ -289,7 +289,7 @@ index 8c8225a7df1..33600a5049d 100644
  static inline BOOL wayland_surface_is_toplevel(struct wayland_surface *surface)
  {
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index b23c6b00a86..5a7ccd6e0d0 100644
+index a24cc638e89..890dcddbe49 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -318,6 +318,7 @@ static void wayland_surface_update_state_toplevel(struct wayland_surface *surfac

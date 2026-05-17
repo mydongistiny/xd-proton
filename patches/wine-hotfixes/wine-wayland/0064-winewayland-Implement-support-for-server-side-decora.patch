@@ -1,8 +1,8 @@
-From 0549069309c78c450030613fe35328d975fec9b9 Mon Sep 17 00:00:00 2001
+From 6284a74b23abad4efa2f509cbae4b71c9c07736c Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 10 Feb 2026 23:30:27 -0600
-Subject: [PATCH 064/119] winewayland: Implement support for server-side
+Subject: [PATCH 064/121] winewayland: Implement support for server-side
  decorations.
 
 ---

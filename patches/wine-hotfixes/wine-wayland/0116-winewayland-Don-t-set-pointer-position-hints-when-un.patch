@@ -1,8 +1,8 @@
-From 93fa30e62c8efb3f81fed2e53b28f55df9cd59ea Mon Sep 17 00:00:00 2001
+From fcd62b1afeca850d8320a635bebabf14b29911bd Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 5 May 2026 05:42:14 -0500
-Subject: [PATCH 116/119] winewayland: Don't set pointer position hints when
+Subject: [PATCH 116/121] winewayland: Don't set pointer position hints when
  unnecessary.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 116/119] winewayland: Don't set pointer position hints when
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winewayland.drv/wayland_pointer.c b/dlls/winewayland.drv/wayland_pointer.c
-index 82f2222309e..3995893e29f 100644
+index 3dcea463d28..a5334f94c37 100644
 --- a/dlls/winewayland.drv/wayland_pointer.c
 +++ b/dlls/winewayland.drv/wayland_pointer.c
 @@ -1248,7 +1248,10 @@ BOOL WAYLAND_ClipCursor(const RECT *clip, BOOL reset)

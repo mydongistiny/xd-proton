@@ -1,7 +1,7 @@
-From 0041c23a240417bb3dcb1dc2a537dba8d7234409 Mon Sep 17 00:00:00 2001
+From a9b51d9110f6e4b91dcb2019d123c807362873f6 Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Fri, 5 Dec 2025 18:51:24 +0300
-Subject: [PATCH 093/119] windowscodecs: Support trivial cases for copying 1bpp
+Subject: [PATCH 093/121] windowscodecs: Support trivial cases for copying 1bpp
  indexed data.
 
 Signed-off-by: Dmitry Timoshkov <dmitry@baikal.ru>

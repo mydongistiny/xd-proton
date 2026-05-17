@@ -1,8 +1,8 @@
-From eadc0c563394806afa3c3fc7ddaa82e9b5e7f5ae Mon Sep 17 00:00:00 2001
+From fd1590b8b5eac603dfcfbefa42314c0aa897d35c Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 13 Oct 2025 13:04:52 -0500
-Subject: [PATCH 084/119] winewayland: Implement support for pointer warp
+Subject: [PATCH 084/121] winewayland: Implement support for pointer warp
  protocol.
 
 ---
@@ -121,7 +121,7 @@ index e5dc193ed0d..b334f8288f7 100644
  
  static void registry_handle_global_remove(void *data, struct wl_registry *registry,
 diff --git a/dlls/winewayland.drv/wayland_pointer.c b/dlls/winewayland.drv/wayland_pointer.c
-index cc6bb308bf4..82f2222309e 100644
+index 2193f8504ba..3dcea463d28 100644
 --- a/dlls/winewayland.drv/wayland_pointer.c
 +++ b/dlls/winewayland.drv/wayland_pointer.c
 @@ -1220,8 +1220,29 @@ BOOL WAYLAND_ClipCursor(const RECT *clip, BOOL reset)
@@ -156,7 +156,7 @@ index cc6bb308bf4..82f2222309e 100644
          wayland_pointer_update_constraint(wl_surface, NULL, FALSE, TRUE);
          pointer->pending_warp = FALSE;
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 5fc20369917..60325245135 100644
+index 0c4154ee5ad..592aa55c19f 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -45,6 +45,7 @@

@@ -1,8 +1,8 @@
-From 8c0c40bea84433c0dd5ba2caacd1cba03ca2071d Mon Sep 17 00:00:00 2001
+From 327414f7bed0d9bf07854886cf19b5bd14baeb83 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 15 Aug 2025 11:41:18 -0400
-Subject: [PATCH 055/119] winewayland: Add support for xdg-toplevel-tag-v1.
+Subject: [PATCH 055/121] winewayland: Add support for xdg-toplevel-tag-v1.
 
 Proton specific
 ---

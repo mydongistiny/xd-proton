@@ -1,8 +1,8 @@
-From 7ba4d4cfb40fd0a59cb4c18890f361cd7f1d14ba Mon Sep 17 00:00:00 2001
+From 1dd051cd8607a99b40e884361525b6ac606ee743 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 18 Apr 2026 23:06:36 -0500
-Subject: [PATCH 070/119] winewayland: Avoid constantly reconfiguring the
+Subject: [PATCH 070/121] winewayland: Avoid constantly reconfiguring the
  client surface.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 070/119] winewayland: Avoid constantly reconfiguring the
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index ef8a24eef58..b9688e7fff5 100644
+index e75b0b37f17..78be70559ad 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -1331,10 +1331,13 @@ static void wayland_client_surface_update(struct client_surface *client)

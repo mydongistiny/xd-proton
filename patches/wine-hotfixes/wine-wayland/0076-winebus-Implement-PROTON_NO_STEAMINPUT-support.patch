@@ -1,8 +1,8 @@
-From 4ea3f0acec4b274592a823561d693d209b20d0ca Mon Sep 17 00:00:00 2001
+From a12790463e6c7590bda5d29870b68d4608ff2384 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 22:40:38 -0500
-Subject: [PATCH 076/119] winebus: Implement PROTON_NO_STEAMINPUT support.
+Subject: [PATCH 076/121] winebus: Implement PROTON_NO_STEAMINPUT support.
 
 ---
  dlls/winebus.sys/bus_udev.c | 7 +++++++

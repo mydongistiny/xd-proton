@@ -1,8 +1,8 @@
-From 0baaab174588696be1b3596311a9ea87cd5a3d35 Mon Sep 17 00:00:00 2001
+From 56a2405f7ab57fe43518f92fed04203be5890225 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 19:59:27 -0500
-Subject: [PATCH 074/119] winewayland: Always use relative motion.
+Subject: [PATCH 074/121] winewayland: Always use relative motion.
 
 ---
  dlls/winewayland.drv/wayland_pointer.c | 32 +++++++++++++++-----------
@@ -10,7 +10,7 @@ Subject: [PATCH 074/119] winewayland: Always use relative motion.
  2 files changed, 19 insertions(+), 14 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_pointer.c b/dlls/winewayland.drv/wayland_pointer.c
-index 4d4baca3a34..b0cf279ae62 100644
+index 2fdd63aec33..b41c84ee223 100644
 --- a/dlls/winewayland.drv/wayland_pointer.c
 +++ b/dlls/winewayland.drv/wayland_pointer.c
 @@ -186,7 +186,7 @@ static void pointer_handle_motion(void *data, struct wl_pointer *wl_pointer,
@@ -78,7 +78,7 @@ index 4d4baca3a34..b0cf279ae62 100644
          pthread_mutex_unlock(&pointer->mutex);
          return FALSE;
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 823fcb00552..a8429360d9f 100644
+index 383772150b3..ac9b9a165e1 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -149,6 +149,7 @@ struct wayland_pointer

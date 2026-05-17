@@ -1,8 +1,8 @@
-From 6878b40a38a1740be1df20a9409d1e3ba36259e3 Mon Sep 17 00:00:00 2001
+From 8a3b93919c713526db21266179ba19ea7067078b Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 29 Apr 2026 22:12:11 -0500
-Subject: [PATCH 117/119] winewayland: Use passthrough for some colorspaces.
+Subject: [PATCH 117/121] winewayland: Use passthrough for some colorspaces.
 
 Required for HDR to look correct on wayland since Windows works in a different way compared to wayland.
 ---
@@ -134,10 +134,10 @@ index 774328da87f..b47e1080e26 100644
        Sends all matching events describing an image description object exactly
        once and finally sends the 'done' event.
 diff --git a/dlls/winewayland.drv/vulkan.c b/dlls/winewayland.drv/vulkan.c
-index 7b64e9695da..834a8dd43fa 100644
+index 9f6ee2152d1..bb0cd1f8d36 100644
 --- a/dlls/winewayland.drv/vulkan.c
 +++ b/dlls/winewayland.drv/vulkan.c
-@@ -130,7 +130,38 @@ static void wayland_map_device_extensions(struct vulkan_device_extensions *exten
+@@ -137,7 +137,38 @@ static void wayland_map_device_extensions(struct vulkan_device_extensions *exten
  
  static VkResult wayland_vulkan_colorspace_configure(VkColorSpaceKHR *colorspace, struct client_surface *client)
  {
@@ -222,7 +222,7 @@ index 5708dd73f26..e33473863c0 100644
          process_wayland.supports_extended_volume = TRUE;
  
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 3cac4d977f8..3d328ecd283 100644
+index 38790850c3a..5bb30deae5b 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -1311,6 +1311,8 @@ static void wayland_client_surface_destroy(struct client_surface *client)
@@ -310,7 +310,7 @@ index 3cac4d977f8..3d328ecd283 100644
  {
      struct wayland_shm_buffer *shm_buffer = data;
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 33600a5049d..bf545ed68e9 100644
+index 4e89ec963f3..ff2936410fd 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -252,6 +252,7 @@ struct wayland

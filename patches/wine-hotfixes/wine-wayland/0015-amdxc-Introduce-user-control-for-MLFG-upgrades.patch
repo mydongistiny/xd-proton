@@ -1,8 +1,8 @@
-From 450c071bf41044b519a9aa56188be1ce7b12814b Mon Sep 17 00:00:00 2001
+From 48133ad712eeee457344b0ac94ebba64e51fb174 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Thu, 18 Dec 2025 12:25:55 -0600
-Subject: [PATCH 015/119] amdxc: Introduce user control for MLFG upgrades.
+Subject: [PATCH 015/121] amdxc: Introduce user control for MLFG upgrades.
 
 ---
  dlls/amdxc64/main.c | 5 ++++-

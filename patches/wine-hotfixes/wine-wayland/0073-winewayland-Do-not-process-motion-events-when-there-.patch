@@ -1,8 +1,8 @@
-From 60ae0ac30564d2ed0c3c7d5b4c0eb549a9eaae27 Mon Sep 17 00:00:00 2001
+From 729ac40df2f0890e2f9c3d43ac2e98d8377ff0ce Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 18:42:01 -0500
-Subject: [PATCH 073/119] winewayland: Do not process motion events when there
+Subject: [PATCH 073/121] winewayland: Do not process motion events when there
  is a pending warp.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 073/119] winewayland: Do not process motion events when there
  1 file changed, 7 insertions(+)
 
 diff --git a/dlls/winewayland.drv/wayland_pointer.c b/dlls/winewayland.drv/wayland_pointer.c
-index fbf208ed866..4d4baca3a34 100644
+index 7141e04ed7f..2fdd63aec33 100644
 --- a/dlls/winewayland.drv/wayland_pointer.c
 +++ b/dlls/winewayland.drv/wayland_pointer.c
 @@ -332,6 +332,13 @@ static void pointer_handle_frame(void *data, struct wl_pointer *wl_pointer)
