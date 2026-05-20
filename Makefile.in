@@ -239,6 +239,8 @@ WAYLAND_PROTOCOLS_MESON_ARGS := \
 	-Dtests=false
 
 $(eval $(call rules-source,wayland-protocols,$(SRCDIR)/wayland-protocols))
+$(eval $(call rules-meson,wayland-protocols,i386,unix))
+$(eval $(call rules-meson,wayland-protocols,x86_64,unix))
 $(eval $(call rules-meson,wayland-protocols,aarch64,unix))
 
 
@@ -353,7 +355,7 @@ GST_BASE_MESON_ARGS := \
 	-Dgl=enabled \
 	-Dgl-graphene=enabled \
 	-Drawparse=enabled \
-	-Dgl_winsys=surfaceless,x11,egl \
+	-Dgl_winsys=surfaceless,x11,wayland,egl \
 	-Dgl_platform=glx,egl \
 	--wrap-mode nodownload
 
@@ -370,8 +372,7 @@ GST_BASE_MESON_ARGS += \
 	-Dtools=disabled
 
 GST_BASE_LDFLAGS = -lm
-GST_BASE_DEPENDS = gst_orc graphene gstreamer
-GST_BASE_aarch64_DEPENDS = wayland-protocols
+GST_BASE_DEPENDS = gst_orc graphene gstreamer wayland-protocols
 GST_BASE_HOST_DEPENDS = gst_orc
 
 $(eval $(call rules-source,gst_base,$(SRCDIR)/gstreamer/subprojects/gst-plugins-base))
@@ -525,14 +526,21 @@ GST_BAD_MESON_ARGS := \
 	-Dopus=enabled \
 	-Dsctp=enabled \
 	-Dsmoothstreaming=enabled \
-	-Dwayland=disabled \
-	-Dx11=disabled \
+	-Dwayland=enabled \
+	-Dx11=enabled \
 	-Dwebp=enabled \
 	-Dorc=enabled
 
-GST_BAD_DEPENDS = gst_orc gstreamer gst_base
-GST_BAD_DEPENDS += libxml2
-GST_BAD_aarch64_DEPENDS = wayland-protocols
+GST_BAD_MESON_ARGS += \
+	-Daes=disabled \
+	-Dclosedcaption=disabled \
+	-Dcolormanagement=disabled \
+	-Ddtls=disabled \
+	-Dopenal=disabled \
+	-Dsndfile=disabled \
+	-Dttml=disabled
+
+GST_BAD_DEPENDS = gst_orc gstreamer gst_base libxml2 wayland-protocols
 GST_BAD_HOST_DEPENDS = gst_orc
 
 $(eval $(call rules-source,gst_bad,$(SRCDIR)/gstreamer/subprojects/gst-plugins-bad/))
@@ -594,7 +602,8 @@ FFMPEG_CONFIGURE_ARGS += \
 	--enable-zlib \
 	--enable-libvpx \
 	--enable-libvorbis \
-	--enable-decoder=indeo5 \
+	--disable-lzma \
+    --enable-decoder=indeo5 \
 	--enable-decoder=adpcm_ms \
 	--enable-decoder=mpegvideo \
 	--enable-decoder=mpeg1video \
