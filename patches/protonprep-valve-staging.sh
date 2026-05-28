@@ -301,7 +301,7 @@ apply_all_in_dir() {
     echo "WINE: mutter -> cinnamon detection patch for winex11"
     apply_patch "../patches/proton/winex11-mutter-cinnamon.patch"
 
-    echo "WINE: -CUSTOM- Update wine's internal vkd3d version to 1.19"
+    echo "WINE: -CUSTOM- Update wine's internal vkd3d version to 2.0"
     apply_patch "../patches/wine/wine-libs-vkd3d-Update-to-version.patch"
 
     echo "WINE: -CUSTOM- ntdll: Futex optimizations"
