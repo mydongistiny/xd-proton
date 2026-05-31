@@ -1,7 +1,7 @@
-From 52b1e7bc55393782166d5a6f9c3d77e90443d319 Mon Sep 17 00:00:00 2001
+From 10e2641f32f19eeda56f3562ae628a68ba326957 Mon Sep 17 00:00:00 2001
 From: Ziia Shi <mkrsym1@gmail.com>
 Date: Wed, 14 Jan 2026 23:50:21 +0100
-Subject: [PATCH 054/121] ntdll: Avoid infinite wait during process
+Subject: [PATCH 054/148] ntdll: Avoid infinite wait during process
  termination.
 
 Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=59178

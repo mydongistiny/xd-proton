@@ -1,8 +1,8 @@
-From d287a00d169ca23769c57b4c569ea406b2188803 Mon Sep 17 00:00:00 2001
+From 58cb747b2850425fe531879f9bb5110465d5219c Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 2 May 2026 17:28:12 -0500
-Subject: [PATCH 063/121] win32u: Avoid re-inserting the same client surface
+Subject: [PATCH 063/148] win32u: Avoid re-inserting the same client surface
  twice.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 063/121] win32u: Avoid re-inserting the same client surface
  1 file changed, 3 insertions(+)
 
 diff --git a/dlls/win32u/window.c b/dlls/win32u/window.c
-index 62cea9c1efc..63a101718c4 100644
+index 09c843a061d..ba15fa32ee1 100644
 --- a/dlls/win32u/window.c
 +++ b/dlls/win32u/window.c
 @@ -384,6 +384,9 @@ void add_window_client_surface( HWND hwnd, struct client_surface *surface )

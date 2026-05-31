@@ -1,8 +1,8 @@
-From 327414f7bed0d9bf07854886cf19b5bd14baeb83 Mon Sep 17 00:00:00 2001
+From 3c863aaa2e7831cf3a22e4d74841d50b5d86e11a Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 15 Aug 2025 11:41:18 -0400
-Subject: [PATCH 055/121] winewayland: Add support for xdg-toplevel-tag-v1.
+Subject: [PATCH 055/148] winewayland: Add support for xdg-toplevel-tag-v1.
 
 Proton specific
 ---
@@ -52,10 +52,10 @@ index 576900683be..6517f15bf78 100644
  
      return TRUE;
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index f8ebf6da925..1514d458120 100644
+index 6aa9ce73eff..ce14edd6eea 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -303,6 +303,18 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
+@@ -339,6 +339,18 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
      if (process_name)
          xdg_toplevel_set_app_id(surface->xdg_toplevel, process_name);
  

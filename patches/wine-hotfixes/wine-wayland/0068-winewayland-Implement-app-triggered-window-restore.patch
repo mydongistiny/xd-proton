@@ -1,15 +1,15 @@
-From 447c96baf430cf957a9bb49f7f03def30b4d5f27 Mon Sep 17 00:00:00 2001
+From 2ecc788a71bf9589f148e534574bfd91e2a04689 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 10 Apr 2026 00:14:01 -0500
-Subject: [PATCH 068/121] winewayland: Implement app triggered window restore.
+Subject: [PATCH 068/148] winewayland: Implement app triggered window restore.
 
 ---
  dlls/winewayland.drv/window.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index bdb06d366c4..ce49a98a458 100644
+index 052a233c11e..797126edf80 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -206,6 +206,7 @@ static BOOL wayland_win_data_create_wayland_surface(struct wayland_win_data *dat

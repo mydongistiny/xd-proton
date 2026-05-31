@@ -1,8 +1,8 @@
-From 629212ae3081b54f6d9bc41be0f44fa008eea536 Mon Sep 17 00:00:00 2001
+From f623043bec0b1237441d137acc56a768f82e67ea Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 25 Jan 2026 14:57:30 -0600
-Subject: [PATCH 059/121] ntdll: Do not rely on CLOCK_REALTIME_COURSE for
+Subject: [PATCH 059/148] ntdll: Do not rely on CLOCK_REALTIME_COURSE for
  NtQuerySystemTime.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 059/121] ntdll: Do not rely on CLOCK_REALTIME_COURSE for
  1 file changed, 2 insertions(+), 15 deletions(-)
 
 diff --git a/dlls/ntdll/unix/sync.c b/dlls/ntdll/unix/sync.c
-index 74a0c93319c..b99cbc57395 100644
+index 67ab945cef8..2b824d45706 100644
 --- a/dlls/ntdll/unix/sync.c
 +++ b/dlls/ntdll/unix/sync.c
 @@ -2521,22 +2521,9 @@ NTSTATUS WINAPI NtQuerySystemTime( LARGE_INTEGER *time )

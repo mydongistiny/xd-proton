@@ -1,8 +1,8 @@
-From 1bbf5dfb0894d4286e90da59eb1f1ba83a269edd Mon Sep 17 00:00:00 2001
+From 88b3cae7029098454a066e9172c1268f6eb927bc Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 20:35:31 -0500
-Subject: [PATCH 056/121] winewayland: Implement wp_content_type_v1.
+Subject: [PATCH 056/148] winewayland: Implement wp_content_type_v1.
 
 ---
  dlls/winewayland.drv/Makefile.in         |   1 +
@@ -186,10 +186,10 @@ index 6517f15bf78..1129f63fb4b 100644
  
      return TRUE;
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 1514d458120..a8ef188b7c3 100644
+index ce14edd6eea..ddebe1c5886 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -1157,6 +1157,8 @@ static void wayland_client_surface_destroy(struct client_surface *client)
+@@ -1155,6 +1155,8 @@ static void wayland_client_surface_destroy(struct client_surface *client)
  
      TRACE("%s\n", debugstr_client_surface(client));
  
@@ -198,7 +198,7 @@ index 1514d458120..a8ef188b7c3 100644
      if (surface->wp_viewport)
          wp_viewport_destroy(surface->wp_viewport);
      if (surface->wl_subsurface)
-@@ -1245,6 +1247,21 @@ struct wayland_client_surface *wayland_client_surface_create(HWND hwnd)
+@@ -1243,6 +1245,21 @@ struct wayland_client_surface *wayland_client_surface_create(HWND hwnd)
          goto err;
      }
  

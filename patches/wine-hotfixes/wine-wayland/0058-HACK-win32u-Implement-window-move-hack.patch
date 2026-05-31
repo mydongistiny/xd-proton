@@ -1,15 +1,15 @@
-From 4ba8dfaf61e6d075e34debdf6c415f8f8b258446 Mon Sep 17 00:00:00 2001
+From f1761c7b0dadd2affbbcc54cd023d14fc52ae90e Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 23:18:22 -0500
-Subject: [PATCH 058/121] HACK: win32u: Implement window move hack
+Subject: [PATCH 058/148] HACK: win32u: Implement window move hack
 
 ---
  dlls/win32u/window.c | 64 +++++++++++++++++++++++++++++++++++++++++++-
  1 file changed, 63 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/win32u/window.c b/dlls/win32u/window.c
-index 1515b65257e..62cea9c1efc 100644
+index 569f77cb129..09c843a061d 100644
 --- a/dlls/win32u/window.c
 +++ b/dlls/win32u/window.c
 @@ -2216,6 +2216,19 @@ static BOOL is_fullscreen( const MONITORINFO *info, const RECT *rect )

@@ -1,8 +1,8 @@
-From d8712da4d348df16822e0b18b4d1644865b7d746 Mon Sep 17 00:00:00 2001
+From b97968e664dfdfa71abfcce35ab27aed0c67157f Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 18 Apr 2026 15:11:48 -0500
-Subject: [PATCH 062/121] win32u: Track swapchain/opengl reference of client
+Subject: [PATCH 062/148] win32u: Track swapchain/opengl reference of client
  surface.
 
 ---
@@ -12,7 +12,7 @@ Subject: [PATCH 062/121] win32u: Track swapchain/opengl reference of client
  3 files changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/win32u/opengl.c b/dlls/win32u/opengl.c
-index d2b7413654b..6d07a617ea6 100644
+index b3986182d1e..a20a1f2b00d 100644
 --- a/dlls/win32u/opengl.c
 +++ b/dlls/win32u/opengl.c
 @@ -117,7 +117,11 @@ void *opengl_drawable_create( UINT size, const struct opengl_drawable_funcs *fun
@@ -42,7 +42,7 @@ index d2b7413654b..6d07a617ea6 100644
      }
  }
 diff --git a/dlls/win32u/vulkan.c b/dlls/win32u/vulkan.c
-index e85c9d2a0aa..a4f8087500a 100644
+index 6f5761ad6e3..3336fa21d0e 100644
 --- a/dlls/win32u/vulkan.c
 +++ b/dlls/win32u/vulkan.c
 @@ -144,6 +144,7 @@ struct surface

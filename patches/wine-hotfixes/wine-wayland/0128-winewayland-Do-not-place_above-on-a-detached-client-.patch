@@ -1,0 +1,27 @@
+From e209bf0f8595a3015570afa04ad8e44f72bd7016 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty
+ <45927311+Etaash-mathamsetty@users.noreply.github.com>
+Date: Sun, 24 May 2026 01:13:35 -0400
+Subject: [PATCH 128/148] winewayland: Do not place_above on a detached client
+ surface.
+
+---
+ dlls/winewayland.drv/wayland_surface.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
+index 6d881c04cf1..1eab4d10242 100644
+--- a/dlls/winewayland.drv/wayland_surface.c
++++ b/dlls/winewayland.drv/wayland_surface.c
+@@ -954,7 +954,7 @@ static void wayland_surface_reconfigure_subsurface(struct wayland_surface *surfa
+         TRACE("hwnd=%p pos=%d,%d\n", surface->hwnd, x, y);
+ 
+         wl_subsurface_set_position(surface->wl_subsurface, x, y);
+-        if (toplevel_data->client_surface)
++        if (toplevel_data->client_surface && toplevel_data->client_surface->wl_subsurface)
+             wl_subsurface_place_above(surface->wl_subsurface, toplevel_data->client_surface->wl_surface);
+         else
+             wl_subsurface_place_above(surface->wl_subsurface, toplevel_surface->wl_surface);
+-- 
+2.54.0
+
