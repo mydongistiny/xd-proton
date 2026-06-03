@@ -2573,8 +2573,9 @@ class Session:
             # there is no way to position toplevel surfaces dynamically in wayland
             self.env["PROTON_USE_XALIA"] = "0"
             # Steam input does not work on wayland
-            if "PROTON_NO_STEAMINPUT" not in self.env:
-                self.env["PROTON_NO_STEAMINPUT"] = "1"
+            self.env.setdefault("PROTON_NO_STEAMINPUT", "1")
+            # Disable other steam input related stuff
+            if nonzero(self.env["PROTON_NO_STEAMINPUT"]):
                 # When steam input is disabled we need the ignored controllers to work again
                 if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
                     del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
