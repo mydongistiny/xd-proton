@@ -182,6 +182,7 @@ $(eval $(call rules-meson,dav1d,i386,unix))
 $(eval $(call rules-meson,dav1d,x86_64,unix))
 $(eval $(call rules-meson,dav1d,aarch64,unix))
 
+
 ##
 ## libsoup
 ##
@@ -195,6 +196,7 @@ $(eval $(call rules-source,libsoup,$(SRCDIR)/libsoup))
 $(eval $(call rules-meson,libsoup,i386,unix))
 $(eval $(call rules-meson,libsoup,x86_64,unix))
 $(eval $(call rules-meson,libsoup,aarch64,unix))
+
 
 ##
 ## libxml2
@@ -1432,7 +1434,7 @@ endif
 ##
 
 default_pfx: wine lsteamclient steamexe vrclient dxvk dxvk-nvapi vkd3d-proton
-	find $(DST_LIBDIR)/wine -type f -execdir chmod go-w '{}' '+'
+	find $(DST_LIBDIR)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	rm -rf $(abspath $(DIST_PREFIX_ARM64))
 ifneq ($(findstring x86_64,$(unix_ARCHS)),)
