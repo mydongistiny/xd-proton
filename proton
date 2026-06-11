@@ -1852,8 +1852,6 @@ def default_compat_config():
             "2067160",  # Simulakros
             "2621010",  # Simulakros Demo
             "368500",   # Assassin's Creed Syndicate
-            "1524630",  # KeepUp Survival
-            "1233570",  # Mirror's Edge Catalyst
         ]:
             try:
                 with open("/proc/modules") as f:
@@ -1955,6 +1953,7 @@ class Session:
     def __init__(self):
         self.log_file = None
         self.env = dict(os.environ)
+        self.xrandr_bin = g_proton.xrandr_bin
         self.dlloverrides = {
             "steam.exe": "b",  # always use our special built-in steam.exe
             "dotnetfx35.exe": "b",  # replace the broken installer, as does Windows
@@ -2200,7 +2199,7 @@ class Session:
     def get_primary_monitor(self):
         try:
             result = subprocess.run(
-                [g_proton.xrandr_bin],
+                [self.xrandr_bin],
                 check=True,
                 capture_output=True,
                 text=True,

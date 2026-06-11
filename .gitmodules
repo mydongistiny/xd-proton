@@ -85,3 +85,6 @@
 [submodule "pyroveil"]
 	path = pyroveil
 	url = https://github.com/HansKristian-Work/pyroveil.git
+[submodule "xz"]
+	path = xz
+	url = https://github.com/tukaani-project/xz.git
