@@ -1,8 +1,8 @@
-From f623043bec0b1237441d137acc56a768f82e67ea Mon Sep 17 00:00:00 2001
+From 98917fc55e71dc3deeeec89739ec5939e7861aee Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 25 Jan 2026 14:57:30 -0600
-Subject: [PATCH 059/148] ntdll: Do not rely on CLOCK_REALTIME_COURSE for
+Subject: [PATCH 059/153] ntdll: Do not rely on CLOCK_REALTIME_COURSE for
  NtQuerySystemTime.
 
 ---

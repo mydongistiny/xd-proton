@@ -1,15 +1,15 @@
-From e83a21129883b788184bd803ccc03d17fae8b3b2 Mon Sep 17 00:00:00 2001
+From 4fb48ed3ab7b678f9f7317dd0338b9f54b0f5983 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Thu, 7 Aug 2025 14:27:09 -0400
-Subject: [PATCH 125/148] HACK: wine.inf: Add workaround for WRC9
+Subject: [PATCH 125/153] HACK: wine.inf: Add workaround for WRC9
 
 ---
  loader/wine.inf.in | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index add32a6f497..daf8c47d027 100644
+index 8dea8f9b510..f7777abb56a 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -1711,6 +1711,7 @@ HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\.NET\3.5 Client Profile,

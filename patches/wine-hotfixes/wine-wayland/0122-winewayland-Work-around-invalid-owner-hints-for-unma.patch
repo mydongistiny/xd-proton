@@ -1,8 +1,8 @@
-From af1394a8ed4f5e9b76b0d062795552fb2de91adc Mon Sep 17 00:00:00 2001
+From 28db52816521ee2746db63bd5f803d50d7c9fe26 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 19 May 2026 16:25:42 -0400
-Subject: [PATCH 122/148] winewayland: Work around invalid owner hints for
+Subject: [PATCH 122/153] winewayland: Work around invalid owner hints for
  unmanaged windows.
 
 We may run into some cases of basically incest where a previously initialized hwnd A has a toplevel parent of hwnd B. hwnd B gets WindowPosChanged where it becomes unmanaged with owner hint of hwnd A creating a circular relationship. In these cases, we should completely ignore the owner hint.

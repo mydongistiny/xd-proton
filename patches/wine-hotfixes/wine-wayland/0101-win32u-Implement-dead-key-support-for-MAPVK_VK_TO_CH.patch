@@ -1,8 +1,8 @@
-From bd0b9cd22fc7eac0bfcd2ae92e9f63cd39e80b92 Mon Sep 17 00:00:00 2001
+From 2854257a1c6d17c635fc38aad0fad6b896db9040 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 24 Apr 2026 17:27:37 -0500
-Subject: [PATCH 101/148] win32u: Implement dead key support for
+Subject: [PATCH 101/153] win32u: Implement dead key support for
  MAPVK_VK_TO_CHAR.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 101/148] win32u: Implement dead key support for
  1 file changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
-index 0d5e9c3798e..fa3affffd80 100644
+index 531605f5b91..0fc0666f922 100644
 --- a/dlls/win32u/input.c
 +++ b/dlls/win32u/input.c
 @@ -439,6 +439,7 @@ static void kbd_tables_init_vk2char( const KBDTABLES *tables, UINT vk2char[0x100

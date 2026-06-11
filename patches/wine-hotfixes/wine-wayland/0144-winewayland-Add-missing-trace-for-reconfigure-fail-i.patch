@@ -1,8 +1,8 @@
-From d1d86ba0b9989093f9953c7a08402bacb21b42b0 Mon Sep 17 00:00:00 2001
+From 10b2d1f22b6696809154243ccc6672eb5826f21b Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 1 Jun 2026 23:12:26 -0400
-Subject: [PATCH 145/148] winewayland: Add missing trace for reconfigure fail
+Subject: [PATCH 144/153] winewayland: Add missing trace for reconfigure fail
  in ensure contents.
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 145/148] winewayland: Add missing trace for reconfigure fail
  1 file changed, 4 insertions(+)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 7b1f6de3acd..dce2272898f 100644
+index 4e57d4ff957..255d4ff6cab 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -1864,6 +1864,10 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface,
+@@ -1866,6 +1866,10 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface,
          wayland_surface_attach_shm(surface, dummy_shm_buffer, damage);
          wl_surface_commit(surface->wl_surface);
      }

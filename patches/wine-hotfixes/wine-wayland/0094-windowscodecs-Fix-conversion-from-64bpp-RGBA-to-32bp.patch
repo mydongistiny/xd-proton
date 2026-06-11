@@ -1,7 +1,7 @@
-From ff41e6c0cd0b8a77e96ed37c2f6a8b40215d6294 Mon Sep 17 00:00:00 2001
+From dc5313d2905f529e21df8f79cd3d17975b5a8578 Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Fri, 19 Dec 2025 15:31:00 +0300
-Subject: [PATCH 094/148] windowscodecs: Fix conversion from 64bpp RGBA to
+Subject: [PATCH 094/153] windowscodecs: Fix conversion from 64bpp RGBA to
  32bpp BGRA.
 
 Signed-off-by: Dmitry Timoshkov <dmitry@baikal.ru>

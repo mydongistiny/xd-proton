@@ -1,8 +1,8 @@
-From 5f6001ec7d41f751c61b5c483b9e1a4411695f84 Mon Sep 17 00:00:00 2001
+From 0249a82afae25904361f47317b61dff5337f813d Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 22:59:47 -0500
-Subject: [PATCH 076/148] winebus: Implement PROTON_EMULATE_STEAMINPUT.
+Subject: [PATCH 076/153] winebus: Implement PROTON_EMULATE_STEAMINPUT.
 
 ---
  dlls/winebus.sys/bus_sdl.c | 14 ++++++++++++++

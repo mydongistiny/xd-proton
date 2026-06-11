@@ -1,18 +1,18 @@
-From b5e501684c44107c01821b0b555d4be25f655430 Mon Sep 17 00:00:00 2001
+From d89e7e1abd37ab4eeb386a588c899fcddf204789 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 27 Apr 2026 01:23:36 -0500
-Subject: [PATCH 108/148] winewayland: Implement modifier key support.
+Subject: [PATCH 108/153] winewayland: Implement modifier key support.
 
 ---
- dlls/winewayland.drv/wayland_keyboard.c | 64 +++++++++++++++++++++++--
- 1 file changed, 61 insertions(+), 3 deletions(-)
+ dlls/winewayland.drv/wayland_keyboard.c | 65 +++++++++++++++++++++++--
+ 1 file changed, 62 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_keyboard.c b/dlls/winewayland.drv/wayland_keyboard.c
-index 577b62381ec..616179cfb39 100644
+index aa734150053..216a8c09ef8 100644
 --- a/dlls/winewayland.drv/wayland_keyboard.c
 +++ b/dlls/winewayland.drv/wayland_keyboard.c
-@@ -1011,6 +1011,64 @@ static void send_keyboard_input(HWND hwnd, UINT scan, UINT vkey, UINT flags, uin
+@@ -1010,6 +1010,64 @@ static void send_right_control(HWND hwnd, uint32_t state)
      NtUserSendHardwareInput(hwnd, 0, &input, 0);
  }
  
@@ -77,16 +77,17 @@ index 577b62381ec..616179cfb39 100644
  static void keyboard_handle_key(void *data, struct wl_keyboard *wl_keyboard,
                                  uint32_t serial, uint32_t time, uint32_t key,
                                  uint32_t state)
-@@ -1044,6 +1102,8 @@ static void keyboard_handle_key(void *data, struct wl_keyboard *wl_keyboard,
-         return;
+@@ -1041,6 +1099,9 @@ static void keyboard_handle_key(void *data, struct wl_keyboard *wl_keyboard,
+     default: break;
      }
  
-+    if (key != KEY_CAPSLOCK && key != KEY_SCROLLLOCK) update_mod_state(hwnd);
++    if (key != KEY_CAPSLOCK && key != KEY_SCROLLLOCK && key != KEY_NUMLOCK)
++        update_mod_state(hwnd);
 +
-     if (scan & ~0xff) flags |= KEYEVENTF_EXTENDEDKEY;
-     if (scan & 0x300) scan += 0xdf00;
- 
-@@ -1061,7 +1121,7 @@ static void keyboard_handle_modifiers(void *data, struct wl_keyboard *wl_keyboar
+     if (state == WL_KEYBOARD_KEY_STATE_RELEASED) input.ki.dwFlags |= KEYEVENTF_KEYUP;
+     NtUserSendHardwareInput(hwnd, 0, &input, 0);
+ }
+@@ -1056,7 +1117,7 @@ static void keyboard_handle_modifiers(void *data, struct wl_keyboard *wl_keyboar
  
      if (!wayland_keyboard_get_focused_hwnd()) return;
  
@@ -95,7 +96,7 @@ index 577b62381ec..616179cfb39 100644
            serial, mods_depressed, mods_latched, mods_locked, xkb_group);
  
      pthread_mutex_lock(&keyboard->mutex);
-@@ -1070,8 +1130,6 @@ static void keyboard_handle_modifiers(void *data, struct wl_keyboard *wl_keyboar
+@@ -1065,8 +1126,6 @@ static void keyboard_handle_modifiers(void *data, struct wl_keyboard *wl_keyboar
      pthread_mutex_unlock(&keyboard->mutex);
  
      set_current_xkb_group(xkb_group);

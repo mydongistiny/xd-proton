@@ -1,8 +1,8 @@
-From 4be3de8e1d4121e7f6c961bc0ba201d7954bc4bc Mon Sep 17 00:00:00 2001
+From 8c4d5ce91bcc241ad252b1ba7d8044f27409c236 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 1 May 2026 16:19:01 -0500
-Subject: [PATCH 110/148] HACK: winewayland: Implement shortcut inhibitor.
+Subject: [PATCH 110/153] HACK: winewayland: Implement shortcut inhibitor.
 
 ---
  dlls/winewayland.drv/Makefile.in              |   1 +
@@ -192,10 +192,10 @@ index b334f8288f7..21128e7b11b 100644
  
  static void registry_handle_global_remove(void *data, struct wl_registry *registry,
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index a422cae99a9..0c7cddb710f 100644
+index f6723813637..fb7d49c9c3a 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -584,6 +584,13 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
+@@ -585,6 +585,13 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
              surface->xdg_toplevel_icon = NULL;
          }
  
@@ -209,7 +209,7 @@ index a422cae99a9..0c7cddb710f 100644
          if (surface->zxdg_toplevel_decoration_v1)
          {
              zxdg_toplevel_decoration_v1_destroy(surface->zxdg_toplevel_decoration_v1);
-@@ -1678,3 +1685,42 @@ void wayland_surface_activate(struct wayland_surface *surface)
+@@ -1680,3 +1687,42 @@ void wayland_surface_activate(struct wayland_surface *surface)
          xdg_activation_token_v1_commit(token);
      }
  }

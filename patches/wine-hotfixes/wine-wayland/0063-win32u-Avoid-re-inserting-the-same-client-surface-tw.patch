@@ -1,8 +1,8 @@
-From 58cb747b2850425fe531879f9bb5110465d5219c Mon Sep 17 00:00:00 2001
+From bc6034fefcba879a7fd6a3a69e2f22212292febd Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 2 May 2026 17:28:12 -0500
-Subject: [PATCH 063/148] win32u: Avoid re-inserting the same client surface
+Subject: [PATCH 063/153] win32u: Avoid re-inserting the same client surface
  twice.
 
 ---

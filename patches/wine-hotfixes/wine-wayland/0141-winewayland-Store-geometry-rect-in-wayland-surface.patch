@@ -1,8 +1,8 @@
-From e70527691bd5ce27a2b57edb1190d64104fd4b3b Mon Sep 17 00:00:00 2001
+From 9a9bbe8b56e905a6cc652a10403eb435f1b0f83d Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 1 Jun 2026 01:53:53 -0400
-Subject: [PATCH 141/148] winewayland: Store geometry rect in wayland surface.
+Subject: [PATCH 141/153] winewayland: Store geometry rect in wayland surface.
 
 Also allows us to perform an optimization. Helps with xdg_popup implementation.
 ---
@@ -11,10 +11,10 @@ Also allows us to perform an optimization. Helps with xdg_popup implementation.
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 1d3297051bb..f164424d42a 100644
+index fecd387e2f8..7156899fc92 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -672,6 +672,7 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
+@@ -673,6 +673,7 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
  
      surface->content_width = 0;
      surface->content_height = 0;
@@ -22,7 +22,7 @@ index 1d3297051bb..f164424d42a 100644
  
      wl_display_flush(process_wayland.wl_display);
  }
-@@ -842,12 +843,13 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
+@@ -843,12 +844,13 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
  
      TRACE("hwnd=%p geometry=%s\n", surface->hwnd, wine_dbgstr_rect(&rect));
  

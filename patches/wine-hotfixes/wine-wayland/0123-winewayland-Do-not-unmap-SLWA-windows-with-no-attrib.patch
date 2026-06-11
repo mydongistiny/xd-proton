@@ -1,8 +1,8 @@
-From 42015ea22dd36080995645465d00eb190a35ff31 Mon Sep 17 00:00:00 2001
+From 1c011d93391a29357b1cc48b2f5b55145975c0b5 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 19 May 2026 20:32:58 -0400
-Subject: [PATCH 123/148] winewayland: Do not unmap SLWA windows with no
+Subject: [PATCH 123/153] winewayland: Do not unmap SLWA windows with no
  attributes set.
 
 ---

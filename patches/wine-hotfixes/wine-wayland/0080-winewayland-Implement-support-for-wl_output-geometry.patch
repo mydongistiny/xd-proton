@@ -1,8 +1,8 @@
-From 0d7e469843fdc22dc29ceb4bb994bbeb7e645f7d Mon Sep 17 00:00:00 2001
+From 268d6e17704553422a97bd41fae72cfe19bf3d9a Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 22 Apr 2026 01:31:18 -0500
-Subject: [PATCH 080/148] winewayland: Implement support for wl_output geometry
+Subject: [PATCH 080/153] winewayland: Implement support for wl_output geometry
  events.
 
 ---

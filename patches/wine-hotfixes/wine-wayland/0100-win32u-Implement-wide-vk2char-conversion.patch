@@ -1,15 +1,15 @@
-From e86757e6c8c283324100b678274f93034764e93b Mon Sep 17 00:00:00 2001
+From a2782c6fd1576eb44697270f642cf20cc7fb5b66 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 24 Apr 2026 17:18:02 -0500
-Subject: [PATCH 100/148] win32u: Implement wide vk2char conversion.
+Subject: [PATCH 100/153] win32u: Implement wide vk2char conversion.
 
 ---
  dlls/win32u/input.c | 31 ++++++++++++++++++-------------
  1 file changed, 18 insertions(+), 13 deletions(-)
 
 diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
-index b34ddcf0810..0d5e9c3798e 100644
+index 88a2a4e177a..531605f5b91 100644
 --- a/dlls/win32u/input.c
 +++ b/dlls/win32u/input.c
 @@ -435,18 +435,19 @@ static void kbd_tables_init_vsc2vk( const KBDTABLES *tables, USHORT vsc2vk[0x300

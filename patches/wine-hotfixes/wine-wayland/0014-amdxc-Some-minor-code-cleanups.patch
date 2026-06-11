@@ -1,8 +1,8 @@
-From f2fcd1db687ad026794d2aa9b56dd374e81988fa Mon Sep 17 00:00:00 2001
+From 4ce20277cb169dc6e5b5d89298f321b76636da86 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 10 Dec 2025 23:47:05 -0600
-Subject: [PATCH 014/148] amdxc: Some minor code cleanups.
+Subject: [PATCH 014/153] amdxc: Some minor code cleanups.
 
 ---
  dlls/amdxc64/amdxc_interfaces.idl | 16 ++++----

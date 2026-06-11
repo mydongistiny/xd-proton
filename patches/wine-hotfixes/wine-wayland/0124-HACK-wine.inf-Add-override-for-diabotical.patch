@@ -1,14 +1,14 @@
-From c2facdb15fb4443c66dcc11229edd2ee8f078204 Mon Sep 17 00:00:00 2001
+From 97ed0b753edb0a78420f84f5376a81a2f8d01bb1 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
 Date: Sat, 14 Jun 2025 11:22:44 -0400
-Subject: [PATCH 124/148] HACK: wine.inf: Add override for diabotical
+Subject: [PATCH 124/153] HACK: wine.inf: Add override for diabotical
 
 ---
  loader/wine.inf.in | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 5db960ce834..add32a6f497 100644
+index 5118de06f70..8dea8f9b510 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -1712,6 +1712,7 @@ HKLM,Software\Wow6432Node\Valve\Steam\Apps\CommonRedist\XNA\4.0,"4.0",0x10001,1

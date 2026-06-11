@@ -1,8 +1,8 @@
-From 2350dfe4eb3f97b8f14ea8467e144732da9b667c Mon Sep 17 00:00:00 2001
+From ac5e6d3a0be5e43e4e883c83da319143a2bba4be Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 27 Apr 2026 13:42:01 -0500
-Subject: [PATCH 113/148] amdxc: Check for wmma support using vkd3d-proton.
+Subject: [PATCH 113/153] amdxc: Check for wmma support using vkd3d-proton.
 
 Requires a pretty new vkd3d-proton.
 ---

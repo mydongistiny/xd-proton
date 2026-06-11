@@ -1,8 +1,8 @@
-From 733222963bf5cdf343d87259b3f746d4bdccf9cf Mon Sep 17 00:00:00 2001
+From baa21c92e23f8e514ea6f85005f050ac3159a614 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 19 May 2026 01:49:00 -0400
-Subject: [PATCH 121/148] HACK: winewayland: Add env to disable focus loss.
+Subject: [PATCH 121/153] HACK: winewayland: Add env to disable focus loss.
 
 for testing
 ---
@@ -10,7 +10,7 @@ for testing
  1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winewayland.drv/wayland_keyboard.c b/dlls/winewayland.drv/wayland_keyboard.c
-index 616179cfb39..e48077a6484 100644
+index 216a8c09ef8..50ff2cd3ada 100644
 --- a/dlls/winewayland.drv/wayland_keyboard.c
 +++ b/dlls/winewayland.drv/wayland_keyboard.c
 @@ -952,6 +952,20 @@ static void keyboard_handle_enter(void *private, struct wl_keyboard *wl_keyboard

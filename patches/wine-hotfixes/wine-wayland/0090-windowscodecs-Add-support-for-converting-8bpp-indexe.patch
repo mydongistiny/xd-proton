@@ -1,7 +1,7 @@
-From 2bb3bd2278b92df16d8e6ac2fe646b1152bdcefc Mon Sep 17 00:00:00 2001
+From 35a262337314145c0b9409a03100d8eb787ef57a Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Sun, 21 Dec 2025 17:41:22 +0300
-Subject: [PATCH 090/148] windowscodecs: Add support for converting 8bpp
+Subject: [PATCH 090/153] windowscodecs: Add support for converting 8bpp
  indexed to 24bpp format.
 
 Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=59155

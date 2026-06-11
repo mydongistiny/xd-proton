@@ -1,8 +1,8 @@
-From 3bae97601d62524e913524357d4e80ac52a0331a Mon Sep 17 00:00:00 2001
+From 16c163c3810cf0d8c0ee35deb98873e396002706 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 24 Apr 2026 00:25:47 -0500
-Subject: [PATCH 097/148] winewayland: Implement support for DXVK_NO_HDR.
+Subject: [PATCH 097/153] winewayland: Implement support for DXVK_NO_HDR.
 
 ---
  dlls/winewayland.drv/display.c | 6 +++---

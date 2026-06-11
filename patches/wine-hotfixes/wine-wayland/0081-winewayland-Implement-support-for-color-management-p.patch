@@ -1,8 +1,8 @@
-From 8134116ec46d9c53c9b3da6cc7ee961e08fff720 Mon Sep 17 00:00:00 2001
+From 8c02a6f2af39ef692eeda3542a6e9e5b2b83db4f Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 22 Apr 2026 18:59:27 -0500
-Subject: [PATCH 081/148] winewayland: Implement support for color management
+Subject: [PATCH 081/153] winewayland: Implement support for color management
  protocol.
 
 Thanks to kode54 for finding some problems with a prior version of this patch: wine-cachyos pull 6

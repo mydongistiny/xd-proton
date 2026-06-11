@@ -1,7 +1,7 @@
-From 0a35b87fceb9b754d6c0327e8032c02293094aeb Mon Sep 17 00:00:00 2001
+From 8b5a8e17c6effd8c4cf0b7c65a2459417d648e58 Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Fri, 19 Dec 2025 15:14:52 +0300
-Subject: [PATCH 093/148] windowscodecs: Add support for converting from 32bpp
+Subject: [PATCH 093/153] windowscodecs: Add support for converting from 32bpp
  RGBA to 64bpp RGBA.
 
 Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=58757

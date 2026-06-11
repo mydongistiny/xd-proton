@@ -1,7 +1,7 @@
-From 74b1bbd7caad6e1891a86e0b4014b752b3e4218c Mon Sep 17 00:00:00 2001
+From 0d48f42903b7729a67fcb569b35ede6fd00af48b Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Thu, 15 Jan 2026 14:35:28 +0300
-Subject: [PATCH 095/148] windowscodecs: Add fallback path to
+Subject: [PATCH 095/153] windowscodecs: Add fallback path to
  copypixels_to_64bppRGBA().
 
 Signed-off-by: Dmitry Timoshkov <dmitry@baikal.ru>

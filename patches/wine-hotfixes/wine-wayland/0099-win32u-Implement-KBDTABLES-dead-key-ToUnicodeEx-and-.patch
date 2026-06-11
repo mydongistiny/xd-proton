@@ -1,7 +1,7 @@
-From 690de9f017bfff46b8b287f2f45e18a72dfabf16 Mon Sep 17 00:00:00 2001
+From eb52dba010f0336e55f059fd20e61ca28514ee14 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 21 Jun 2024 13:29:40 +0200
-Subject: [PATCH 099/148] win32u: Implement KBDTABLES dead key ToUnicodeEx and
+Subject: [PATCH 099/153] win32u: Implement KBDTABLES dead key ToUnicodeEx and
  GetKeyNameText.
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 099/148] win32u: Implement KBDTABLES dead key ToUnicodeEx and
  2 files changed, 48 insertions(+), 9 deletions(-)
 
 diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
-index 8c85d68db96..b34ddcf0810 100644
+index 900c9533dd2..88a2a4e177a 100644
 --- a/dlls/win32u/input.c
 +++ b/dlls/win32u/input.c
 @@ -503,12 +503,13 @@ static WORD kbd_tables_wchar_to_vkey( const KBDTABLES *tables, WCHAR wch )

@@ -1,7 +1,7 @@
-From efe5239780d1b87f15a3a8889df4d8bdc993f636 Mon Sep 17 00:00:00 2001
+From dd4fb11eb3991a9709ffa28e429a286cbc7093d6 Mon Sep 17 00:00:00 2001
 From: Alexandre Julliard <julliard@winehq.org>
 Date: Fri, 23 Jan 2026 22:31:11 +0100
-Subject: [PATCH 003/148] winewayland: Fix build error with older wl_pointer
+Subject: [PATCH 003/153] winewayland: Fix build error with older wl_pointer
  interface.
 
 ---

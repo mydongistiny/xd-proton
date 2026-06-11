@@ -1,8 +1,8 @@
-From e26aa2b60b58bdb4a9f2259fb313a5cfd6a65e42 Mon Sep 17 00:00:00 2001
+From e78e6ce4c53167558ff795d3f6e2424303e232a7 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 6 Mar 2026 17:02:29 -0600
-Subject: [PATCH 096/148] winewayland: Rework ensure contents to avoid
+Subject: [PATCH 096/153] winewayland: Rework ensure contents to avoid
  compositor bugs.
 
 Not a fan of having to change this but hyprland is hyprland i guess
@@ -11,10 +11,10 @@ Not a fan of having to change this but hyprland is hyprland i guess
  1 file changed, 13 insertions(+), 17 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 8b2f51ac7f2..a422cae99a9 100644
+index 58b4e564bfd..f6723813637 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -1496,7 +1496,7 @@ static const struct wl_buffer_listener dummy_buffer_listener =
+@@ -1498,7 +1498,7 @@ static const struct wl_buffer_listener dummy_buffer_listener =
  void wayland_surface_ensure_contents(struct wayland_surface *surface)
  {
      struct wayland_shm_buffer *dummy_shm_buffer;
@@ -23,7 +23,7 @@ index 8b2f51ac7f2..a422cae99a9 100644
      int width, height;
      BOOL needs_contents;
  
-@@ -1511,28 +1511,24 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface)
+@@ -1513,28 +1513,24 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface)
  
      if (!needs_contents) return;
  

@@ -1,8 +1,8 @@
-From 7ead5772d33aa99fcf6e41bbc2ac02c48b686a6c Mon Sep 17 00:00:00 2001
+From 47bbe0d1391923331eb546546a7f58e206da5cc2 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 19 Apr 2026 19:59:27 -0500
-Subject: [PATCH 073/148] winewayland: Always use relative motion.
+Subject: [PATCH 073/153] winewayland: Always use relative motion.
 
 ---
  dlls/winewayland.drv/wayland_pointer.c | 34 +++++++++++++++-----------

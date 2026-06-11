@@ -1,8 +1,8 @@
-From 5d80827d56028c0d291ebbc16537b03c88f6d80a Mon Sep 17 00:00:00 2001
+From 1fab712f10c598a084cb1cbe88adb60ffb211bdf Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 20 Apr 2026 22:49:35 -0500
-Subject: [PATCH 078/148] winewayland: Treat maximized,fullscreen state as
+Subject: [PATCH 078/153] winewayland: Treat maximized,fullscreen state as
  fullscreen.
 
 ---
@@ -11,10 +11,10 @@ Subject: [PATCH 078/148] winewayland: Treat maximized,fullscreen state as
  2 files changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 72f0315cc6f..be173ea6b27 100644
+index aa1aed022ef..0a2fef902a4 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -705,6 +705,14 @@ BOOL wayland_surface_config_is_compatible(struct wayland_surface_config *conf,
+@@ -706,6 +706,14 @@ BOOL wayland_surface_config_is_compatible(struct wayland_surface_config *conf,
      static enum wayland_surface_config_state mask =
          WAYLAND_SURFACE_CONFIG_STATE_MAXIMIZED;
  
@@ -29,7 +29,7 @@ index 72f0315cc6f..be173ea6b27 100644
      /* We require the same state. */
      if ((state & mask) != (conf->state & mask)) return FALSE;
  
-@@ -717,11 +725,6 @@ BOOL wayland_surface_config_is_compatible(struct wayland_surface_config *conf,
+@@ -718,11 +726,6 @@ BOOL wayland_surface_config_is_compatible(struct wayland_surface_config *conf,
          return FALSE;
      }
  
@@ -41,7 +41,7 @@ index 72f0315cc6f..be173ea6b27 100644
      return TRUE;
  }
  
-@@ -775,6 +778,7 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
+@@ -776,6 +779,7 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
          /* If the window rect in the monitor is smaller than required,
           * fall back to an appropriately sized rect at the top-left. */
          if ((surface->current.state & WAYLAND_SURFACE_CONFIG_STATE_MAXIMIZED) &&

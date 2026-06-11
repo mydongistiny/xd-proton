@@ -1,17 +1,17 @@
-From 11539f1c52701c27363f266d63a75ed562688472 Mon Sep 17 00:00:00 2001
+From f5ad65b2c2e2306639bb42754b9142455f2596f8 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 6 May 2025 09:06:03 -0400
-Subject: [PATCH 025/148] winewayland: Implement fractional scaling protcol.
+Subject: [PATCH 025/153] winewayland: Implement fractional scaling protocol.
 
 ---
  dlls/winewayland.drv/Makefile.in             |   1 +
  dlls/winewayland.drv/fractional-scale-v1.xml | 102 +++++++++++++++++++
  dlls/winewayland.drv/wayland.c               |   8 ++
- dlls/winewayland.drv/wayland_surface.c       |  81 +++++++++++++++
+ dlls/winewayland.drv/wayland_surface.c       |  82 +++++++++++++++
  dlls/winewayland.drv/waylanddrv.h            |   5 +
  dlls/winewayland.drv/window.c                |   5 +-
- 6 files changed, 201 insertions(+), 1 deletion(-)
+ 6 files changed, 202 insertions(+), 1 deletion(-)
  create mode 100644 dlls/winewayland.drv/fractional-scale-v1.xml
 
 diff --git a/dlls/winewayland.drv/Makefile.in b/dlls/winewayland.drv/Makefile.in
@@ -161,7 +161,7 @@ index 2c48a6d2bf1..576900683be 100644
  
      return TRUE;
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 2f8275ddb52..1b2237d8616 100644
+index 2f8275ddb52..7363248c585 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -138,6 +138,53 @@ static const struct xdg_toplevel_listener xdg_toplevel_listener =
@@ -201,7 +201,7 @@ index 2f8275ddb52..1b2237d8616 100644
 +                }
 +            }
 +
-+            TRACE("Got scale %lf\n", scale);
++            TRACE("hwnd=%p scale %lf\n", hwnd, scale);
 +        }
 +
 +        wayland_win_data_release(data);
@@ -218,7 +218,15 @@ index 2f8275ddb52..1b2237d8616 100644
  /**********************************************************************
   *          wayland_surface_create
   *
-@@ -241,6 +288,28 @@ void wayland_surface_destroy(struct wayland_surface *surface)
+@@ -175,6 +222,7 @@ struct wayland_surface *wayland_surface_create(HWND hwnd)
+     }
+ 
+     surface->window.scale = 1.0;
++    surface->window.fractional_scale = 1.0;
+ 
+     return surface;
+ 
+@@ -241,6 +289,28 @@ void wayland_surface_destroy(struct wayland_surface *surface)
      free(surface);
  }
  
@@ -247,7 +255,7 @@ index 2f8275ddb52..1b2237d8616 100644
  /**********************************************************************
   *          wayland_surface_make_toplevel
   *
-@@ -276,6 +345,8 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
+@@ -276,6 +346,8 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
  
      wayland_surface_assign_icon(surface);
  
@@ -256,7 +264,7 @@ index 2f8275ddb52..1b2237d8616 100644
      wl_surface_commit(surface->wl_surface);
      wl_display_flush(process_wayland.wl_display);
  
-@@ -312,6 +383,8 @@ void wayland_surface_make_subsurface(struct wayland_surface *surface,
+@@ -312,6 +384,8 @@ void wayland_surface_make_subsurface(struct wayland_surface *surface,
          goto err;
      }
  
@@ -265,7 +273,7 @@ index 2f8275ddb52..1b2237d8616 100644
      surface->role = WAYLAND_SURFACE_ROLE_SUBSURFACE;
      surface->toplevel_hwnd = parent->hwnd;
  
-@@ -338,6 +411,14 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
+@@ -338,6 +412,14 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
  {
      TRACE("surface=%p\n", surface);
  

@@ -1,8 +1,8 @@
-From 311b7695509671352f66696c0ffe7a9e646dd30c Mon Sep 17 00:00:00 2001
+From 244d601acc0494929cc1d646e25ffa040dfead38 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 25 May 2026 19:33:11 -0400
-Subject: [PATCH 132/148] winewayland/opengl: Skip vsync swap buffers when the
+Subject: [PATCH 132/153] winewayland/opengl: Skip vsync swap buffers when the
  window is not visible.
 
 ---

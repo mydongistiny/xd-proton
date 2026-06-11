@@ -1,15 +1,15 @@
-From b0868601fbdd10f87092d08a2d3b38baf9df507a Mon Sep 17 00:00:00 2001
+From 5766c99fb14bf902ecba771bcd1d3aed415fa83c Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Thu, 28 May 2026 22:25:31 -0400
-Subject: [PATCH 135/148] winewayland: Implement brazil ABNT keyboard layout.
+Subject: [PATCH 135/153] winewayland: Implement brazil ABNT keyboard layout.
 
 ---
  dlls/winewayland.drv/wayland_keyboard.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winewayland.drv/wayland_keyboard.c b/dlls/winewayland.drv/wayland_keyboard.c
-index e48077a6484..6798ceebc66 100644
+index 50ff2cd3ada..0be4a8787f0 100644
 --- a/dlls/winewayland.drv/wayland_keyboard.c
 +++ b/dlls/winewayland.drv/wayland_keyboard.c
 @@ -151,6 +151,15 @@ static const USHORT scan2vk_dvorak[0x280] =

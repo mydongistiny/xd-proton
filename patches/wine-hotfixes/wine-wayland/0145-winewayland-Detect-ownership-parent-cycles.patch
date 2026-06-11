@@ -1,15 +1,15 @@
-From 504379a9aa2740ab1ca2869788a0e508780416ef Mon Sep 17 00:00:00 2001
+From 743e0b0bb470b4c73678fb576b3a6806e49e0411 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 2 Jun 2026 19:23:49 -0400
-Subject: [PATCH 146/148] winewayland: Detect ownership/parent cycles.
+Subject: [PATCH 145/153] winewayland: Detect ownership/parent cycles.
 
 ---
- dlls/winewayland.drv/window.c | 66 +++++++++++++++++++++++++----------
- 1 file changed, 47 insertions(+), 19 deletions(-)
+ dlls/winewayland.drv/window.c | 71 ++++++++++++++++++++++++-----------
+ 1 file changed, 50 insertions(+), 21 deletions(-)
 
 diff --git a/dlls/winewayland.drv/window.c b/dlls/winewayland.drv/window.c
-index d5d2e7ff621..792f02aa48e 100644
+index 5bdcfc3dfd5..7be99a6b267 100644
 --- a/dlls/winewayland.drv/window.c
 +++ b/dlls/winewayland.drv/window.c
 @@ -524,6 +524,34 @@ BOOL WAYLAND_WindowPosChanging(HWND hwnd, UINT swp_flags, BOOL shaped, const str
@@ -47,7 +47,7 @@ index d5d2e7ff621..792f02aa48e 100644
  /***********************************************************************
   *           WAYLAND_WindowPosChanged
   */
-@@ -539,7 +567,11 @@ void WAYLAND_WindowPosChanged(HWND hwnd, HWND insert_after, HWND owner_hint, UIN
+@@ -539,38 +567,39 @@ void WAYLAND_WindowPosChanged(HWND hwnd, HWND insert_after, HWND owner_hint, UIN
      /* Get the managed state with win_data unlocked, as is_window_managed
       * may need to query win_data information about other HWNDs and thus
       * acquire the lock itself internally. */
@@ -58,14 +58,19 @@ index d5d2e7ff621..792f02aa48e 100644
 +        owner = owner_hint;
 +    }
  
-     TRACE("hwnd %p toplevel %p new_rects %s after %p flags %08x\n", hwnd, toplevel, debugstr_window_rects(new_rects),
-                                                                     insert_after, swp_flags);
-@@ -549,28 +581,24 @@ void WAYLAND_WindowPosChanged(HWND hwnd, HWND insert_after, HWND owner_hint, UIN
+-    TRACE("hwnd %p toplevel %p new_rects %s after %p flags %08x\n", hwnd, toplevel, debugstr_window_rects(new_rects),
+-                                                                    insert_after, swp_flags);
++    TRACE("hwnd %p toplevel %p owner %p new_rects %s after %p flags %08x\n", hwnd, toplevel, owner,
++          debugstr_window_rects(new_rects), insert_after, swp_flags);
+ 
+     if (!(data = wayland_win_data_get(hwnd))) return;
+     toplevel_data = toplevel && toplevel != hwnd ? wayland_win_data_get_nolock(toplevel) : NULL;
      toplevel_surface = toplevel_data ? toplevel_data->wayland_surface : NULL;
      owner_data = owner && owner != hwnd ? wayland_win_data_get_nolock(owner) : NULL;
      owner_surface = owner_data ? owner_data->wayland_surface : NULL;
 -    if (owner_surface && owner_surface->xdg_surface)
-+    /* for it to be a popup, we need a valid xdg surface. Demote to subsurface instead */
++    /* for it to be a popup, we need a valid xdg surface.
++     * Demote to subsurface instead if this condition is not met. */
 +    if (owner_surface && !owner_surface->xdg_surface)
      {
 -        toplevel_data = NULL;

@@ -1,7 +1,7 @@
-From fb7b5a69f5a3e5443656fbfe74a04ea146b78953 Mon Sep 17 00:00:00 2001
+From 17c7591002f1047ae21460edf7ac2403a1b087be Mon Sep 17 00:00:00 2001
 From: Ziia Shi <mkrsym1@gmail.com>
 Date: Sun, 1 Feb 2026 01:54:17 +0100
-Subject: [PATCH 005/148] win32u: Add SetIMEEnabled driver call.
+Subject: [PATCH 005/153] win32u: Add SetIMEEnabled driver call.
 
 ---
  dlls/win32u/driver.c      | 12 ++++++++++++

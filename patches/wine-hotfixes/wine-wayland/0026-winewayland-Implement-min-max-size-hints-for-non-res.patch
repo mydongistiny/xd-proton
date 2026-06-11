@@ -1,8 +1,8 @@
-From 9a695c43c45cdc16986194ef62301d565600c69d Mon Sep 17 00:00:00 2001
+From 70cea3fdef617ca35a48d12e1420a0f1345f27e2 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 01:47:59 -0500
-Subject: [PATCH 026/148] winewayland: Implement min/max size hints for
+Subject: [PATCH 026/153] winewayland: Implement min/max size hints for
  non-resizeable windows.
 
 ---
@@ -12,10 +12,10 @@ Subject: [PATCH 026/148] winewayland: Implement min/max size hints for
  3 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 1b2237d8616..6aa9ce73eff 100644
+index 7363248c585..8729bb1647d 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -638,10 +638,20 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
+@@ -639,10 +639,20 @@ static void wayland_surface_reconfigure_geometry(struct wayland_surface *surface
  
      if (!IsRectEmpty(&rect))
      {

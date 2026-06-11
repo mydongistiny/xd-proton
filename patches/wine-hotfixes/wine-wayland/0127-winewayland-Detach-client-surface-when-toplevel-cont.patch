@@ -1,8 +1,8 @@
-From c947e5f98207ed601c11e134ea0282a643ab38a7 Mon Sep 17 00:00:00 2001
+From c0b35f342ab88e5617e2247cc70097f843c8ef6d Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 23 May 2026 02:22:53 -0400
-Subject: [PATCH 127/148] winewayland: Detach client surface when toplevel
+Subject: [PATCH 127/153] winewayland: Detach client surface when toplevel
  contents are set.
 
 ---

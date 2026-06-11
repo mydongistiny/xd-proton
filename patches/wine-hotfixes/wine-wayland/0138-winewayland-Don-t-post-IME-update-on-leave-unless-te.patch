@@ -1,7 +1,7 @@
-From 5f8cb261360f3fc335b589afa1d3fbea9e514a65 Mon Sep 17 00:00:00 2001
+From 850a7ae83064b2a17c00793a78741fc1d17f995b Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
 Date: Sat, 30 May 2026 04:05:46 -0400
-Subject: [PATCH 138/148] winewayland: Don't post IME update on leave unless
+Subject: [PATCH 138/153] winewayland: Don't post IME update on leave unless
  text input is enabled
 
 ---

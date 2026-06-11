@@ -1,8 +1,8 @@
-From 58c2bcebd5d5f224518cb4ac7fe11e9042d2347f Mon Sep 17 00:00:00 2001
+From 1591accc36736f7b915aa1eae48b73022b3d4d08 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Mon, 30 Mar 2026 01:03:35 -0500
-Subject: [PATCH 027/148] winewayland: respect size hint when restoring from
+Subject: [PATCH 027/153] winewayland: respect size hint when restoring from
  tiled states.
 
 ---

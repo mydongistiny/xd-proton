@@ -1,19 +1,19 @@
-From 3f811863f7a1889b87b237f4cc787b8aea067546 Mon Sep 17 00:00:00 2001
+From 190f209ed33337c528698771eaedcd25539c650e Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 10 Feb 2026 23:30:27 -0600
-Subject: [PATCH 064/148] winewayland: Implement support for server-side
+Subject: [PATCH 064/153] winewayland: Implement support for server-side
  decorations.
 
 ---
  dlls/winewayland.drv/Makefile.in              |   1 +
  dlls/winewayland.drv/wayland.c                |  28 +++
- dlls/winewayland.drv/wayland_surface.c        |  97 +++++++++-
+ dlls/winewayland.drv/wayland_surface.c        | 100 +++++++++-
  dlls/winewayland.drv/waylanddrv.h             |  19 +-
  dlls/winewayland.drv/waylanddrv_main.c        |   1 +
  dlls/winewayland.drv/window.c                 |  88 ++++++++-
  .../xdg-decoration-unstable-v1.xml            | 176 ++++++++++++++++++
- 7 files changed, 398 insertions(+), 12 deletions(-)
+ 7 files changed, 400 insertions(+), 13 deletions(-)
  create mode 100644 dlls/winewayland.drv/xdg-decoration-unstable-v1.xml
 
 diff --git a/dlls/winewayland.drv/Makefile.in b/dlls/winewayland.drv/Makefile.in
@@ -82,7 +82,7 @@ index 1129f63fb4b..99d59fc1360 100644
  
      return TRUE;
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 64619ec1580..9aa888fe4e0 100644
+index a4900a02fbe..a7a725c169f 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -57,6 +57,16 @@ static void xdg_surface_handle_configure(void *private, struct xdg_surface *xdg_
@@ -133,7 +133,7 @@ index 64619ec1580..9aa888fe4e0 100644
  /**********************************************************************
   *          wayland_surface_create
   *
-@@ -310,19 +344,62 @@ static void wayland_surface_init_fractional_scale(struct wayland_surface *surfac
+@@ -311,19 +345,62 @@ static void wayland_surface_init_fractional_scale(struct wayland_surface *surfac
      }
  }
  
@@ -198,7 +198,7 @@ index 64619ec1580..9aa888fe4e0 100644
  
      wayland_surface_clear_role(surface);
      surface->role = WAYLAND_SURFACE_ROLE_TOPLEVEL;
-@@ -359,6 +436,8 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
+@@ -360,6 +437,8 @@ void wayland_surface_make_toplevel(struct wayland_surface *surface)
  
      wayland_surface_init_fractional_scale(surface, 1.0);
  
@@ -207,7 +207,7 @@ index 64619ec1580..9aa888fe4e0 100644
      wl_surface_commit(surface->wl_surface);
      wl_display_flush(process_wayland.wl_display);
  
-@@ -446,6 +525,12 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
+@@ -447,6 +526,12 @@ void wayland_surface_clear_role(struct wayland_surface *surface)
              surface->xdg_toplevel_icon = NULL;
          }
  
@@ -220,28 +220,35 @@ index 64619ec1580..9aa888fe4e0 100644
          if (surface->xdg_toplevel)
          {
              xdg_toplevel_destroy(surface->xdg_toplevel);
-@@ -742,7 +827,10 @@ static BOOL wayland_surface_reconfigure_xdg(struct wayland_surface *surface,
+@@ -741,9 +826,12 @@ static BOOL wayland_surface_reconfigure_xdg(struct wayland_surface *surface,
+                                              width, height,
+                                              window->state))
      {
-         surface->current = surface->processing;
-         memset(&surface->processing, 0, sizeof(surface->processing));
--        xdg_surface_ack_configure(surface->xdg_surface, surface->current.serial);
 +        /* if a decoration change occured during the initial configure, avoid
 +         * a double ack as that would cause a protocol error */
 +        if (surface->processing.serial != surface->current.serial)
-+            xdg_surface_ack_configure(surface->xdg_surface, surface->current.serial);
++            xdg_surface_ack_configure(surface->xdg_surface, surface->processing.serial);
+         surface->current = surface->processing;
+         memset(&surface->processing, 0, sizeof(surface->processing));
+-        xdg_surface_ack_configure(surface->xdg_surface, surface->current.serial);
      }
      /* If this is the initial configure, and we have a compatible requested
       * config, use that, in order to draw windows that don't go through the
-@@ -754,6 +842,9 @@ static BOOL wayland_surface_reconfigure_xdg(struct wayland_surface *surface,
+@@ -753,9 +841,13 @@ static BOOL wayland_surface_reconfigure_xdg(struct wayland_surface *surface,
+                                                   width, height,
+                                                   window->state))
      {
++        if (surface->requested.serial != surface->current.serial)
++            xdg_surface_ack_configure(surface->xdg_surface, surface->requested.serial);
          surface->current = surface->requested;
          memset(&surface->requested, 0, sizeof(surface->requested));
+-        xdg_surface_ack_configure(surface->xdg_surface, surface->current.serial);
 +        /* decoration changes must go through the message loop */
 +        surface->requested.decor = surface->current.decor;
 +        surface->current.decor = 0;
-         xdg_surface_ack_configure(surface->xdg_surface, surface->current.serial);
      }
      else if (!surface->current.serial ||
+              !wayland_surface_config_is_compatible(&surface->current,
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
 index 5e1919bb44c..4eb2be4d845 100644
 --- a/dlls/winewayland.drv/waylanddrv.h

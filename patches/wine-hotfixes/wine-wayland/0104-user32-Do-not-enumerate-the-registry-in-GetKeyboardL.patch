@@ -1,7 +1,7 @@
-From 4c6090f14aa5f72d2602c1a1aef76c1ad98fcb79 Mon Sep 17 00:00:00 2001
+From 3358b1342f44a23b3885f3d1c82de119ec1d4f75 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Tue, 9 Jul 2019 14:13:28 +1000
-Subject: [PATCH 104/148] user32: Do not enumerate the registry in
+Subject: [PATCH 104/153] user32: Do not enumerate the registry in
  GetKeyboardLayoutList().
 
 This function returns the current list of *installed* Keyboard layouts
@@ -65,7 +65,7 @@ index 7915a8416d3..81e264b2147 100644
      test_ScheduleDispatchNotification();
  
 diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
-index fa3affffd80..aa2d5ebb260 100644
+index 0fc0666f922..2384cb70d3e 100644
 --- a/dlls/win32u/input.c
 +++ b/dlls/win32u/input.c
 @@ -1453,11 +1453,7 @@ HKL WINAPI NtUserActivateKeyboardLayout( HKL layout, UINT flags )

@@ -1,8 +1,8 @@
-From b26a912c7d1f0a3d5cd854582e4653b37661cf88 Mon Sep 17 00:00:00 2001
+From a0d2115b8f7d0a9b4f2ff969bb1b91d789928c91 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 24 May 2026 14:16:10 -0400
-Subject: [PATCH 129/148] winewayland: Rebind output extensions after binding
+Subject: [PATCH 129/153] winewayland: Rebind output extensions after binding
  to globals.
 
 The globals are not defined to be exposed in any particular order, so we need to do this to ensure a valid state before program start.

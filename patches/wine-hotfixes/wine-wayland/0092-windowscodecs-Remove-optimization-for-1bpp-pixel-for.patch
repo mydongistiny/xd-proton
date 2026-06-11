@@ -1,7 +1,7 @@
-From 7cc144ac7410a975acccce3d8c5b215b212a0832 Mon Sep 17 00:00:00 2001
+From 34f55b915796d8d256ef5f7fc125b4976b9ccb95 Mon Sep 17 00:00:00 2001
 From: Dmitry Timoshkov <dmitry@baikal.ru>
 Date: Mon, 8 Dec 2025 11:39:24 +0300
-Subject: [PATCH 092/148] windowscodecs: Remove optimization for 1bpp pixel
+Subject: [PATCH 092/153] windowscodecs: Remove optimization for 1bpp pixel
  formats from WICConvertBitmapSource().
 
 Signed-off-by: Dmitry Timoshkov <dmitry@baikal.ru>

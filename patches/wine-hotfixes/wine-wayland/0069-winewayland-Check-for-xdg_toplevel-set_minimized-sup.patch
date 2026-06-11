@@ -1,8 +1,8 @@
-From c5772938d345a898cb32592760f9d0243eadf0b1 Mon Sep 17 00:00:00 2001
+From a5881567d4322e655272d68ea36a8cc818aea6c4 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 10 Apr 2026 21:25:37 -0500
-Subject: [PATCH 069/148] winewayland: Check for xdg_toplevel::set_minimized
+Subject: [PATCH 069/153] winewayland: Check for xdg_toplevel::set_minimized
  support
 
 ---
@@ -41,7 +41,7 @@ index 0aebf7550f2..2cc605a2d34 100644
          }
  
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 9aa888fe4e0..72f0315cc6f 100644
+index a7a725c169f..aa1aed022ef 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
 @@ -57,6 +57,8 @@ static void xdg_surface_handle_configure(void *private, struct xdg_surface *xdg_

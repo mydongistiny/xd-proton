@@ -1,7 +1,7 @@
-From 29680547e5387ede55926687a34086e18d6a5379 Mon Sep 17 00:00:00 2001
+From 8db418e802686563beb1044236c7e9f6e160ebd3 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
 Date: Thu, 26 Jan 2023 15:07:16 -0500
-Subject: [PATCH 028/148] ntoskrnl.exe: Implement KeAcquireGuardedMutex.
+Subject: [PATCH 028/153] ntoskrnl.exe: Implement KeAcquireGuardedMutex.
 
 ---
  dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  2 ++

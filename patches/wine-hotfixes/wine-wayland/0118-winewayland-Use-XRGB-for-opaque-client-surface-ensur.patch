@@ -1,8 +1,8 @@
-From 17190e240811d9210f15082c4aeaa2283ba2771e Mon Sep 17 00:00:00 2001
+From e9279edddcef20ae0dffbed52bfe57b12e3d62e9 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 16 May 2026 17:11:29 -0500
-Subject: [PATCH 118/148] winewayland: Use XRGB for opaque client surface
+Subject: [PATCH 118/153] winewayland: Use XRGB for opaque client surface
  ensure contents.
 
 ---
@@ -26,10 +26,10 @@ index c0dc1b0871d..062506870ba 100644
      return VK_SUCCESS;
  err:
 diff --git a/dlls/winewayland.drv/wayland_surface.c b/dlls/winewayland.drv/wayland_surface.c
-index 4f5046f7c82..6d881c04cf1 100644
+index 91fc3c0fca8..8f5b700badf 100644
 --- a/dlls/winewayland.drv/wayland_surface.c
 +++ b/dlls/winewayland.drv/wayland_surface.c
-@@ -1553,6 +1553,12 @@ void wayland_client_surface_attach_image_description(struct client_surface *clie
+@@ -1555,6 +1555,12 @@ void wayland_client_surface_attach_image_description(struct client_surface *clie
      wl_display_flush(process_wayland.wl_display);
  }
  
@@ -42,7 +42,7 @@ index 4f5046f7c82..6d881c04cf1 100644
  static void dummy_buffer_release(void *data, struct wl_buffer *buffer)
  {
      struct wayland_shm_buffer *shm_buffer = data;
-@@ -1571,7 +1577,8 @@ static const struct wl_buffer_listener dummy_buffer_listener =
+@@ -1573,7 +1579,8 @@ static const struct wl_buffer_listener dummy_buffer_listener =
   * Ensure that the wayland surface has up-to-date contents, by committing
   * a dummy buffer if necessary.
   */
@@ -52,7 +52,7 @@ index 4f5046f7c82..6d881c04cf1 100644
  {
      struct wayland_shm_buffer *dummy_shm_buffer;
      HRGN damage = NULL;
-@@ -1580,19 +1587,24 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface)
+@@ -1582,19 +1589,24 @@ void wayland_surface_ensure_contents(struct wayland_surface *surface)
  
      width = surface->window.rect.right - surface->window.rect.left;
      height = surface->window.rect.bottom - surface->window.rect.top;

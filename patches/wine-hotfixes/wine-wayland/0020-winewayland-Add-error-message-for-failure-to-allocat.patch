@@ -1,8 +1,8 @@
-From 97ec864c8ae8f65a78effdf86d36de80f6f4c318 Mon Sep 17 00:00:00 2001
+From d5e918143916831aef107e0af802c37e7b56d676 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 00:12:55 -0500
-Subject: [PATCH 020/148] winewayland: Add error message for failure to
+Subject: [PATCH 020/153] winewayland: Add error message for failure to
  allocate client surface.
 
 ---
