@@ -2583,10 +2583,6 @@ class Session:
             # FIXME: temporary workaround for libxkbcommon's current integration
             if "XLOCALEDIR" not in self.env:
                 self.env["XLOCALEDIR"] = g_proton.dist_dir + "share/X11/locale"
-            # Some strange bug with X displays. I have a hunch it is caused by ffmpeg but it's not logging anything...
-            # TODO: Needs retest with proton 11
-            if "DISPLAY" in self.env:
-                del self.env["DISPLAY"]
 
         # Use SDL backend for inputs instead of hidraw/Steam Input.
         if "sdlinput" in self.compat_config:
