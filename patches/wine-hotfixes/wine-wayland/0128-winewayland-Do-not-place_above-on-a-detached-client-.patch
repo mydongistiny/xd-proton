@@ -1,8 +1,8 @@
-From 743c6dd0aa087ec9d72cea703bee1878027db6f4 Mon Sep 17 00:00:00 2001
+From a95c9c648678b6ccf37f1ee9e8f05dfe7cd86c55 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sun, 24 May 2026 01:13:35 -0400
-Subject: [PATCH 128/153] winewayland: Do not place_above on a detached client
+Subject: [PATCH 128/152] winewayland: Do not place_above on a detached client
  surface.
 
 ---

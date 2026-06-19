@@ -1,8 +1,8 @@
-From ea43a64bccd57a79388fe15c7c269aada4e69eb3 Mon Sep 17 00:00:00 2001
+From c2e2f5334dbbf92217a3617760b15e233feaf773 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Sat, 16 May 2026 17:05:56 -0500
-Subject: [PATCH 117/153] win32u/vulkan: Include alpha bits in vulkan surface
+Subject: [PATCH 117/152] win32u/vulkan: Include alpha bits in vulkan surface
  configure.
 
 ---
@@ -14,7 +14,7 @@ Subject: [PATCH 117/153] win32u/vulkan: Include alpha bits in vulkan surface
  5 files changed, 23 insertions(+), 13 deletions(-)
 
 diff --git a/dlls/win32u/vulkan.c b/dlls/win32u/vulkan.c
-index b6ad8b01f4d..c959d2a114a 100644
+index b8d7edacce5..a975223ebf2 100644
 --- a/dlls/win32u/vulkan.c
 +++ b/dlls/win32u/vulkan.c
 @@ -2599,7 +2599,7 @@ static VkResult win32u_vkCreateSwapchainKHR( VkDevice client_device, const VkSwa
@@ -26,7 +26,7 @@ index b6ad8b01f4d..c959d2a114a 100644
      {
          free( swapchain );
          return res;
-@@ -3978,7 +3978,9 @@ static VkResult nulldrv_vulkan_surface_create( HWND hwnd, BOOL raw, const struct
+@@ -4023,7 +4023,9 @@ static VkResult nulldrv_vulkan_surface_create( HWND hwnd, BOOL raw, const struct
      return res;
  }
  
@@ -37,7 +37,7 @@ index b6ad8b01f4d..c959d2a114a 100644
  {
      return VK_SUCCESS;
  }
-@@ -4009,7 +4011,7 @@ static void nulldrv_map_device_extensions( struct vulkan_device_extensions *exte
+@@ -4054,7 +4056,7 @@ static void nulldrv_map_device_extensions( struct vulkan_device_extensions *exte
  static const struct vulkan_driver_funcs nulldrv_funcs =
  {
      .p_vulkan_surface_create = nulldrv_vulkan_surface_create,
@@ -46,7 +46,7 @@ index b6ad8b01f4d..c959d2a114a 100644
      .p_get_physical_device_presentation_support = nulldrv_get_physical_device_presentation_support,
      .p_map_instance_extensions = nulldrv_map_instance_extensions,
      .p_map_device_extensions = nulldrv_map_device_extensions,
-@@ -4042,10 +4044,12 @@ static VkResult lazydrv_vulkan_surface_create( HWND hwnd, BOOL raw, const struct
+@@ -4087,10 +4089,12 @@ static VkResult lazydrv_vulkan_surface_create( HWND hwnd, BOOL raw, const struct
      return driver_funcs->p_vulkan_surface_create( hwnd, raw, instance, surface, client );
  }
  
@@ -61,7 +61,7 @@ index b6ad8b01f4d..c959d2a114a 100644
  }
  
  static VkBool32 lazydrv_get_physical_device_presentation_support( struct vulkan_physical_device *physical_device, uint32_t queue )
-@@ -4069,7 +4073,7 @@ static void lazydrv_map_device_extensions( struct vulkan_device_extensions *exte
+@@ -4114,7 +4118,7 @@ static void lazydrv_map_device_extensions( struct vulkan_device_extensions *exte
  static const struct vulkan_driver_funcs lazydrv_funcs =
  {
      .p_vulkan_surface_create = lazydrv_vulkan_surface_create,

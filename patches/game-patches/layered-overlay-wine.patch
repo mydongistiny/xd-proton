@@ -304,7 +304,7 @@ diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
 index 63a8536c71..fa0aafe4d4 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
-@@ -568,6 +567,7 @@ static unsigned long get_mwm_decorations( struct x11drv_win_data *data, DWORD st
+@@ -568,6 +568,7 @@ static unsigned long get_mwm_decorations( struct x11drv_win_data *data, DWORD st
  static int get_window_attributes( struct x11drv_win_data *data, XSetWindowAttributes *attr )
  {
      DWORD ex_style = NtUserGetWindowLongW( data->hwnd, GWL_EXSTYLE );
@@ -312,7 +312,7 @@ index 63a8536c71..fa0aafe4d4 100644
  
      attr->colormap          = data->whole_colormap ? data->whole_colormap : default_colormap;
      attr->save_under        = ((NtUserGetClassLongW( data->hwnd, GCL_STYLE ) & CS_SAVEBITS) != 0);
-@@ -577,9 +577,10 @@ static int get_window_attributes( struct x11drv_win_data *data, XSetWindowAttrib
+@@ -577,9 +578,10 @@ static int get_window_attributes( struct x11drv_win_data *data, XSetWindowAttrib
      attr->background_pixel  = 0;
      attr->event_mask        = (ExposureMask | KeyPressMask | KeyReleaseMask |
                                 FocusChangeMask | KeymapStateMask | StructureNotifyMask | PropertyChangeMask);
@@ -326,20 +326,24 @@ index 63a8536c71..fa0aafe4d4 100644
  
      return (CWSaveUnder | CWColormap | CWBorderPixel | CWBackPixel |
              CWEventMask | CWBitGravity | CWBackingStore);
-@@ -596,10 +597,11 @@ static void sync_window_input_shape( struct x11drv_win_data *data )
+@@ -596,6 +598,7 @@ static void sync_window_input_shape( struct x11drv_win_data *data )
  {
  #ifdef HAVE_LIBXSHAPE
      DWORD ex_style = NtUserGetWindowLongW( data->hwnd, GWL_EXSTYLE );
 +    BOOL overlay = layered_overlay_shape_enabled() || layered_overlay_alpha_enabled();
+     char const *sgi;
  
      if (!data->whole_window) return;
+@@ -612,7 +615,7 @@ static void sync_window_input_shape( struct x11drv_win_data *data )
+      */
+     if ((sgi = getenv( "SteamGameId" )) && !strcmp( sgi, "3678970" )) return;
  
 -    if (ex_style & WS_EX_TRANSPARENT)
 +    if ((ex_style & WS_EX_TRANSPARENT) && !overlay)
      {
          /* For transparent windows, set an empty input shape to allow mouse pass-through */
          static XRectangle empty_rect;
-@@ -2763,6 +2765,17 @@ static void create_whole_window( struct x11drv_win_data *data )
+@@ -2818,6 +2821,17 @@ static void create_whole_window( struct x11drv_win_data *data )
      }
      data->shaped = (win_rgn != 0);
  
@@ -357,7 +361,7 @@ index 63a8536c71..fa0aafe4d4 100644
      if (data->vis.visualid != default_visual.visualid)
          data->whole_colormap = XCreateColormap( data->display, root_window, data->vis.visual, AllocNone );
  
-@@ -2946,7 +2959,12 @@ void X11DRV_SetWindowStyle( HWND hwnd, INT offset, STYLESTRUCT *style )
+@@ -3001,7 +3015,12 @@ void X11DRV_SetWindowStyle( HWND hwnd, INT offset, STYLESTRUCT *style )
          if (changed & WS_EX_LAYERED) /* changing WS_EX_LAYERED resets attributes */
          {
              data->layered = FALSE;

@@ -1,0 +1,75 @@
+From ff5a4eb2055e7e937cc99abeea187cb4f3b12b98 Mon Sep 17 00:00:00 2001
+From: Jason Edson <jaysonedson@gmail.com>
+Date: Thu, 18 Jun 2026 17:53:40 -0700
+Subject: [PATCH 009/152] Revert "amdcx64: Turn AmdExtStub1 into singleton."
+
+This reverts commit 7c3d7324e1fe07f65154a88029ee8782c6f9ac9d.
+---
+ dlls/amdxc64/main.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/amdxc64/main.c b/dlls/amdxc64/main.c
+index 9c1e7977e54..569a311d8fe 100644
+--- a/dlls/amdxc64/main.c
++++ b/dlls/amdxc64/main.c
+@@ -167,6 +167,7 @@ const static struct IAmdExtStub2Vtbl AMDSTUB2_vtable = {
+ struct AMDExtStub1
+ {
+     IAmdExtStub1 IAmdExtStub1_iface;
++    LONG ref;
+ };
+ 
+ struct AMDExtStub1* impl_from_IAMDExtStub1(IAmdExtStub1 *iface)
+@@ -176,19 +177,22 @@ struct AMDExtStub1* impl_from_IAMDExtStub1(IAmdExtStub1 *iface)
+ 
+ ULONG STDMETHODCALLTYPE AMDExtStub1_AddRef(IAmdExtStub1 *iface)
+ {
+-    return 2;
++    struct AMDExtStub1 *this = impl_from_IAMDExtStub1(iface);
++    return InterlockedIncrement(&this->ref);
+ }
+ 
+ ULONG STDMETHODCALLTYPE AMDExtStub1_Release(IAmdExtStub1 *iface)
+ {
+-    return 1;
++    struct AMDExtStub1 *this = impl_from_IAMDExtStub1(iface);
++    ULONG ret = InterlockedDecrement(&this->ref);
++    if (!ret) free(this);
++    return ret;
+ }
+ 
+ HRESULT STDMETHODCALLTYPE AmdExtStub1_QueryInterface2(IAmdExtStub1 *iface, void* unk, REFIID iid, void **out)
+ {
+     TRACE("%p %p %s %p\n", iface, unk, debugstr_guid(iid), out);
+ 
+-    *out = NULL;
+     if(IsEqualGUID(iid, &IID_IAmdExtStub2))
+     {
+         struct AMDExtStub2 *this = calloc(1, sizeof(struct AMDExtStub2));
+@@ -216,11 +220,6 @@ static const struct IAmdExtStub1Vtbl AMDSTUB1_vtable = {
+     AmdExtStub1_QueryInterface2
+ };
+ 
+-static struct AMDExtStub1 amd_ext_stub1 =
+-{
+-    .IAmdExtStub1_iface = { &AMDSTUB1_vtable },
+-};
+-
+ HRESULT CDECL AmdExtD3DCreateInterface(IUnknown *outer, REFIID iid, void **obj)
+ {
+     TRACE("outer %p, iid %s, obj %p\n", outer, debugstr_guid(iid), obj);
+@@ -235,7 +234,10 @@ HRESULT CDECL AmdExtD3DCreateInterface(IUnknown *outer, REFIID iid, void **obj)
+     } else if (IsEqualGUID(iid, &IID_IAmdExtAntiLagApi)) {
+         return ID3D12Device_QueryInterface((ID3D12Device *)outer, &IID_IAmdExtAntiLagApi, obj);
+     } else if(IsEqualGUID(iid, &IID_IAmdExtStub1)) {
+-        *obj = &amd_ext_stub1;
++        struct AMDExtStub1 *this = calloc(1, sizeof(struct AMDExtStub1));
++        this->IAmdExtStub1_iface.lpVtbl = &AMDSTUB1_vtable;
++        this->ref = 1;
++        *obj = &this->IAmdExtStub1_iface;
+         return S_OK;
+     } else {
+         FIXME("unknown guid: %s\n", debugstr_guid(iid));
+-- 
+2.54.0
+

@@ -1,8 +1,8 @@
-From 2a5022b3cf315f8fa4b317b71c9592bdd27fced7 Mon Sep 17 00:00:00 2001
+From bfd797050c7f7007e21873d00fe066278e3d548a Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Wed, 29 Apr 2026 22:12:11 -0500
-Subject: [PATCH 115/153] winewayland: Use passthrough for some colorspaces.
+Subject: [PATCH 115/152] winewayland: Use passthrough for some colorspaces.
 
 Required for HDR to look correct on wayland since Windows works in a different way compared to wayland.
 ---
@@ -175,7 +175,7 @@ index 68c32ee0041..54e22f142dd 100644
  
  static const struct vulkan_driver_funcs wayland_vulkan_driver_funcs =
 diff --git a/dlls/winewayland.drv/wayland.c b/dlls/winewayland.drv/wayland.c
-index 56f621446a9..7f0b9ae77ba 100644
+index 0b458977bb1..d8853842057 100644
 --- a/dlls/winewayland.drv/wayland.c
 +++ b/dlls/winewayland.drv/wayland.c
 @@ -43,7 +43,8 @@ struct wayland process_wayland =
@@ -188,17 +188,17 @@ index 56f621446a9..7f0b9ae77ba 100644
  };
  
  /**********************************************************************
-@@ -253,7 +254,7 @@ static void registry_handle_global(void *data, struct wl_registry *registry,
-     {
+@@ -255,7 +256,7 @@ static void registry_handle_global(void *data, struct wl_registry *registry,
+ 
          process_wayland.wp_color_manager_v1 =
              wl_registry_bind(registry, id, &wp_color_manager_v1_interface,
 -                             version < 2 ? version : 2);
 +                             version < 3 ? version : 3);
-         if (process_wayland.wp_color_manager_v1) wayland_color_manager_init();
-     }
-     else if (strcmp(interface, "xdg_activation_v1") == 0)
+ 
+         wayland_color_manager_init();
+         /* Add image descriptions to existing outputs. */
 diff --git a/dlls/winewayland.drv/wayland_output.c b/dlls/winewayland.drv/wayland_output.c
-index 5708dd73f26..e33473863c0 100644
+index cb588ecdad7..eb77cc89e45 100644
 --- a/dlls/winewayland.drv/wayland_output.c
 +++ b/dlls/winewayland.drv/wayland_output.c
 @@ -222,6 +222,8 @@ static void wayland_output_done(struct wayland_output *output)
@@ -210,7 +210,7 @@ index 5708dd73f26..e33473863c0 100644
          output->current.supports_hdr = (output->current.max_target_lum > output->current.ref_lum);
      }
  
-@@ -747,6 +749,8 @@ static void wayland_color_manager_handle_supported_feature(void *data,
+@@ -746,6 +748,8 @@ static void wayland_color_manager_handle_supported_feature(void *data,
  
      if (feature == WP_COLOR_MANAGER_V1_FEATURE_WINDOWS_SCRGB)
          process_wayland.supports_scrgb = TRUE;
@@ -309,7 +309,7 @@ index fb7d49c9c3a..91fc3c0fca8 100644
  {
      struct wayland_shm_buffer *shm_buffer = data;
 diff --git a/dlls/winewayland.drv/waylanddrv.h b/dlls/winewayland.drv/waylanddrv.h
-index 4e89ec963f3..368580a31bb 100644
+index d6ad90f5194..c5f06224f37 100644
 --- a/dlls/winewayland.drv/waylanddrv.h
 +++ b/dlls/winewayland.drv/waylanddrv.h
 @@ -252,6 +252,7 @@ struct wayland
@@ -328,7 +328,7 @@ index 4e89ec963f3..368580a31bb 100644
      struct wp_viewport *wp_viewport;
      struct wp_content_type_v1 *wp_content_type_v1;
  };
-@@ -435,6 +437,8 @@ void wayland_surface_coords_to_window(struct wayland_surface *surface,
+@@ -436,6 +438,8 @@ void wayland_surface_coords_to_window(struct wayland_surface *surface,
                                        int *window_x, int *window_y);
  struct wayland_client_surface *wayland_client_surface_create(HWND hwnd);
  void wayland_client_surface_attach(struct wayland_client_surface *client, HWND toplevel);

@@ -1,7 +1,7 @@
-From 5e10571e78abd19a56f24a5a5044f81b05fee9b0 Mon Sep 17 00:00:00 2001
+From 64479158f62383c3d70a0c8951e6b8939ea0a812 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 13 Jan 2026 11:30:00 +0100
-Subject: [PATCH 126/153] win32u: Use surfaces for client area if the backend
+Subject: [PATCH 126/152] win32u: Use surfaces for client area if the backend
  doesn't support PutImage.
 
 This is the case on macOS and some other drivers. It will not change

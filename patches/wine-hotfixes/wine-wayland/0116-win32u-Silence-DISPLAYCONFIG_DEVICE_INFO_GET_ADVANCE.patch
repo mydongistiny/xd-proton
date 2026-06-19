@@ -1,8 +1,8 @@
-From 1e1fcebf8e70c34ebd004828344764a3c9f1c046 Mon Sep 17 00:00:00 2001
+From 47377ce5352e7ed954eaefd5ec2c45cc9f147fc5 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Tue, 12 May 2026 10:12:17 -0500
-Subject: [PATCH 116/153] win32u: Silence
+Subject: [PATCH 116/152] win32u: Silence
  DISPLAYCONFIG_DEVICE_INFO_GET_ADVANCED_COLOR_INFO fixme.
 
 ---
