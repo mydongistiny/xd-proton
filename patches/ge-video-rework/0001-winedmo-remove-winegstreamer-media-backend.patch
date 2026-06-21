@@ -19,7 +19,7 @@ The winedmo media-type path also replaces the old Metal Gear Solid V / Metal Gea
  .../libavcodec/pcm_byte_order_reverse_bsf.c   |   66 +-
  dlls/winedmo/main.c                           |  736 ++++-
  .../media-converter/fossilize.c               |   80 +-
- .../media-converter/lib.c                     |   79 +-
+ .../media-converter/lib.c                     |   77 +-
  .../media-converter/media-converter.h         |   31 +-
  .../media-converter/murmur3.c                 |    0
  dlls/winedmo/media_format.h                   |  422 +++
@@ -54,7 +54,7 @@ The winedmo media-type path also replaces the old Metal Gear Solid V / Metal Gea
  .../winegstreamer/media-converter/audioconv.c | 1094 -------
  .../media-converter/audioconvbin.c            |  148 -
  .../media-converter/protondemuxer.c           |  250 --
- .../winegstreamer/media-converter/videoconv.c | 1394 ---------
+ .../winegstreamer/media-converter/videoconv.c | 1425 ---------
  dlls/winegstreamer/quartz_parser.c            | 2768 -----------------
  dlls/winegstreamer/unix_private.h             |  159 -
  dlls/winegstreamer/unixlib.c                  |  369 ---
@@ -63,18 +63,18 @@ The winedmo media-type path also replaces the old Metal Gear Solid V / Metal Gea
  dlls/winegstreamer/wg_format.c                | 1193 -------
  dlls/winegstreamer/wg_media_type.c            |  943 ------
  dlls/winegstreamer/wg_muxer.c                 |  560 ----
- dlls/winegstreamer/wg_parser.c                | 2738 ----------------
+ dlls/winegstreamer/wg_parser.c                | 2691 ----------------
  dlls/winegstreamer/wg_sample.c                |  582 ----
  dlls/winegstreamer/wg_task_pool.c             |   98 -
  dlls/winegstreamer/wg_transform.c             | 1742 -----------
  dlls/winegstreamer/winegstreamer.rgs          |   42 -
  dlls/winegstreamer/winegstreamer.spec         |    7 -
  include/wine/winedmo.h                        |   39 +-
- 59 files changed, 12741 insertions(+), 18654 deletions(-)
+ 59 files changed, 12740 insertions(+), 18637 deletions(-)
  rename dlls/{winegstreamer => winedmo}/audio_decoder.c (65%)
  rename dlls/{winegstreamer => winedmo}/color_convert.c (87%)
  rename dlls/{winegstreamer => winedmo}/media-converter/fossilize.c (88%)
- rename dlls/{winegstreamer => winedmo}/media-converter/lib.c (85%)
+ rename dlls/{winegstreamer => winedmo}/media-converter/lib.c (83%)
  rename dlls/{winegstreamer => winedmo}/media-converter/media-converter.h (90%)
  rename dlls/{winegstreamer => winedmo}/media-converter/murmur3.c (100%)
  create mode 100644 dlls/winedmo/media_format.h
@@ -2421,7 +2421,7 @@ index 420f201ef57..36af3ac8a93 100644
      }
  
 diff --git a/dlls/winegstreamer/media-converter/lib.c b/dlls/winedmo/media-converter/lib.c
-similarity index 85%
+similarity index 83%
 rename from dlls/winegstreamer/media-converter/lib.c
 rename to dlls/winedmo/media-converter/lib.c
 index 14294c636a9..07555e97c14 100644
@@ -2565,18 +2565,9 @@ index 14294c636a9..07555e97c14 100644
  
      slots = malloc(original_size);
      if (slots &&
-@@ -426,7 +419,7 @@ int discard_transcoded_streams(struct fozdb *dump_db, struct fozdb *read_db)
- 
-             if (!(buffer = calloc(1, entry->full_size)))
-             {
--                GST_WARNING("out of memory.");
-+                MEDIACONV_WARN("out of memory.");
-                 break;
-             }
- 
-@@ -449,39 +442,3 @@ int discard_transcoded_streams(struct fozdb *dump_db, struct fozdb *read_db)
- 
-     return ret;
+@@ -396,39 +389,3 @@ void mark_transcoded_stream(struct fozdb *fozdb, struct fozdb_hash *hash)
+     free(slots);
+     fozdb_release(played_fozdb);
  }
 -
 -#ifndef _WINEDMO
@@ -2621,7 +2612,7 @@ rename to dlls/winedmo/media-converter/media-converter.h
 index d06534eb991..6d3aef6ce2b 100644
 --- a/dlls/winegstreamer/media-converter/media-converter.h
 +++ b/dlls/winedmo/media-converter/media-converter.h
-@@ -35,19 +35,12 @@
+@@ -35,19 +35,13 @@
  
  #ifdef _WINEDMO
  
@@ -2642,6 +2633,7 @@ index d06534eb991..6d3aef6ce2b 100644
 +#define MEDIACONV_WARN(fmt, ...) WARN(fmt "\n", ## __VA_ARGS__)
 +#define MEDIACONV_INFO(fmt, ...) TRACE(fmt "\n", ## __VA_ARGS__)
 +#define MEDIACONV_DBG(fmt, ...) TRACE(fmt "\n", ## __VA_ARGS__)
++#define GST_WARNING(fmt, ...) MEDIACONV_WARN(fmt, ## __VA_ARGS__)
 +typedef struct media_buffer media_buffer_t; /* not used */
 +extern size_t media_buffer_extract(media_buffer_t*,size_t,void*,size_t); /* not used */
  
@@ -2659,7 +2651,7 @@ index d06534eb991..6d3aef6ce2b 100644
      size_t offset;
  };
  
-@@ -284,15 +277,15 @@ static inline int bytes_reader_read(void *data_reader, uint8_t *buffer, size_t s
+@@ -283,15 +276,15 @@ static inline int bytes_reader_read(void *data_reader, uint8_t *buffer, size_t s
      return CONV_OK;
  }
  
@@ -2678,7 +2670,7 @@ index d06534eb991..6d3aef6ce2b 100644
  
      if (!size)
      {
-@@ -300,7 +293,7 @@ static inline int gst_buffer_reader_read(void *data_reader, uint8_t *buffer, siz
+@@ -299,7 +292,7 @@ static inline int gst_buffer_reader_read(void *data_reader, uint8_t *buffer, siz
          return CONV_OK;
      }
  
@@ -22606,7 +22598,7 @@ deleted file mode 100644
 index fb8cc2c2512..00000000000
 --- a/dlls/winegstreamer/media-converter/videoconv.c
 +++ /dev/null
-@@ -1,1394 +0,0 @@
+@@ -1,1425 +0,0 @@
 -/*
 - * Copyright 2024 Ziqing Hui for CodeWeavers
 - *
@@ -22778,6 +22770,8 @@ index fb8cc2c2512..00000000000
 -
 -static void dump_fozdb_discard_transcoded(void)
 -{
+-    struct rb_tree to_discard_chunks = {fozdb_entry_compare};
+-    struct fozdb_entry *entry;
 -    struct fozdb *read_fozdb;
 -    char *read_fozdb_path;
 -    int ret;
@@ -22806,11 +22800,40 @@ index fb8cc2c2512..00000000000
 -        return;
 -    }
 -
--    if ((ret = discard_transcoded_streams(dump_fozdb.fozdb, read_fozdb)) < 0)
+-    FOZDB_FOR_EACH_TAG_ENTRY(entry, VIDEO_CONV_FOZ_TAG_STREAM, dump_fozdb.fozdb)
 -    {
--        GST_ERROR("failed to discard transcoded streams from the dump db, ret %i.", ret);
+-        struct fozdb_hash chunk_id;
+-        uint32_t i;
+-        size_t read_size;
+-
+-        if (fozdb_has_entry(read_fozdb, VIDEO_CONV_FOZ_TAG_OGVDATA, &entry->key.hash))
+-        {
+-            if (entry->full_size)
+-            {
+-                uint8_t *buffer = calloc(1, entry->full_size);
+-                if (fozdb_read_entry_data(dump_fozdb.fozdb, VIDEO_CONV_FOZ_TAG_STREAM, &entry->key.hash,
+-                        0, buffer, entry->full_size, &read_size, true) == CONV_OK)
+-                {
+-                    for (i = 0; i < read_size / sizeof(chunk_id); ++i)
+-                    {
+-                        fozdb_hash_from_bytes(&chunk_id, buffer + i * sizeof(chunk_id));
+-                        fozdb_entry_put(&to_discard_chunks, VIDEO_CONV_FOZ_TAG_VIDEODATA, &chunk_id);
+-                    }
+-                }
+-                free(buffer);
+-            }
+-
+-            fozdb_entry_put(&to_discard_chunks, VIDEO_CONV_FOZ_TAG_STREAM, &entry->key.hash);
+-        }
+-    }
+-
+-    if ((ret = fozdb_discard_entries(dump_fozdb.fozdb, &to_discard_chunks)) < 0)
+-    {
+-        GST_ERROR("Failed to discard entries, ret %d.", ret);
 -        dump_fozdb_close(&dump_fozdb);
 -    }
+-
+-    rb_destroy(&to_discard_chunks, fozdb_entry_destroy, NULL);
 -}
 -
 -struct pad_reader *pad_reader_create_with_stride(GstPad *pad, size_t stride)
@@ -30843,7 +30866,7 @@ deleted file mode 100644
 index 2403aae49bf..00000000000
 --- a/dlls/winegstreamer/wg_parser.c
 +++ /dev/null
-@@ -1,2738 +0,0 @@
+@@ -1,2691 +0,0 @@
 -/*
 - * GStreamer parser backend
 - *
@@ -30972,7 +30995,7 @@ index 2403aae49bf..00000000000
 -    GstBuffer *buffer;
 -    GstMapInfo map_info;
 -
--    bool flushing, eos, enabled, has_tags, has_buffer, no_more_pads, fix_align, get_buffer_called;
+-    bool flushing, eos, enabled, has_tags, has_buffer, no_more_pads, fix_nv12, get_buffer_called;
 -
 -    uint64_t duration;
 -    gchar *tags[WG_PARSER_TAG_COUNT];
@@ -31624,7 +31647,7 @@ index 2403aae49bf..00000000000
 -        {
 -            GstStructure *structure;
 -            GstVideoInfo video_info;
--            bool fix_nv12 = false, fix_yv12 = false;
+-            bool fix_nv12 = false;
 -            GstCaps *caps;
 -
 -            gst_event_parse_caps(event, &caps);
@@ -31640,23 +31663,11 @@ index 2403aae49bf..00000000000
 -                }
 -                if (fix_nv12)
 -                    GST_INFO("Enabling the NV12 alignment fix.");
--
--                fix_yv12 = (GST_VIDEO_INFO_FORMAT(&video_info) == GST_VIDEO_FORMAT_YV12
--                        || GST_VIDEO_INFO_FORMAT(&video_info) == GST_VIDEO_FORMAT_I420)
--                        && (video_info.stride[1] > GST_ROUND_UP_2(video_info.width/2));
--                if (fix_yv12 && GST_VIDEO_INFO_IS_INTERLACED(&video_info))
--                {
--                    GST_WARNING("YV12/I420 alignment fix is not implemented for interlaced YV12/I420.\n");
--                    fix_yv12 = false;
--                }
--                if (fix_yv12)
--                    GST_INFO("Enabling the YV12/I420 alignment fix.");
--
 -            }
 -
 -            pthread_mutex_lock(&parser->mutex);
 -            stream->current_caps = gst_caps_ref(caps);
--            stream->fix_align = fix_nv12 || fix_yv12;
+-            stream->fix_nv12 = fix_nv12;
 -            pthread_mutex_unlock(&parser->mutex);
 -            pthread_cond_signal(&parser->init_cond);
 -            break;
@@ -31676,7 +31687,7 @@ index 2403aae49bf..00000000000
 -    return TRUE;
 -}
 -
--static void buffer_fix_align(GstBuffer *buffer, GstCaps *caps)
+-static void buffer_fix_nv12(GstBuffer *buffer, GstCaps *caps)
 -{
 -    GstVideoInfo src_info, dst_info;
 -    gint i, aligned_height;
@@ -31696,63 +31707,28 @@ index 2403aae49bf..00000000000
 -
 -    dst_info = src_info;
 -
--    if (GST_VIDEO_INFO_FORMAT(&src_info) == GST_VIDEO_FORMAT_NV12)
+-    aligned_height = GST_ROUND_UP_2(dst_info.height);
+-    dst_info.stride[0] = GST_ROUND_UP_2(dst_info.width);
+-    dst_info.stride[1] = dst_info.stride[0];
+-    dst_info.offset[0] = 0;
+-    dst_info.offset[1] = dst_info.stride[0] * aligned_height;
+-    dst_info.size = dst_info.offset[1] + dst_info.stride[0] * aligned_height / 2;
+-
+-    dst = src = map_info.data;
+-    for (i = 0; i < aligned_height; ++i)
 -    {
--        aligned_height = GST_ROUND_UP_2(dst_info.height);
--        dst_info.stride[0] = GST_ROUND_UP_2(dst_info.width);
--        dst_info.stride[1] = dst_info.stride[0];
--        dst_info.offset[0] = 0;
--        dst_info.offset[1] = dst_info.stride[0] * aligned_height;
--        dst_info.size = dst_info.offset[1] + dst_info.stride[0] * aligned_height / 2;
--
--        dst = src = map_info.data;
--        for (i = 0; i < aligned_height; ++i)
--        {
--            memmove(dst, src, dst_info.stride[0]);
--            dst += dst_info.stride[0];
--            src += src_info.stride[0];
--        }
--
--        dst = map_info.data + dst_info.offset[1];
--        src = map_info.data + src_info.offset[1];
--        for (i = 0; i < aligned_height / 2; ++i)
--        {
--            memmove(dst, src, dst_info.stride[1]);
--            dst += dst_info.stride[1];
--            src += src_info.stride[1];
--        }
+-        memmove(dst, src, dst_info.stride[0]);
+-        dst += dst_info.stride[0];
+-        src += src_info.stride[0];
 -    }
--    else if (GST_VIDEO_INFO_FORMAT(&src_info) == GST_VIDEO_FORMAT_I420
--            || GST_VIDEO_INFO_FORMAT(&src_info) == GST_VIDEO_FORMAT_YV12)
+-
+-    dst = map_info.data + dst_info.offset[1];
+-    src = map_info.data + src_info.offset[1];
+-    for (i = 0; i < aligned_height / 2; ++i)
 -    {
--        gint p, plane1, plane2;
--
--        plane1 = (src_info.offset[2] > src_info.offset[1]) ? 1 : 2;
--        plane2 = 3 - plane1;
--        aligned_height = (src_info.offset[plane2] - src_info.offset[plane1]) / src_info.stride[plane1];
--
--        dst_info.stride[2] = dst_info.stride[1] = GST_ROUND_UP_2(dst_info.width / 2);
--        dst_info.offset[plane2] = dst_info.offset[plane1] + dst_info.stride[plane1] * aligned_height;
--        dst_info.size = dst_info.offset[plane2] + dst_info.stride[plane2] * aligned_height;
--
--        assert(dst_info.size <= src_info.size);
--
--        for (p = 1; p <= 2; ++p)
--        {
--            dst = map_info.data + dst_info.offset[p];
--            src = map_info.data + src_info.offset[p];
--            for (i = 0; i < aligned_height; ++i)
--            {
--                memmove(dst, src, dst_info.stride[p]);
--                dst += dst_info.stride[p];
--                src += src_info.stride[p];
--            }
--        }
--    }
--    else
--    {
--        /* should never happen */
--        assert(0);
+-        memmove(dst, src, dst_info.stride[1]);
+-        dst += dst_info.stride[1];
+-        src += src_info.stride[1];
 -    }
 -
 -    gst_buffer_unmap(buffer, &map_info);
@@ -31796,8 +31772,8 @@ index 2403aae49bf..00000000000
 -        return GST_FLOW_FLUSHING;
 -    }
 -
--    if (stream->fix_align)
--        buffer_fix_align(buffer, stream->current_caps);
+-    if (stream->fix_nv12)
+-        buffer_fix_nv12(buffer, stream->current_caps);
 -
 -    if (!gst_buffer_map(buffer, &stream->map_info, GST_MAP_READ))
 -    {
@@ -36140,4 +36116,3 @@ index c068dfa1de8..444c896d6b4 100644
  #endif /* __WINE_WINEDMO_H */
 -- 
 2.54.0
-
