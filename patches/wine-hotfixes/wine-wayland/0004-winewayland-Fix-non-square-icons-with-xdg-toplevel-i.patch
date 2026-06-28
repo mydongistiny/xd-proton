@@ -1,7 +1,7 @@
-From 1a328f05da2ce53815e49ab5f30b4ea96c1a6c17 Mon Sep 17 00:00:00 2001
+From 4cddc061866ca55f8d7b7c41e80ad1f74def9301 Mon Sep 17 00:00:00 2001
 From: Alex Schwartz <alexschwartz01@gmail.com>
 Date: Sun, 18 Jan 2026 11:12:05 -0500
-Subject: [PATCH 004/152] winewayland: Fix non-square icons with
+Subject: [PATCH 004/153] winewayland: Fix non-square icons with
  xdg-toplevel-icon protocol.
 
 ---
