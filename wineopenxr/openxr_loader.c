@@ -695,9 +695,7 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
   wine_session->session_type = session_type;
 
   EnterCriticalSection(&session_list_lock);
-
   list_add_tail(&session_list, &wine_session->entry);
-
   LeaveCriticalSection(&session_list_lock);
 
   *session = (XrSession)wine_session;
