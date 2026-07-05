@@ -77,9 +77,6 @@ apply_all_in_dir() {
     echo "WINE: -CUSTOM- ETAASH WINE-WAYLAND+ PATCHES"
    apply_all_in_dir "../patches/wine-hotfixes/wine-wayland/"
 
-    echo "WINE: -CUSTOM- DWPROTON PATCHES"
-   apply_all_in_dir "../patches/wine-hotfixes/dw-proton/"
-
 ### END EM-10/WINE-WAYLAND PATCH SECTION ###
 
 ### (2-3) WINE STAGING APPLY SECTION ###
