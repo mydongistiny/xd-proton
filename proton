@@ -1990,6 +1990,7 @@ def default_compat_config():
 
     if appid not in [
         "4920",
+        "552440",
     ]:
         ret.add("gamedrive")
 
