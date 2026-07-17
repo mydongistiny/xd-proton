@@ -2444,6 +2444,17 @@ class Session:
                 "0" if self.log_enabled_for("fex", True) else "1"
             )
 
+        if (
+            "SteamGameId" in os.environ
+            and os.environ["SteamGameId"] in fex_application_profiles
+        ):
+            try:
+                app_config["AppOverrides"] = fex_application_profiles[
+                    os.environ["SteamGameId"]
+                ]
+            except (KeyError, ValueError):
+                pass
+
         return app_config
 
     def get_primary_monitor(self):
@@ -3192,7 +3203,9 @@ class Session:
 
         steam_input_appid_forced = False
         if self.force_steam_input_appid:
-            appid = os.environ.get("SteamGameId", os.environ.get("STEAM_COMPAT_APP_ID", "0"))
+            appid = os.environ.get(
+                "SteamGameId", os.environ.get("STEAM_COMPAT_APP_ID", "0")
+            )
             if str(appid).isdigit() and str(appid) != "0":
                 steam_input_appid_forced = self.set_steam_input_appid(appid)
 
