@@ -1585,16 +1585,6 @@ class CompatData:
                     link_debug=True,
                 )
 
-                # copy contrib dlls
-                try_copy(
-                    g_proton.contrib_dir + "amdxcffx64.dll",
-                    "drive_c/windows/system32",
-                    prefix=self.prefix_dir,
-                    track_file=tracked_files,
-                    link_debug=True,
-                    optional=True,
-                )  # redist versions may not have the contrib dir
-
                 if use_wined3d:
                     dxvkfiles = []
                     vkd3d_protonfiles = []
