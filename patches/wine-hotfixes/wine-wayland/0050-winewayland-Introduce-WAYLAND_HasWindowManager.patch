@@ -1,8 +1,8 @@
-From fb06dd6dd0b2452ddd6609c7fbc4cbe0b8c35ae5 Mon Sep 17 00:00:00 2001
+From c38fd8fd816aa987dd850c7a6aed6f5b7fd28a65 Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 00:44:32 -0500
-Subject: [PATCH 050/201] winewayland: Introduce WAYLAND_HasWindowManager.
+Subject: [PATCH 050/239] winewayland: Introduce WAYLAND_HasWindowManager.
 
 ---
  dlls/winewayland.drv/waylanddrv.h      |  1 +

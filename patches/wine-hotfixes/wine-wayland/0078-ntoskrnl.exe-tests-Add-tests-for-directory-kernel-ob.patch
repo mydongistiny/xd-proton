@@ -1,7 +1,7 @@
-From 8320765f5ef7ad31b3d486c6cbc9e7414419a715 Mon Sep 17 00:00:00 2001
+From a88b146d2f187797dd49444488421dca876a2289 Mon Sep 17 00:00:00 2001
 From: Nello De Gregoris <bluechxindv@gmail.com>
 Date: Thu, 5 Mar 2026 19:33:22 +0100
-Subject: [PATCH 078/201] ntoskrnl.exe/tests: Add tests for directory kernel
+Subject: [PATCH 078/239] ntoskrnl.exe/tests: Add tests for directory kernel
  objects.
 
 ---

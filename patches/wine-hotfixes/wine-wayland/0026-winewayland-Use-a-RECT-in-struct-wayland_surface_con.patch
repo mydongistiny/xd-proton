@@ -1,7 +1,7 @@
-From acbf5be5ce1a7dbb13fd23e645af6344fb62f43c Mon Sep 17 00:00:00 2001
+From f92bf783c99b720a1c1d095981939dcab5e5a0ec Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 23 Jun 2026 09:15:56 +0200
-Subject: [PATCH 026/201] winewayland: Use a RECT in struct
+Subject: [PATCH 026/239] winewayland: Use a RECT in struct
  wayland_surface_config.
 
 ---

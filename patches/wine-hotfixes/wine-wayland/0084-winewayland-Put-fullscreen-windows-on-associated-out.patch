@@ -1,8 +1,8 @@
-From 9d4de368f6ff67e00e899e6f0241416d61079f6e Mon Sep 17 00:00:00 2001
+From a97c2b228552daf9bdac4ccc20cc31162f430aea Mon Sep 17 00:00:00 2001
 From: Etaash Mathamsetty
  <45927311+Etaash-mathamsetty@users.noreply.github.com>
 Date: Fri, 17 Apr 2026 21:07:55 -0500
-Subject: [PATCH 084/201] winewayland: Put fullscreen windows on associated
+Subject: [PATCH 084/239] winewayland: Put fullscreen windows on associated
  output.
 
 ---
