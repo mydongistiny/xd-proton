@@ -1,5 +1,6 @@
 """Various utility functions for use in the proton script"""
 
+import importlib.util
 import io
 import sys
 import os
@@ -231,6 +232,14 @@ def primary_gpu_supports_vulkan(
     )
 
 
+def import_from_path(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 if __name__ == '__main__':
 
     os.environ["PROTON_ADD_CONFIG"] = ""
@@ -267,6 +276,7 @@ if __name__ == '__main__':
 
 
 __all__ = [
+    'import_from_path',
     'primary_gpu_supports_vulkan',
     'get_vulkan_gpus',
     'log_environment',
