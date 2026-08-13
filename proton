@@ -2286,9 +2286,16 @@ class Session:
                 "SteamVirtualGamepadInfo_Proton"
             ]
 
+        if "PROTON_USE_WOW64" not in self.env and "SteamGameId" in self.env:
+            if self.env["SteamGameId"] in [
+                "747920",
+            ]:
+                self.env["PROTON_USE_WOW64"] = "1"
+
         self.env.pop("WINEARCH", "")
         if (
-            os.environ.get("PROTON_USE_WOW64", None) == "1"
+            "PROTON_USE_WOW64" in self.env
+            and self.env["PROTON_USE_WOW64"] == "1"
             and platform.machine() == "x86_64"
         ):
             self.env["WINEARCH"] = "wow64"
