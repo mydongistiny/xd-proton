@@ -55,6 +55,16 @@ apply_all_in_dir() {
     echo "DISCORD: -DISCORD RPC BRIDGE- patch steam/umu helpers"
     apply_all_in_dir "patches/discordrpc/helpers"
 
+    git checkout -- \
+        lsteamclient/Makefile.in \
+        lsteamclient/gen_wrapper.py \
+        lsteamclient/steam_input_manual.c \
+        lsteamclient/steamclient_private.h \
+        lsteamclient/winISteamInput.c
+
+    echo "LSTEAMCLIENT: add XInput-backed Steam Input fallback"
+    apply_all_in_dir "patches/lsteamclient"
+
 ### (2) WINE PATCHING ###
 
     pushd wine
@@ -111,6 +121,7 @@ apply_all_in_dir() {
     -W ntdll-ext4-case-folder \
     -W winex11-Window_Style \
     -W wininet-Cleanup \
+    -W wintrust-WTHelperGetProvCertFromChain \
     -W winex11-ime-check-thread-data \
     -W winex11-Fixed-scancodes \
     -W Staging
@@ -139,6 +150,7 @@ apply_all_in_dir() {
     # loader-KeyboardLayouts - already applied
     # ntdll-Syscall_Emulation - already applied
     # ntdll_reg_flush - already applied
+    # wintrust-WTHelperGetProvCertFromChain - already applied by the wine-wayland patchset
 
     # ntdll-Hide_Wine_Exports - applied manually
     # kernel32-Debugger - applied manually
@@ -223,6 +235,12 @@ apply_all_in_dir() {
 
     echo "WINE: -GAME FIXES- add fixes Guilty Gear Accent Core Plus R intro video (win32u related)"
     apply_patch "../patches/game-patches/0001-win32u-Avoid-zero-WM_ACTIVATEAPP-lparam-on-first-for.patch"
+
+    echo "WINE: -GAME FIXES- make MapleStory launch: avoid NULL deref in CharPrevA/CharPrevExA"
+    apply_patch "../patches/game-patches/maplestory-kernelbase-charprev-null.patch"
+
+    echo "WINE: -GAME FIXES- make MapleStory launch: accept SPI_SETSTICKYKEYS/SPI_SETFILTERKEYS"
+    apply_patch "../patches/game-patches/maplestory-spi-stickykeys-filterkeys.patch"
 
 ### END GAME PATCH SECTION ###
 
