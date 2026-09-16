@@ -456,6 +456,13 @@ $(eval $(call rules-cmake,glslang,aarch64,unix))
 
 LSTEAMCLIENT_DEPENDS = wine
 
+ifeq ($(TARGET_ARCH),arm64)
+# Wine's ARM64X build installs its PE import libraries under the aarch64 build tree.
+LSTEAMCLIENT_i386_LIBFLAGS = -L$(WINE_aarch64_LIBDIR)/wine/i386-windows
+LSTEAMCLIENT_x86_64_LIBFLAGS = -L$(WINE_aarch64_LIBDIR)/wine/x86_64-windows
+LSTEAMCLIENT_arm64ec_LIBFLAGS = -L$(WINE_aarch64_LIBDIR)/wine/aarch64-windows
+endif
+
 $(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
 $(eval $(call rules-makedep,lsteamclient,i386))
 $(eval $(call rules-makedep,lsteamclient,x86_64))
@@ -722,7 +729,6 @@ $(OBJ)/.wine-x86_64-post-build:
 	if [ -f "$(WINEOPENXR64_JSON_SRC)" ]; then \
 		cp -a "$(WINEOPENXR64_JSON_SRC)" "$(WINEOPENXR64_JSON)"; \
 	fi
-
 	touch $@
 
 $(OBJ)/.wine-aarch64-post-build:
@@ -741,7 +747,6 @@ endif
 	if [ -f "$(WINEOPENXR64_JSON_SRC)" ]; then \
 		cp -a "$(WINEOPENXR64_JSON_SRC)" "$(WINEOPENXR64_JSON)"; \
 	fi
-
 	touch $@
 
 ##
@@ -1054,6 +1059,7 @@ include $(SRC)/vklayers/build-dxvk-nvapi-vkreflex-layer.mk
 include $(SRC)/vklayers/build-pyroveil.mk
 include $(SRC)/vklayers/build-low_latency_layer.mk
 include $(SRC)/vklayers/build-vkbasalt.mk
+include $(SRC)/vklayers/build-steam-overlay-wayland.mk
 endif # WITHOUT_VKLAYERS
 
 
@@ -1480,7 +1486,7 @@ distclean: gecko-distclean
 ## wine-mono
 ##
 
-WINEMONO_VER := 11.3.0
+include $(SRC)/patches/wine-mono/source.conf
 WINEMONO_x86_64_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 WINEMONO_aarch64_TARBALL := wine-mono-$(WINEMONO_VER)-arm64.tar.xz
 ifeq ($(TARGET_ARCH),arm64)
@@ -1493,16 +1499,60 @@ DIST_WINEMONO := $(OBJ)/.wine-mono-dist
 DIST_WINEMONO_TARGET := $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
+# Rebuild the native runtimes and patched class libraries from the matching release.
+WINEMONO_PREPARED := $(SRC)/wine-mono/.proton-prepared
+WINEMONO_RUNTIME_SRC := $(OBJ)/src-wine-mono-$(WINEMONO_VER)
+WINEMONO_SOURCE_STAMP := $(OBJ)/.wine-mono-$(WINEMONO_VER)-source
+WINEMONO_RUNTIME_STAMP := $(OBJ)/.wine-mono-$(WINEMONO_VER)-runtime
+WINEMONO_DRAWING_STAMP := $(OBJ)/.wine-mono-$(WINEMONO_VER)-drawing
+WINEMONO_DRAWING_SRC := $(WINEMONO_RUNTIME_SRC)/mono/mcs/class/lib/net_4_x-win32
+DIST_WINEMONO_DRAWING := $(DIST_WINEMONO_TARGET)/lib/mono/gac/System.Drawing/4.0.0.0__b03f5f7f11d50a3a
+WINEMONO_PATCHES := $(sort $(wildcard $(SRC)/patches/wine-mono/*.patch))
+
 $(SRC)/contrib/$(WINEMONO_TARBALL):
 	mkdir -p $(dir $@)
 	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL) || (rm $@; false)
+
+$(WINEMONO_PREPARED): $(SRC)/patches/wine-mono/source.conf $(SRC)/patches/wine-mono/prepare.sh $(WINEMONO_PATCHES)
+	@echo "Wine-Mono source is missing or stale; run ./patches/protonprep-valve-staging.sh first." >&2
+	@exit 1
+
+$(WINEMONO_SOURCE_STAMP): $(WINEMONO_PREPARED) $(SRC)/Makefile.in
+	rm -rf $(WINEMONO_RUNTIME_SRC)
+	mkdir -p $(WINEMONO_RUNTIME_SRC)
+	rsync -a --exclude .proton-prepared $(SRC)/wine-mono/ $(WINEMONO_RUNTIME_SRC)/
+	touch $@
+
+$(WINEMONO_RUNTIME_STAMP): $(WINEMONO_SOURCE_STAMP)
+	mkdir -p $(WINEMONO_RUNTIME_SRC)/build $(WINEMONO_RUNTIME_SRC)/image
+	# mono.make appends a PDB filename even for DWARF; override its PDB linker flags.
+	# Keep GCC support code in the DLL; the SDK's libgcc DLL is not distributed.
+	+$(MAKE) -C $(WINEMONO_RUNTIME_SRC) AUTO_LLVM_MINGW=0 \
+	    MINGW_x86=$(i386-windows_TARGET) MINGW_x86_64=$(x86_64-windows_TARGET) \
+	    ENABLE_DEBUG_SYMBOLS=1 PREFER_DWARF_SYMBOLS=1 \
+	    PDB_LDFLAGS_LIBMONO_x86=-static-libgcc PDB_LDFLAGS_LIBMONO_x86_64=-static-libgcc \
+	    libmono-2.0-x86.dll libmono-2.0-x86_64.dll
+	touch $@
+
+$(WINEMONO_DRAWING_STAMP): $(WINEMONO_RUNTIME_STAMP)
+	# Use Mono's own compiler bootstrap and Windows class-library profile.
+	# Only System.Drawing is packaged; keep the other release assemblies intact.
+	+$(MAKE) -C $(WINEMONO_RUNTIME_SRC) AUTO_LLVM_MINGW=0 \
+	    BUILDDIR=$(WINEMONO_RUNTIME_SRC)/build build_profiles=net_4_x \
+	    $(WINEMONO_RUNTIME_SRC)/build/mono-unix/.built-win32
+	test -s $(WINEMONO_DRAWING_SRC)/System.Drawing.dll
+	touch $@
 
 $(DIST_WINEMONO_TARGET): $(SRC)/contrib/$(WINEMONO_TARBALL)
 	mkdir -p $(DIST_WINEMONO_DIR)
 	rm -rf $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
 	tar --no-same-owner -xf $< -C $(DIST_WINEMONO_DIR)
 
-$(DIST_WINEMONO): $(DIST_WINEMONO_TARGET)
+$(DIST_WINEMONO): $(DIST_WINEMONO_TARGET) $(WINEMONO_DRAWING_STAMP)
+	cp $(WINEMONO_RUNTIME_SRC)/image/bin/libmono-2.0-x86.dll $(WINEMONO_RUNTIME_SRC)/image/bin/libmono-2.0-x86_64.dll $(DIST_WINEMONO_TARGET)/bin/
+	cp $(WINEMONO_RUNTIME_SRC)/image/bin/libmono-2.0-x86.dbg $(WINEMONO_RUNTIME_SRC)/image/bin/libmono-2.0-x86_64.dbg $(DIST_WINEMONO_TARGET)/bin/
+	cp $(WINEMONO_DRAWING_SRC)/System.Drawing.dll $(DIST_WINEMONO_DRAWING)/
+	if test -f $(WINEMONO_DRAWING_SRC)/System.Drawing.pdb; then cp $(WINEMONO_DRAWING_SRC)/System.Drawing.pdb $(DIST_WINEMONO_DRAWING)/; fi
 	rm -f $(DIST_WINEMONO_DIR)/wine-mono; ln -s wine-mono-$(WINEMONO_VER) $(DIST_WINEMONO_DIR)/wine-mono
 	touch $@
 

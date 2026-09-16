@@ -486,12 +486,14 @@ PROTON_ENABLE_HDR=1 %command%
 ```
 
 > [!NOTE]
-> Enabling HDR auto-enables the wine-wayland driver as it is a requirement.
-> As of right now, in-game Steam overlay WILL NOT work with Wayland enabled.
-> Please also note that Steam Input also does not work properly with the wine-wayland driver due to the overlay being broken.
+> Setting PROTON_ENABLE_HDR=1 does NOT enable the  Wine Wayland driver. Gamescope
+> can use PROTON_ENABLE_HDR, and automatically enabling native Wine Wayland
+> here would break that path. For HDR outside of gamescope, enable PROTON_ENABLE_HDR=1 
+> AND PROTON_ENABLE_WAYLAND=1 together only when using a native wayland desktop and
+> not using gamescope.
 
 ##### Enabling NTSync
-For NTSync to work, your kernel must be version 6.14 or newer and built with `CONFIG_NTSYNC=y` or `CONFIG_NTSYNC=m`.
+For NTSync to work, your kernel must be version 6.14 or newer and built with `CONFIG_NTSYNC=y` or `CONFIG_NTSYNC=m`. On non-systemd systems, you must also have a `ulimit -Hn` of 524288 or higher.
 If using `CONFIG_NTSYNC=m`, a module loading configuration is required followed by a reboot:
 
 /etc/modules-load.d/ntsync.conf
@@ -502,11 +504,40 @@ You can also manually enable the module without reboot, just keep in mind the ab
 ```
 sudo modprobe ntsync
 ```
+If on a non-systemd system with an inadequate `ulimit -Hn`, adjusting limits is required followed by a reboot:
 
+/etc/security/limits.d/26-steam-nofile.conf
+```
+*               hard    nofile             524288
+```
+
+##### Enabling FSR 4
+
+To download and install `amdxcffx64.dll` for FSR 4 upgrades in compatible games with FSR 3.1, use:
+
+```bash
+PROTON_FSR4_UPGRADE=1 %command%
+```
+
+Use the same option for RDNA3 GPUs. The old `PROTON_FSR4_RDNA3_UPGRADE` option is obsolete and has no effect; replace it with `PROTON_FSR4_UPGRADE`. GPU, driver, and game compatibility are still required.
+
+The default DLL version is selected from the `fsr_40_drv` entries in the [upscaler manifest](https://loathingkernel.github.io/proton-upscalers/manifest.json), not pinned to a version in Proton. As of September 27, 2026, the default is **4.1.1**. To request a specific available version, use, for example, `PROTON_FSR4_UPGRADE=4.1.1 %command%`. If the requested version is absent from the manifest, the downloader falls back to the latest non-development entry. In particular, `4.0.2` is currently unavailable and requesting it does not select the old DLL.
+
+GE-Proton's DLL downloader remains opt-in: it does not automatically download `amdxcffx64.dll` without enabling this option. This is separate from a game's own FSR support or Wine using a DLL that is already installed. `PROTON_FSR4_INDICATOR=1` enables the FSR upscaling and frame-generation watermarks.
 
 Environment variable options:
 
 Disable Steam Input for the game before using the Sony controller compatibility options below. This allows Wine to use the physical controller's HIDRAW interface instead of Steam's virtual controller.
+
+Wired [VitaPad v.2.0.0](https://github.com/carlelieser/vitapad/releases/tag/v.2.0.0) (`054c:1337`) is exposed as a DualShock 4 v2 by default through HIDRAW, without an opt-in variable or SDL mapping. This maps the face buttons, both sticks, D-pad, Select/Start to Share/Options, and rear-touch L2/R2 and L3/R3. L2/R2 remain digital; rumble, motion and DS4 touchpad input are not available. The existing `PROTON_SONY_DUALSHOCK4_V2_AS_V1=1` option also applies to VitaPad. Unreleased VitaPad builds with a different button layout are not supported by this mapping.
+
+VitaPad DS4 emulation requires read/write access to its `/dev/hidraw*` device. If your distribution's controller rules do not include VitaPad, a system administrator can add this udev rule to `/etc/udev/rules.d/70-vitapad.rules`, reload the rules, and reconnect the device:
+
+```udev
+KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="1337", MODE="0660", TAG+="uaccess"
+```
+
+Without HIDRAW access, Wine retains its normal SDL fallback, which does not provide this DS4 emulation. Explicit `PROTON_USE_SDL`/`PROTON_PREFER_SDL` or HIDRAW-disable options also bypass the emulation. Disable Steam Input when testing native DS4 detection and PlayStation button icons.
 
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
@@ -537,22 +568,29 @@ Disable Steam Input for the game before using the Sony controller compatibility 
 |                       | <tt>WINE_FULLSCREEN_FSR_CUSTOM_MODE</tt> | Set fake resolution of the screen. This can be useful in games that render in native resolution regardless of the selected resolution. Parameter `WIDTHxHEIGHT` |
 |                       | <tt>WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER</tt> | Set to 1 to enable. Required for video playback in some games to not be miscolored (usually tinted pink) |
 |                       | <tt>COPYPREFIX</tt> | Set to 1 to enable. If -steamdeck is used on steam (or SteamDeck=1 is set), copies the game's prefix and shader cache from the game partition to the local steam steamapps folder. Logic is reversed if -steamdeck not enabled (or SteamDeck=0) |
-| `fsr4`               | `PROTON_FSR4_UPGRADE`          | Automatically download `amdxcffx64.dll` and upgrade games with FSR 3.1 to use FSR 4. Version to download can be specified by supplying it as a value, like so `PROTON_FSR4_UPGRADE="4.0.1"`, instead of `1`. Downloads version `4.0.2` of the required DLL by default. This option also disables AMD Anti-Lag 2 currently due to various issues.                                                                                      |
-| `fsr4hud`            | `PROTON_FSR4_INDICATOR`        | Enable the FSR4 watermark at the top left portion of the screen.                                                                                                                                                                                                                                                                                                                                                                      |
-| `fsr4rdna3`          | `PROTON_FSR4_RDNA3_UPGRADE`    | Identical to `PROTON_FSR4_UPGRADE` but for RDNA3 GPUs. Enables some required compatibility options and downloads version `4.0.0` of the DLL by default.                                                                                                                                                                                                                                                                               |
+| `fsr4`               | `PROTON_FSR4_UPGRADE`          | Download `amdxcffx64.dll` for FSR 4 upgrades in compatible FSR 3.1 games, including on RDNA3. Set to `1` for the manifest-selected default, or specify an available version such as `4.1.1`. See [Enabling FSR 4](#enabling-fsr-4) for version selection and compatibility notes. |
+| `fsr4hud`            | `PROTON_FSR4_INDICATOR`        | Enable the FSR upscaling and frame-generation watermarks (`FSR_WATERMARK=1` and `FSR_FG_WATERMARK=1`). |
 | `fsr3`               | `PROTON_FSR3_UPGRADE`          |                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `dlss`               | `PROTON_DLSS_UPGRADE`          | Automatically download and use newer versions of `nvngx_dlss(d\|g).dll` DLLs. Version to download can be specified by supplying it as a value, like so `PROTON_DLSS_UPGRADE="310.2"`, instead of `1`, to download version `310.2.1.0`. This option also sets `DXVK_NVAPI_DRS_SETTINGS` to use the latest preset. If you provide your own config for it through this environment variable, your configuration is going to be applied.. |
-| `dlsshud`            | `PROTON_DLSS_INDICATOR`        | Enable the DLSS overlay at the bottom left portion of the screen. This is exactly the same as `FSR4_WATERMARK=1`                                                                                                                                                                                                                                                                                                                      |
+| `dlsshud`            | `PROTON_DLSS_INDICATOR`        | Enable the DLSS indicator through DXVK-NVAPI. This is separate from `PROTON_FSR4_INDICATOR`. |
 | `xess`               | `PROTON_XESS_UPGRADE`          |                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `sdlinput`           | `PROTON_USE_SDL` or `PROTON_PREFER_SDL` | Uses SDL input instead of HIDRAW/Steam Input. |
-|                      | `PROTON_SONY_DUALSENSE_AS_DUALSHOCK4` | Set to `1` to expose a DualSense or DualSense Edge as a DualShock 4. Use this for older games that support DS4 correctly but have missing or broken DualSense mappings. This preserves the game's DS4 button mappings and icons while translating input, rumble, lightbar, and feature reports. |
+|                      | `PROTON_SONY_DUALSENSE_EDGE_AS_DUALSENSE` | Expose a native DualSense Edge as a regular DualSense to games without Edge support. Enabled automatically for Diablo IV; set to `0` to disable. Skipped when a Steam Input virtual controller is present. Physical controller identity and native reports are preserved for audio, haptics, and hotplug handling. |
+|                      | `PROTON_SONY_DUALSENSE_AS_DUALSHOCK4` | Set to `1` to expose a DualSense or DualSense Edge as a DualShock 4 v2. Use this for older games that support DS4 correctly but have missing or broken DualSense mappings. This preserves the game's DS4 button mappings and icons while translating input, rumble, lightbar, and feature reports. When the Steam Input fallback is active, it also advertises the detected DualSense as a DS4 profile. |
+|                      | `PROTON_SONY_DUALSHOCK4_V2_AS_V1` | Set to `1` to expose a DualShock 4 v2 as a DualShock 4 v1. When combined with `PROTON_SONY_DUALSENSE_AS_DUALSHOCK4=1`, a DualSense or DualSense Edge is exposed directly as DS4 v1. Input, output, feature reports, controller audio, haptics, and hotplug handling continue to use the physical controller internally. |
 |                      | `PROTON_SONY_HIDRAW_XINPUT` | Set to `1` to translate a DualShock 4, DualSense, or DualSense Edge HIDRAW device to XInput, including conventional two-motor rumble. Use this when a game has missing or incorrect native Sony mappings. The controller mappings are corrected, but the game's displayed button icons may not change. |
-|                      | `PROTON_STEAMINPUT_XINPUT_FALLBACK` | Set to `1` to provide an XInput-backed replacement for the Steam Input interface required by some games. This allows controller support outside Steam and can work around unavailable Steam Input profile switching under Wine-Wayland. Combine it with `PROTON_SONY_HIDRAW_XINPUT=1` for Sony controllers; Xbox controllers can use the fallback directly. |
+|                      | `PROTON_SONY_AUTO_XINPUT` | Enabled by default, replacing the general per-game forced-XInput list. Provide a Sony XInput fallback and matching Xbox DirectInput VID/PID while keeping native HID available; withdraw that controller's automatic fallback and identity projection when the process consumes native HID input. Where available, Steam Input queries report DS4 or DS5 identity and button origins. Real Steam Input and explicit Sony compatibility overrides take priority. Set to `0` to disable. See [controller details](docs/CONTROLLERS.md#automatic-sony-xinput-fallback). |
+|                      | `PROTON_STEAMINPUT_FALLBACK` | Set to `1` to provide an XInput-backed replacement for the Steam Input interface required by some games. This allows controller support outside Steam and can work around unavailable Steam Input profile switching under Wine-Wayland. When native Steam Input is enabled for the current session, the native Steam controller and mappings remain authoritative and the fallback stays inactive. Combine it with `PROTON_SONY_HIDRAW_XINPUT=1` for Sony controllers; Xbox controllers can use the fallback directly. When active, the fallback detects connected DS4 and DualSense/Edge devices dynamically, updates the advertised profile after hotplugging, and defaults to Xbox for other controllers or when none are connected. `PROTON_STEAMINPUT_XINPUT_FALLBACK=1` remains supported as a compatibility alias. |
+|                      | `PROTON_STEAMINPUT_LAYOUT_XBOX` | Force the fallback controller to use the Xbox One profile instead of automatic layout detection. |
+|                      | `PROTON_STEAMINPUT_LAYOUT_DS4` | Force the fallback controller to use the DualShock 4 profile instead of automatic layout detection. |
+|                      | `PROTON_STEAMINPUT_LAYOUT_DS5` | Force the fallback controller to use the DualSense profile instead of automatic layout detection. |
 | `wayland`            | `PROTON_USE_WAYLAND` or `PROTON_ENABLE_WAYLAND` | Enables the Wayland driver. |
+|                      | `PROTON_USE_X11_EXCLUSIVE` | Under Wine-Wayland, use `winex11.drv` only for the executable specified by this value. Accepts an exact executable basename such as `Launcher.exe` or a case-insensitive Windows path fragment such as `Vendor\\Launcher.exe`; other processes remain on Wine-Wayland. |
 | `wow64`              | `PROTON_USE_WOW64`             | Enables wow64. |
 |                      | `WAYLANDDRV_PRIMARY_MONITOR`   | Specify primary monitor where the value is something like `eDP-1`. Requires the Wayland driver. |
 |                      | `PROTON_ENABLE_MEDIACONV`      | Enable media converter for winegstreamer. This is not needed for winedmo, since the mediaconverter implementation of the codecs doesn't override the underlying implementation. |
 |                      | `WAYLANDDRV_RAWINPUT`          | A value of 0 disables unaccelerated input and uses accelerated input. Any positive real number (like 0.5) adjusts the sensitivity of rawinput. Requires the Wayland driver. |
+| `lowlatencylayer`    | `LOW_LATENCY_LAYER`            | Enables [low_latency_layer](https://github.com/Korthos-Software/low_latency_layer). |
 
 ## Credits
 

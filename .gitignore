@@ -4,6 +4,7 @@
 /dist-*
 /obj-*
 /syn-*
+/wine-mono/
 
 /.vagrant/
 /vagrant_share/

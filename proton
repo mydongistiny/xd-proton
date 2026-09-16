@@ -54,6 +54,50 @@ CURRENT_PREFIX_VERSION = "xd-proton11-10"
 PFX = "Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
 
+# https://bugs.kde.org/show_bug.cgi?id=524702
+# Ark can omit empty directory entries when extracting Proton tarballs. Keep
+# fresh prefixes valid even when their extracted default_pfx lost Wine's shell
+# directory skeleton.
+STANDARD_PREFIX_DIRECTORIES = (
+    "drive_c/ProgramData/Microsoft/Windows/Start Menu/Programs/Administrative Tools",
+    "drive_c/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp",
+    "drive_c/ProgramData/Microsoft/Windows/Templates",
+    "drive_c/users/Public/Desktop",
+    "drive_c/users/Public/Documents",
+    "drive_c/users/Public/Music",
+    "drive_c/users/Public/Pictures",
+    "drive_c/users/Public/Videos",
+    "drive_c/users/steamuser/AppData/Local/Microsoft/Windows/History",
+    "drive_c/users/steamuser/AppData/Local/Microsoft/Windows/INetCache",
+    "drive_c/users/steamuser/AppData/Local/Microsoft/Windows/INetCookies",
+    "drive_c/users/steamuser/AppData/Local/Temp",
+    "drive_c/users/steamuser/AppData/LocalLow",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/AccountPictures",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Network Shortcuts",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Printer Shortcuts",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Recent",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/SendTo",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Administrative Tools",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/StartUp",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Templates",
+    "drive_c/users/steamuser/AppData/Roaming/Microsoft/Windows/Themes",
+    "drive_c/users/steamuser/Contacts",
+    "drive_c/users/steamuser/Desktop",
+    "drive_c/users/steamuser/Documents/Downloads",
+    "drive_c/users/steamuser/Documents/Music",
+    "drive_c/users/steamuser/Documents/Pictures",
+    "drive_c/users/steamuser/Documents/Templates",
+    "drive_c/users/steamuser/Documents/Videos",
+    "drive_c/users/steamuser/Downloads",
+    "drive_c/users/steamuser/Favorites",
+    "drive_c/users/steamuser/Links",
+    "drive_c/users/steamuser/Music",
+    "drive_c/users/steamuser/Pictures/Screenshots",
+    "drive_c/users/steamuser/Saved Games",
+    "drive_c/users/steamuser/Searches",
+    "drive_c/users/steamuser/Videos",
+)
+
 proton_config = set()
 if "PROTON_ADD_CONFIG" in os.environ:
     try:
@@ -1223,6 +1267,19 @@ class CompatData:
                     if not file_exists(dst_file, follow_symlinks=True):
                         self.pfx_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
+
+            created_dirs = []
+            for rel_dir in STANDARD_PREFIX_DIRECTORIES:
+                dst_dir = self.prefix_dir.rstrip("/")
+                for component in rel_dir.split("/"):
+                    dst_dir = os.path.join(dst_dir, component)
+                    if not file_exists(dst_dir, follow_symlinks=True):
+                        makedirs(dst_dir)
+                        created_dirs.append(os.path.relpath(dst_dir, self.prefix_dir))
+
+            # Track children before parents so prefix upgrades can remove them.
+            for rel_dir in reversed(created_dirs):
+                tracked_files.write(rel_dir + "/\n")
         # Set .update-timestamp so Wine doesn't try to update the prefix.
         # This is needed in case the mtime of wine.inf has changed in distribution.
         with open(
@@ -1459,6 +1516,13 @@ class CompatData:
                 + "xaudio*.dll,"
                 + "xinput*.dll,"
                 # vcruntime redist
+                # VC2005/2008 installers also replace the WinSxS copies.
+                # https://github.com/GloriousEggroll/proton-ge-custom/issues/705
+                + "atl[89]0.dll,"
+                + "msvcm[89]0.dll,"
+                + "msvcp[89]0.dll,"
+                + "msvcr[89]0.dll,"
+                + "vcomp[89]0.dll,"
                 + "atl1*.dll,"
                 + "atl.dll,"
                 + "concrt*.dll,"
@@ -2042,6 +2106,7 @@ def default_compat_config():
         if appid in [
             # OPWR may be causing text input delays in login windows in these games on Wayland due to
             # blit happening before presentation
+            # Keep Forza Horizon 5 out: its bundled WebView2 needs cross-process Vulkan surfaces.
             "1172620",  # Sea of Thieves
             "962130",   # Grounded
             "495420",   # State of Decay 2: Juggernaut Edition
@@ -2157,6 +2222,8 @@ def default_compat_config():
             "2067160",  # Simulakros
             "2621010",  # Simulakros Demo
             "368500",   # Assassin's Creed Syndicate
+            "1524630",  # KeepUp Survival
+            "1233570",
         ]:
             try:
                 with open("/proc/modules") as f:
@@ -2257,6 +2324,9 @@ default_cpu_limit = {
     "1038250"   :  "P",   # DIRT 5
 }
 
+fex_application_profiles = {
+    "292030": {"setup*": {"X87ReducedPrecision": "0"}}  # The Witcher 3: Wild Hunt
+}
 
 def get_current_cpu_affinity():
     try:
@@ -2274,7 +2344,6 @@ class Session:
         self.log_file = None
         self.env = dict(os.environ)
         self.xrandr_bin = g_proton.xrandr_bin
-        self.force_steam_input_appid = False
         self.dlloverrides = {
             "steam.exe": "b",  # always use our special built-in steam.exe
             "dotnetfx35.exe": "b",  # replace the broken installer, as does Windows
@@ -2341,6 +2410,14 @@ class Session:
             "287290",   # Resident Evil Revelations 2
             "1364780",  # Street Fighter 6
             "1446780",  # Monster Hunter Rise
+            "345350",   # FINAL FANTASY XIII: Lightning Returns
+            "1685750",  # Capcom Fighting Collection
+            "2400430",  # Capcom Fighting Collection 2
+            "2634890",  # MARVEL vs. CAPCOM Fighting Collection: Arcade Classics
+            "586200",   # Street Fighter 30th Anniversary Collection
+            "1003590",  # Tetris Effect: Connected
+            "1665460",  # eFootball
+            "1222690",  # Dragon Age Inquisition
         ]:
             self.env["PROTON_SONY_HIDRAW_XINPUT"] = "1"
 
@@ -2356,7 +2433,6 @@ class Session:
             "1593500",  # God of War (2018)
             "1151640",  # Horizon Zero Dawn Complete Edition
             "1172710",  # Dune Awakening
-            "330390",   # Grandia II
             "731490",   # Crash Bandicoot N'Sane Trilogy
             "253230",   # A Hat in Time
             "638970",   # Yakuza 0
@@ -2377,6 +2453,7 @@ class Session:
             # testing it's support; whether it supports the DS4 v2 or only the v1.
             # rjbs91 claims it has proper button mappings and glyphs.
             "606880",  # Greedfall
+            "570940",  # Dark Souls Remastered
         ]:
             self.env["PROTON_SONY_DUALSENSE_AS_DUALSHOCK4"] = "1"
 
@@ -2395,7 +2472,9 @@ class Session:
             "2246340",  # Monster Hunter Wilds
             "1151640",  # Horizon Zero Dawn Complete Edition
             "2322010",  # God of War Ragnarok
+            "1034860",  # Grandia
             "330390",   # Grandia II
+            "3255380",  # Lunar
         ]:
             self.env["PROTON_SONY_HIDRAW_XINPUT"] = "1"
             self.env["PROTON_STEAMINPUT_FALLBACK"] = "1"
@@ -2488,7 +2567,7 @@ class Session:
 
         if "PROTON_USE_WOW64" not in self.env and "SteamGameId" in self.env:
             if self.env["SteamGameId"] in [
-                "747920",
+                "747920",  # Hero Plus
             ]:
                 self.env["PROTON_USE_WOW64"] = "1"
 
@@ -2975,6 +3054,7 @@ class Session:
                 "374320",  # DARK SOULS III
                 "357190",  # Ultimate Marvel vs Capcom 3
                 "730830",  # Escape from Monkey Island
+                "229480",  # Dungeons & Dragons: Chronicles of Mystara
             ]:
                 self.env["PROTON_LIMIT_RESOLUTIONS"] = "32"
 
@@ -3103,6 +3183,35 @@ class Session:
 
         # Don't use wayland backend when WAYLAND_DISPLAY is not set
         if "wayland" in self.compat_config and "WAYLAND_DISPLAY" in self.env:
+            # Make the temporary Steam overlay bridge discoverable only when
+            # Steam actually injected its overlay and the X11 path remains
+            # available. win32u bootstraps the selected layer for launchers.
+            overlay_preload = ":".join(
+                (
+                    self.env.get("LD_PRELOAD", ""),
+                    self.env.get("WINE_LD_PRELOAD", ""),
+                )
+            )
+            winex11_order = self.dlloverrides.get("winex11.drv")
+            winex11_available = (
+                winex11_order is None
+                or "b" in winex11_order.lower()
+                or "n" in winex11_order.lower()
+            )
+            if (
+                "gameoverlayrenderer.so" in overlay_preload
+                and winex11_available
+                and not nonzero(
+                    self.env.get("DISABLE_WINE_WAYLAND_STEAM_OVERLAY_LAYER", "0")
+                )
+            ):
+                self.env["WINE_WAYLAND_STEAM_OVERLAY_LAYER"] = "1"
+                append_to_env_str(
+                    self.env,
+                    "VK_IMPLICIT_LAYER_PATH",
+                    g_proton.dist_dir + "share/steam-overlay-wayland/implicit_layer.d",
+                    ":",
+                )
             # Set primary monitor if given
             if "PROTON_WAYLAND_MONITOR" in self.env:
                 self.env["WAYLANDDRV_PRIMARY_MONITOR"] = self.env[
@@ -3113,7 +3222,9 @@ class Session:
                 primary_monitor = self.get_primary_monitor()
                 if primary_monitor:
                     self.env["WAYLANDDRV_PRIMARY_MONITOR"] = primary_monitor
-            self.dlloverrides["winex11.drv"] = "d"
+            # Select Wayland explicitly while keeping X11 available for
+            # per-process compatibility fallbacks used by launcher UIs.
+            self.env["WINE_GRAPHICS_DRIVER"] = "wayland"
             self.dlloverrides["winewayland.drv"] = "b"
             # This is required for OpenGL to work on winewayland
             self.env["WINE_USE_EGL"] = "1"
@@ -3124,11 +3235,20 @@ class Session:
             # It is not possible for winewayland to support xalia since
             # there is no way to position toplevel surfaces dynamically in wayland
             self.env["PROTON_USE_XALIA"] = "0"
-            # Never expose Steam's desktop virtual controller on winewayland.
-            self.env["PROTON_NO_STEAMINPUT"] = "1"
-            # Steam cannot track native Wayland window focus, so keep it from
-            # falling back to the global desktop controller layout.
-            self.force_steam_input_appid = True
+            # Steam advertises its per-game virtual controller through these
+            # variables. Keep that device available when the game's Steam Input
+            # toggle is enabled: the overlay controller UI consumes its translated
+            # XInput stream. Otherwise suppress the desktop virtual controller and
+            # leave the game's native controller path active.
+            steam_input_enabled = (
+                "SteamVirtualGamepadInfo" in self.env
+                and nonzero(self.env["SteamVirtualGamepadInfo"])
+            ) or (
+                "SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD" in self.env
+                and nonzero(self.env["SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD"])
+            )
+            if "PROTON_NO_STEAMINPUT" not in self.env:
+                self.env["PROTON_NO_STEAMINPUT"] = "0" if steam_input_enabled else "1"
             # Disable other steam input related stuff
             if nonzero(self.env["PROTON_NO_STEAMINPUT"]):
                 # When steam input is disabled we need the ignored controllers to work again
@@ -3141,6 +3261,9 @@ class Session:
                     del self.env["SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD"]
             # FIXME: temporary workaround for libxkbcommon's current integration
             self.env.setdefault("XLOCALEDIR", g_proton.dist_dir + "share/X11/locale")
+            # Keep DISPLAY available for processes that explicitly fall back to
+            # XWayland. WINE_GRAPHICS_DRIVER still selects native Wayland for
+            # the desktop and every process without such a fallback.
 
         # Use SDL backend for inputs instead of hidraw/Steam Input.
         if "sdlinput" in self.compat_config:
@@ -3346,33 +3469,13 @@ class Session:
             args, env=local_env, stderr=self.log_file, stdout=self.log_file
         )
 
-    def set_steam_input_appid(self, appid):
-        steam_bin = shutil.which("steam")
-        if not steam_bin:
-            log("Unable to set Steam Input AppID: steam executable not found.")
-            return False
-
-        env = dict(os.environ)
-        for name in ("SteamAppId", "SteamGameId", "STEAM_COMPAT_APP_ID"):
-            env.pop(name, None)
-
-        try:
-            result = subprocess.run(
-                [steam_bin, "steam://forceinputappid/" + str(appid)],
-                env=env,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                timeout=5,
-                check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired) as e:
-            log("Unable to set Steam Input AppID: " + str(e))
-            return False
-
-        return result.returncode == 0
-
     def run(self):
+        umu_without_steam = (
+            "UMU_ID" in os.environ and os.environ.get("UMU_USE_STEAM") != "1"
+        )
+        if umu_without_steam:
+            append_to_env_str(self.env, "WINEDLLOVERRIDES", "lsteamclient=d", ";")
+
         if shutil.which("steam-runtime-launcher-interface-0") is not None:
             adverb = ["steam-runtime-launcher-interface-0", "proton"]
         else:
@@ -3402,7 +3505,7 @@ class Session:
         # Prevent this warning for non-steam games:
         # [S_API FAIL] SteamAPI_Init() failed; no appID found.
         # Either launch the game from Steam, or put the file steam_appid.txt containing the correct appID in your game folder.
-        elif "UMU_ID" in os.environ and os.environ.get("UMU_USE_STEAM", "0") != "1":
+        elif umu_without_steam:
             if len(sys.argv) >= 3 and sys.argv[2].startswith("/"):
                 log(sys.argv[2])
                 log("Executable is a unix path, launching with 'umu.exe'.")
@@ -3420,8 +3523,6 @@ class Session:
                 log("Executable is inside wine prefix, launching normally.")
                 argv = [g_proton.wine_bin]
         else:
-            if "UMU_ID" in os.environ:
-                append_to_env_str(self.env, "WINEDLLOVERRIDES", "lsteamclient=d", ";")
             if g_proton.host_pe_arch == "x86_64-windows":
                 # run with winepreloader directly to avoid restart through start.exe
                 self.env["WINELOADERNOEXEC"] = "1"
@@ -3433,19 +3534,7 @@ class Session:
             else:
                 argv = [g_proton.wine_bin, "c:\\windows\\system32\\steam.exe"]
 
-        steam_input_appid_forced = False
-        if self.force_steam_input_appid:
-            appid = os.environ.get(
-                "SteamGameId", os.environ.get("STEAM_COMPAT_APP_ID", "0")
-            )
-            if str(appid).isdigit() and str(appid) != "0":
-                steam_input_appid_forced = self.set_steam_input_appid(appid)
-
-        try:
-            rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
-        finally:
-            if steam_input_appid_forced:
-                self.set_steam_input_appid(0)
+        rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
