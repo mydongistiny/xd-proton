@@ -1991,8 +1991,6 @@ def default_compat_config():
         if appid in [
             # affected by CW bug 22265
             "692890",   # Roboquest
-            # affected by CW bug 19741
-            "1017900",  # Age of Empires: Definitive Edition
             # affected by CW bug 20240
             "1331440",  # FUSER
             # affected by Unity race
