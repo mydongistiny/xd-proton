@@ -30,6 +30,10 @@ apply_all_in_dir() {
     apply_patch "../patches/dxvk/dxgi-keep-fullscreen-on-focus-loss.patch"
     # Black Desert also needs the matching Wine activation compatibility patch below.
     apply_patch "../patches/dxvk/black-desert-keep-fullscreen-on-focus-loss.patch"
+    # Assassin's Creed DX10: preserve fullscreen presentation across Alt+Tab.
+    apply_patch "../patches/dxvk/assassins-creed-keep-fullscreen-on-focus-loss.patch"
+    # HDR colorspaces require an instance extension, not a device extension.
+    apply_patch "../patches/dxvk/dxvk-enable-swapchain-colorspace-on-instance.patch"
     popd
 
     pushd vkd3d-proton
@@ -80,6 +84,8 @@ apply_all_in_dir() {
         lsteamclient/steam_input_manual.c \
         lsteamclient/steamclient_main.c \
         lsteamclient/steamclient_private.h \
+        lsteamclient/unixlib.cpp \
+        lsteamclient/winISteamController.c \
         lsteamclient/winISteamInput.c
 
     echo "LSTEAMCLIENT: apply Steam Input and initialization fixes"
@@ -371,6 +377,9 @@ apply_all_in_dir() {
     echo "WINE: -HOTFIX- Remove redundant packed-code split locks"
     apply_patch "../patches/wine-hotfixes/pending/ntdll-remove-redundant-packed-split-lock.patch"
 
+    # Publish process-exit state before pending I/O APCs can take orphaned locks.
+    apply_patch "../patches/wine-hotfixes/pending/ntdll-block-apcs-until-process-exit-state-is-set.patch"
+
     # https://gitlab.winehq.org/wine/wine/-/commit/a31ec8da9572672e04ae46792a398da942649875
     echo "WINE: -HOTFIX- Prefer native non-Microsoft DLLs using version resources"
     apply_patch "../patches/wine-hotfixes/pending/ntdll-prefer-native-version-resource-heuristics.patch"
@@ -467,6 +476,12 @@ apply_all_in_dir() {
     for patch in ../patches/proton-ds5-haptic/*.patch; do
         apply_patch "$patch"
     done
+
+    echo "WINE: expose mapped Switch Pro controllers as Xbox when Steam Input is disabled"
+    apply_patch "../patches/wine-hotfixes/pending/winebus-switch-pro-xinput-identity.patch"
+
+    echo "WINE: expose native DualSense Edge as DualSense for Diablo IV"
+    apply_patch "../patches/wine-hotfixes/pending/winebus-diablo-iv-dualsense-edge-identity.patch"
 
     echo "WINE: -CUSTOM- Update wine's internal vkd3d version to 2.0"
     apply_patch "../patches/wine/wine-libs-vkd3d-Update-to-version.patch"
