@@ -49,7 +49,7 @@ import utilities
 # To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 # and edit it if needed.
 
-CURRENT_PREFIX_VERSION = "xd-proton11-10"
+CURRENT_PREFIX_VERSION = "xd-proton11-11"
 
 PFX = "Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
