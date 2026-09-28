@@ -893,6 +893,7 @@ DXVK_NVAPI_LDFLAGS = -static -static-libgcc -static-libstdc++
 $(eval $(call rules-source,dxvk-nvapi,$(SRCDIR)/dxvk-nvapi))
 $(eval $(call rules-meson,dxvk-nvapi,i386,windows))
 $(eval $(call rules-meson,dxvk-nvapi,x86_64,windows))
+$(eval $(call rules-meson,dxvk-nvapi,arm64ec,windows))
 
 $(OBJ)/.dxvk-nvapi-post-source:
 	mkdir -p $(DST_LIBDIR)/wine/nvapi
@@ -1039,15 +1040,14 @@ $(OBJ)/.vkd3d-proton-post-source:
 ##
 ## nvidia-libs
 ##
-ifeq ($(TARGET_ARCH),x86_64)
 ifneq ($(WITHOUT_NVIDIA_LIBS),1)
+include $(SRC)/nvidia-libs/build-dxvk-nvapi.mk
 include $(SRC)/make/rules-nvidia-libs.mk
 include $(SRC)/nvidia-libs/build-nvcuda.mk
 include $(SRC)/nvidia-libs/build-nvenc.mk
 include $(SRC)/nvidia-libs/build-wine-nvml.mk
 include $(SRC)/nvidia-libs/build-wine-nvoptix.mk
 endif # WITHOUT_NVIDIA_LIBS
-endif # TARGET_ARCH=x86_64
 
 
 ##

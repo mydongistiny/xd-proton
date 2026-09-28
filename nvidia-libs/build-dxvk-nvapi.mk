@@ -16,6 +16,7 @@ NVLIBS_NVAPI_LDFLAGS = -static -static-libgcc -static-libstdc++
 $(eval $(call rules-source,nvlibs-nvapi,$(SRCDIR)/nvidia-libs/dxvk-nvapi))
 $(eval $(call rules-meson,nvlibs-nvapi,i386,windows))
 $(eval $(call rules-meson,nvlibs-nvapi,x86_64,windows))
+$(eval $(call rules-meson,nvlibs-nvapi,arm64ec,windows))
 
 $(OBJ)/.nvlibs-nvapi-post-source:
 	mkdir -p $(DST_LIBDIR)/wine/nvidia-libs/nvapi
