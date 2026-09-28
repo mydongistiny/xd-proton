@@ -12,7 +12,7 @@ diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
 index f8af784f..6637fd12 100644
 --- a/libs/vkd3d/command.c
 +++ b/libs/vkd3d/command.c
-@@ -23357,27 +23357,46 @@ static void d3d12_command_queue_signal(struct d3d12_command_queue *command_queue
+@@ -24775,27 +24775,46 @@ static void d3d12_command_queue_signal(struct d3d12_command_queue *command_queue
  static void d3d12_command_queue_wait_shared(struct d3d12_command_queue *command_queue,
          struct d3d12_shared_fence *fence, uint64_t value)
  {
@@ -65,7 +65,7 @@ index f8af784f..6637fd12 100644
 +        }
 +    }
 +
-     VKD3D_DEVICE_REPORT_FAULT_AND_BREADCRUMB_IF(device, vr == VK_ERROR_DEVICE_LOST);
+     VKD3D_DEVICE_REPORT_FAULT_AND_BREADCRUMB_IF(device, vr == VK_ERROR_DEVICE_LOST, vr);
  }
  
 -- 
