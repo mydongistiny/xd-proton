@@ -660,7 +660,7 @@ WINE_AUTOCONF_ARGS += \
   --with-x \
   --with-wayland \
   --with-ffmpeg \
-  --with-libpcap \
+  --with-pcap \
   --without-oss
 
 WINE_x86_64_AUTOCONF_ARGS = \
