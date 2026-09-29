@@ -71,14 +71,6 @@ ifneq ($(SUPPRESS_WARNINGS),)
 	CFLAGS += -w
 endif
 
-ifneq ($(USE_LTO),1)
-	GST_LTO :=
-	FFMPEG_LTO :=
-else
-	GST_LTO := -Db_lto=true
-	FFMPEG_LTO := --enable-lto
-endif
-
 $(DST_DIR):
 	mkdir -p $@
 
@@ -113,10 +105,10 @@ ifeq ($(shell cc --version|grep 'clang'),)
 	TOOLCHAIN_PREFIX :=
 	OBJCOPY_FLAGS  := -p
 	MINGW_TYPE := gcc
-	i386_CFLAGS += -s -mno-avx -mno-avx2 -mno-avx512f
-	i386_CFLAGS += -fvect-cost-model=cheap -fno-semantic-interposition -fipa-pta
-	x86_64_CFLAGS += -s -mno-avx -mno-avx2 -mno-avx512f
-	x86_64_CFLAGS += -fvect-cost-model=cheap -fno-semantic-interposition -fipa-pta
+	i386_CFLAGS += -mno-avx -mno-avx2 -mno-avx512f
+	i386_CFLAGS += -fvect-cost-model=cheap
+	x86_64_CFLAGS += -mno-avx -mno-avx2 -mno-avx512f
+	x86_64_CFLAGS += -fvect-cost-model=cheap
 	i386_SANITY_FLAGS := -mpreferred-stack-boundary=2
 else
 	# CLANG-specific flags
@@ -139,6 +131,9 @@ else
     STRIP := $(TOOLCHAIN_PREFIX)strip
     INSTALL_PROGRAM_FLAGS := -s
     MESON_STRIP_ARG := --strip
+ifeq ($(shell cc --version|grep 'clang'),)
+    CFLAGS += -s
+endif
 endif
 
 # all, all-dist and dist are basically synonyms
@@ -191,6 +186,11 @@ LIBSOUP_MESON_ARGS = \
 	-Ddocs=disabled \
 	-Dautobahn=disabled \
 	-Dtls_check=false
+
+LIBSOUP_MESON_ARGS += \
+	-Dntlm=disabled \
+	-Dintrospection=disabled \
+	-Dtests=false
 
 $(eval $(call rules-source,libsoup,$(SRCDIR)/libsoup))
 $(eval $(call rules-meson,libsoup,i386,unix))
@@ -378,7 +378,6 @@ $(OBJ)/.pipewire-alsa-aarch64-build:
 FFMPEG_DEPENDS = bzip2 dav1d xz
 
 FFMPEG_CONFIGURE_ARGS := \
-	$(FFMPEG_LTO) \
 	--enable-shared \
 	--disable-static \
 	--disable-everything \
