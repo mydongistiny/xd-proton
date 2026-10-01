@@ -96,10 +96,6 @@
 [submodule "discord-rpc-bridge"]
 	path = discord-rpc-bridge
 	url = https://github.com/enderice2/rpc-bridge.git
-[submodule "nvidia-libs/dxvk-nvapi"]
-	path = nvidia-libs/dxvk-nvapi
-	url = https://github.com/SveSop/dxvk-nvapi.git
-	branch = experimental
 [submodule "nvidia-libs/nvcuda"]
 	path = nvidia-libs/nvcuda
 	url = https://github.com/SveSop/nvcuda.git

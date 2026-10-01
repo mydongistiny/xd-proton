@@ -156,6 +156,8 @@ include $(SRC)/make/rules-winemaker.mk
 include $(SRC)/make/rules-wine-requests.mk
 include $(SRC)/make/rules-wine-tools.mk
 include $(SRC)/make/rules-cargo.mk
+## custom rules
+include $(SRC)/make/rules-meson-wine.mk
 
 ##
 ## meson
@@ -913,8 +915,6 @@ $(OBJ)/.vkd3d-proton-post-source:
 ## nvidia-libs
 ##
 ifneq ($(WITHOUT_NVIDIA_LIBS),1)
-include $(SRC)/nvidia-libs/build-dxvk-nvapi.mk
-include $(SRC)/make/rules-nvidia-libs.mk
 include $(SRC)/nvidia-libs/build-nvcuda.mk
 include $(SRC)/nvidia-libs/build-nvenc.mk
 include $(SRC)/nvidia-libs/build-wine-nvml.mk
