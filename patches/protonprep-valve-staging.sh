@@ -38,8 +38,6 @@ apply_all_in_dir() {
     apply_patch "../patches/dxvk/dxgi-auto-detect-hdr.patch"
     # StarCraft II: avoid GPU hangs with D3D9 constant buffer streaming (#790).
     apply_patch "../patches/dxvk/starcraft2-disable-constant-buffer-streaming.patch"
-    # Clang realigns the stack for 32-byte spills, so AVX is fine with it.
-    apply_patch "../patches/dxvk/dxvk-allow-avx-with-clang.patch"
     popd
 
     pushd d7vk
@@ -58,6 +56,7 @@ apply_all_in_dir() {
     git reset --hard HEAD
     git clean -xdf
     echo "VKD3D-PROTON: prevent stalled present waits from deadlocking swapchain teardown"
+    echo "VKD3D-PROTON: don't map the parent process image for engine detection (EAC untrusted file, Star Citizen/Hunt)"
     echo "VKD3D-PROTON: Add busy-wait path for shared semaphores on Nvidia"
     apply_all_in_dir "../patches/vkd3d-proton/"
     popd
@@ -102,6 +101,7 @@ apply_all_in_dir() {
         lsteamclient/steam_input_manual.c \
         lsteamclient/steamclient_main.c \
         lsteamclient/steamclient_private.h \
+        lsteamclient/unix_private.h \
         lsteamclient/unixlib.cpp \
         lsteamclient/winISteamController.c \
         lsteamclient/winISteamInput.c
@@ -111,6 +111,13 @@ apply_all_in_dir() {
 
     echo "LSTEAMCLIENT: apply Steam Input and initialization fixes"
     apply_all_in_dir "patches/lsteamclient"
+
+    git checkout -- \
+        vrclient_x64/json_converter.cpp \
+        vrclient_x64/unix_private.h
+
+    echo "VRCLIENT: apply build fixes"
+    apply_all_in_dir "patches/vrclient"
 
 ### (2) WINE PATCHING ###
 
@@ -336,6 +343,27 @@ apply_all_in_dir() {
     echo "WINE: -GAME FIXES- repair NASCAR 25 protected loader state"
     apply_patch "../patches/game-patches/nascar25-protector.patch"
 
+    # https://github.com/GloriousEggroll/proton-ge-custom/issues/847
+    # Original fix by mkrsym1 in dawn-winery/wine-dwproton (ecedc3e2d6d2)
+    echo "WINE: -GAME FIXES- call DriverEntry with a kernel-mode return address for ACE anti-cheat"
+    apply_patch "../patches/game-patches/ace-driverentry-kernel-return-address.patch"
+
+    # https://github.com/GloriousEggroll/proton-ge-custom/issues/847
+    # ACE-CORE driver fixes by NelloKudo in dawn-winery/wine-dwproton
+    # (4ef68081d5, 6a06ad015f, e7942574f6, 532d18e79a)
+    echo "WINE: -GAME FIXES- add ntoskrnl MmCopyMemory, ServiceKeyName, MDL view and PsGetContextThread fixes for ACE anti-cheat"
+    apply_patch "../patches/game-patches/ace-ntoskrnl-mmcopymemory-stub.patch"
+    apply_patch "../patches/game-patches/ace-ntoskrnl-service-key-name.patch"
+    apply_patch "../patches/game-patches/ace-ntoskrnl-keep-mdl-section-views-mapped.patch"
+    apply_patch "../patches/game-patches/ace-ntoskrnl-psgetcontextthread-thunk.patch"
+
+    # https://github.com/GloriousEggroll/proton-ge-custom/issues/847
+    # ACE-CORE fails DriverEntry unless lsass.exe is running. Backported in
+    # CachyOS/wine-cachyos (3b0c6a64ba, b1fbd12dd0); drop with the Wine 12 rebase.
+    echo "WINE: -GAME FIXES- add and start an lsass.exe SamSs service stub for ACE anti-cheat"
+    apply_patch "../patches/game-patches/ace-lsass-samss-service-stub.patch"
+    apply_patch "../patches/game-patches/ace-wineboot-start-samss-service.patch"
+
 ### END GAME PATCH SECTION ###
 
 ### (2-5) WINE HOTFIX/BACKPORT SECTION ###
@@ -546,6 +574,10 @@ apply_all_in_dir() {
 
     echo "WINE: -HOTFIX- ntdll: skip needless wake in RtlReleaseSRWLockShared (ValveSoftware/wine#367)"
     apply_patch "../patches/wine-hotfixes/pending/ntdll-srwlock-skip-needless-shared-release-wake.patch"
+
+    # https://github.com/ValveSoftware/Proton/issues/8072
+    echo "WINE: -GAME FIXES- ntdll: don't leave a stale alert after a raced RtlWaitOnAddress() timeout (Space Marine 2 mid-mission crash)"
+    apply_patch "../patches/wine-hotfixes/pending/ntdll-take-in-flight-alert-when-wait-on-address-times-out.patch"
 
     # Bluetooth LE GATT and WinRT BLE (Zwift, Rouvy trainers). winebth.sys stays disabled
     # unless PROTON_ENABLE_WINEBTH=1. https://github.com/GloriousEggroll/proton-ge-custom/issues/814
