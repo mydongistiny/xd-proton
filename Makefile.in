@@ -165,6 +165,21 @@ $(eval $(call rules-source,meson,$(SRCDIR)/meson))
 
 
 ##
+## steamrtdeps
+##
+
+ifneq ($(WITHOUT_STEAMRT_DEPENDS),1)
+include $(SRC)/steamrtdeps/build-libxml2.mk
+include $(SRC)/steamrtdeps/build-libxkbcommon.mk
+include $(SRC)/steamrtdeps/build-wayland-protocols.mk
+include $(SRC)/steamrtdeps/build-libpcap.mk
+include $(SRC)/steamrtdeps/build-pipewire.mk
+include $(SRC)/steamrtdeps/build-xz.mk
+include $(SRC)/steamrtdeps/build-bzip2.mk
+endif # WITHOUT_STEAMRT_DEPENDS
+
+
+##
 ## dav1d
 ##
 
@@ -199,74 +214,6 @@ $(eval $(call rules-meson,libsoup,aarch64,unix))
 
 
 ##
-## libxml2
-##
-
-LIBXML2_MESON_ARGS := \
-	-Ddocs=disabled \
-	-Dicu=disabled \
-	-Dlegacy=enabled \
-	-Dpython=disabled
-
-$(eval $(call rules-source,libxml2,$(SRCDIR)/libxml2))
-$(eval $(call rules-meson,libxml2,i386,unix))
-$(eval $(call rules-meson,libxml2,x86_64,unix))
-$(eval $(call rules-meson,libxml2,aarch64,unix))
-
-
-##
-## xkbcommon
-##
-
-LIBXKBCOMMON_MESON_ARGS := \
-	-Denable-xkbregistry=true \
-	-Denable-docs=false \
-	-Denable-x11=false \
-	-Denable-bash-completion=false \
-	-Denable-wayland=false
-
-LIBXKBCOMMON_DEPENDS = libxml2
-
-$(eval $(call rules-source,libxkbcommon,$(SRCDIR)/libxkbcommon))
-$(eval $(call rules-meson,libxkbcommon,i386,unix))
-$(eval $(call rules-meson,libxkbcommon,x86_64,unix))
-$(eval $(call rules-meson,libxkbcommon,aarch64,unix))
-
-
-##
-## wayland-protocols
-##
-
-WAYLAND_PROTOCOLS_MESON_ARGS := \
-	-Dtests=false
-
-$(eval $(call rules-source,wayland-protocols,$(SRCDIR)/wayland-protocols))
-$(eval $(call rules-meson,wayland-protocols,i386,unix))
-$(eval $(call rules-meson,wayland-protocols,x86_64,unix))
-$(eval $(call rules-meson,wayland-protocols,aarch64,unix))
-
-
-##
-## libpcap
-##
-
-LIBPCAP_CONFIGURE_ARGS := \
-	--enable-shared \
-	--disable-static \
-	--disable-usb \
-	--disable-netmap \
-	--disable-bluetooth \
-	--disable-dbus \
-	--disable-rdma \
-	--with-pcap=linux \
-	--without-libnl
-
-$(eval $(call rules-source,libpcap,$(SRCDIR)/libpcap))
-$(eval $(call rules-configure,libpcap,i386,unix))
-$(eval $(call rules-configure,libpcap,x86_64,unix))
-$(eval $(call rules-configure,libpcap,aarch64,unix))
-
-##
 ## graphene
 ##
 
@@ -284,98 +231,9 @@ $(eval $(call rules-meson,graphene,aarch64,unix))
 ##
 ## FFmpeg
 ##
-
-XZ_CONFIGURE_ARGS := \
-	--enable-shared \
-	--disable-static \
-	--disable-xz \
-	--disable-xzdec \
-	--disable-lzmadec \
-	--disable-lzmainfo \
-	--disable-lzma-links \
-	--disable-scripts \
-	--disable-doc \
-	--disable-doxygen \
-	--disable-nls
-
-$(eval $(call rules-source,xz,$(SRCDIR)/xz))
-$(eval $(call rules-configure,xz,i386,unix))
-$(eval $(call rules-configure,xz,x86_64,unix))
-$(eval $(call rules-configure,xz,aarch64,unix))
-
-$(eval $(call rules-source,bzip2,$(SRCDIR)/bzip2))
-$(eval $(call create-rules-common,bzip2,BZIP2,i386,unix))
-$(eval $(call create-rules-common,bzip2,BZIP2,x86_64,unix))
-$(eval $(call create-rules-common,bzip2,BZIP2,aarch64,unix))
-
-$(OBJ)/.bzip2-%-configure:
-	@echo ":: configuring bzip2-$*..." >&2
-	touch $@
-
-$(OBJ)/.bzip2-%-build:
-	@echo ":: building bzip2-$*..." >&2
-	rsync --filter=:C --exclude '*~' --exclude .git --exclude compile_commands.json --info=name -Oarx --delete "$(BZIP2_SRC)/" "$(BZIP2_$*_OBJ)/" $(--quiet?)
-	+$(MAKE) -C "$(BZIP2_$*_OBJ)" -f Makefile-libbz2_so clean
-	+$(MAKE) -C "$(BZIP2_$*_OBJ)" -f Makefile-libbz2_so \
-	    CC="$($*-unix_TARGET)-gcc" \
-	    CFLAGS="-fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 $($*_CFLAGS) $(CFLAGS)" \
-	    LDFLAGS="$($*_LDFLAGS) $(LDFLAGS)"
-	mkdir -p "$(BZIP2_$*_LIBDIR)/$($*-unix_LIBDIR)" "$(BZIP2_$*_INCDIR)"
-	cp -a "$(BZIP2_$*_OBJ)/libbz2.so.1.0.8" "$(BZIP2_$*_LIBDIR)/$($*-unix_LIBDIR)/"
-	ln -sfn libbz2.so.1.0.8 "$(BZIP2_$*_LIBDIR)/$($*-unix_LIBDIR)/libbz2.so.1.0"
-	ln -sfn libbz2.so.1.0.8 "$(BZIP2_$*_LIBDIR)/$($*-unix_LIBDIR)/libbz2.so"
-	cp -a "$(BZIP2_$*_OBJ)/bzlib.h" "$(BZIP2_$*_INCDIR)/"
-	touch $@
-
-##
-## PipeWire ALSA PCM plugin
-##
-
-$(eval $(call rules-source,pipewire-alsa,$(SRCDIR)/pipewire/pipewire-alsa/alsa-plugins))
-$(eval $(call create-rules-common,pipewire-alsa,PIPEWIRE_ALSA,x86_64,unix))
-$(eval $(call create-rules-common,pipewire-alsa,PIPEWIRE_ALSA,aarch64,unix))
-
-$(OBJ)/.pipewire-alsa-post-source:
-	patch -d "$(PIPEWIRE_ALSA_SRC)" -Np1 -i "$(realpath $(SRCDIR)/patches/pipewire/0001-alsa-pcm-support-aux-channel-map.patch)"
-	touch $@
-
-$(OBJ)/.pipewire-alsa-x86_64-configure:
-	@echo ":: configuring pipewire-alsa-x86_64..." >&2
-	touch $@
-
-$(OBJ)/.pipewire-alsa-aarch64-configure:
-	@echo ":: configuring pipewire-alsa-aarch64..." >&2
-	touch $@
-
-$(OBJ)/.pipewire-alsa-x86_64-build:
-	@echo ":: building pipewire-alsa-x86_64..." >&2
-	mkdir -p "$(PIPEWIRE_ALSA_x86_64_LIBDIR)/$(x86_64-unix_LIBDIR)/alsa-lib"
-	env $(PIPEWIRE_ALSA_x86_64_ENV) \
-	    "$(x86_64-unix_TARGET)-gcc" -shared -fPIC -DPIC \
-	    $$("$(x86_64-unix_TARGET)-pkg-config" --cflags alsa libpipewire-0.3 libspa-0.2) \
-	    $(x86_64_CFLAGS) $(CFLAGS) \
-	    -Wl,-soname,libasound_module_pcm_pipewire.so \
-	    -o "$(PIPEWIRE_ALSA_x86_64_LIBDIR)/$(x86_64-unix_LIBDIR)/alsa-lib/libasound_module_pcm_pipewire.so" \
-	    "$(PIPEWIRE_ALSA_SRC)/pcm_pipewire.c" \
-	    $$("$(x86_64-unix_TARGET)-pkg-config" --libs alsa libpipewire-0.3 libspa-0.2) \
-	    $(x86_64_LDFLAGS) $(LDFLAGS)
-	touch $@
-
-$(OBJ)/.pipewire-alsa-aarch64-build:
-	@echo ":: building pipewire-alsa-aarch64..." >&2
-	mkdir -p "$(PIPEWIRE_ALSA_aarch64_LIBDIR)/$(aarch64-unix_LIBDIR)/alsa-lib"
-	env $(PIPEWIRE_ALSA_aarch64_ENV) \
-	    "$(aarch64-unix_TARGET)-gcc" -shared -fPIC -DPIC \
-	    $$("$(aarch64-unix_TARGET)-pkg-config" --cflags alsa libpipewire-0.3 libspa-0.2) \
-	    $(aarch64_CFLAGS) $(CFLAGS) \
-	    -Wl,-soname,libasound_module_pcm_pipewire.so \
-	    -o "$(PIPEWIRE_ALSA_aarch64_LIBDIR)/$(aarch64-unix_LIBDIR)/alsa-lib/libasound_module_pcm_pipewire.so" \
-	    "$(PIPEWIRE_ALSA_SRC)/pcm_pipewire.c" \
-	    $$("$(aarch64-unix_TARGET)-pkg-config" --libs alsa libpipewire-0.3 libspa-0.2) \
-	    $(aarch64_LDFLAGS) $(LDFLAGS)
-	touch $@
-
-FFMPEG_DEPENDS = bzip2 dav1d xz
+FFMPEG_DEPENDS = dav1d
+FFMPEG_DEPENDS += $(BZIP2_DEPENDENCY)
+FFMPEG_DEPENDS += $(XZ_DEPENDENCY)
 
 FFMPEG_CONFIGURE_ARGS := \
 	--enable-shared \
@@ -684,10 +542,14 @@ WINE_x86_64_AUTOCONF_ARGS += \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_x86_64_DST)/include -I$(VKD3D_x86_64_DST)/include/vkd3d" \
   VKD3D_PE_LIBS="-L$(VKD3D_x86_64_LIBDIR) -lvkd3d -lvkd3d-shader -lvkd3d-utils"
 
-WINE_DEPENDS = ffmpeg openfst kaldi vosk libxml2 libxkbcommon libpcap
+WINE_DEPENDS = ffmpeg openfst kaldi vosk
 WINE_i386_DEPENDS = vkd3d
 WINE_x86_64_DEPENDS = piper vkd3d openxr
 WINE_aarch64_DEPENDS = piper openxr
+
+WINE_DEPENDS += $(LIBXML2_DEPENDENCY)
+WINE_DEPENDS += $(LIBXKBCOMMON_DEPENDENCY)
+WINE_DEPENDS += $(LIBPCAP_DEPENDENCY)
 
 WINE_i386_LIBDIR = $(WINE_i386_DST)/lib
 WINE_x86_64_LIBDIR = $(WINE_x86_64_DST)/lib
@@ -1922,6 +1784,7 @@ redist: all
 	XZ_OPT="-9 -T$(J)" tar -cvJf $(BUILD_NAME).tar.xz $(BUILD_NAME)
 	sha512sum $(BUILD_NAME).tar.xz > $(BUILD_NAME).sha512sum
 	@echo "Proton build available at $(BUILD_NAME).tar.xz"
+
 
 ##
 ## make distclean

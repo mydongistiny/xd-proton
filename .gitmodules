@@ -57,19 +57,27 @@
 	path = piper
 	url = https://github.com/shaunren/piper.git
 	branch = library
-[submodule "libxkbcommon"]
-        path = libxkbcommon
-        url = https://github.com/xkbcommon/libxkbcommon.git
-	branch = libxkbcommon-1.7.0
-[submodule "libxml2"]
-	path = libxml2
-	url = https://gitlab.gnome.org/GNOME/libxml2.git
-[submodule "wayland-protocols"]
-	path = wayland-protocols
+[submodule "steamrtdeps/libxml2"]
+	path = steamrtdeps/libxml2
+	url = https://github.com/GNOME/libxml2.git
+[submodule "steamrtdeps/libxkbcommon"]
+	path = steamrtdeps/libxkbcommon
+	url = https://github.com/xkbcommon/libxkbcommon.git
+[submodule "steamrtdeps/wayland-protocols"]
+	path = steamrtdeps/wayland-protocols
 	url = https://gitlab.freedesktop.org/wayland/wayland-protocols.git
-[submodule "libpcap"]
-	path = libpcap
+[submodule "steamrtdeps/libpcap"]
+	path = steamrtdeps/libpcap
 	url = https://github.com/the-tcpdump-group/libpcap.git
+[submodule "steamrtdeps/pipewire"]
+	path = steamrtdeps/pipewire
+	url = https://gitlab.freedesktop.org/pipewire/pipewire.git
+[submodule "steamrtdeps/xz"]
+	path = steamrtdeps/xz
+	url = https://github.com/tukaani-project/xz.git
+[submodule "steamrtdeps/bzip2"]
+	path = steamrtdeps/bzip2
+	url = https://sourceware.org/git/bzip2.git
 [submodule "FEX"]
         path = FEX
         url = https://github.com/FEX-Emu/FEX.git
@@ -82,18 +90,12 @@
 [submodule "libsoup"]
 	path = libsoup
 	url = https://github.com/GNOME/libsoup.git
-[submodule "xz"]
-	path = xz
-	url = https://github.com/tukaani-project/xz.git
 [submodule "d7vk"]
 	path = d7vk
 	url = https://github.com/WinterSnowfall/d7vk.git
 [submodule "discord-rpc-bridge"]
 	path = discord-rpc-bridge
 	url = https://github.com/enderice2/rpc-bridge.git
-[submodule "bzip2"]
-	path = bzip2
-	url = https://sourceware.org/git/bzip2.git
 [submodule "nvidia-libs/dxvk-nvapi"]
 	path = nvidia-libs/dxvk-nvapi
 	url = https://github.com/SveSop/dxvk-nvapi.git
@@ -130,9 +132,6 @@
 [submodule "vklayers/vkbasalt"]
 	path = vklayers/vkBasalt
 	url = https://github.com/DadSchoorse/vkBasalt.git
-[submodule "pipewire"]
-	path = pipewire
-	url = https://gitlab.freedesktop.org/pipewire/pipewire.git
 [submodule "dxvk-igdext"]
 	path = dxvk-igdext
 	url = https://github.com/GameTechDev/dxvk-igdext
