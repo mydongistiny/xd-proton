@@ -3163,8 +3163,6 @@ class Session:
                 )
             ):
                 self.env["WINE_WAYLAND_STEAM_OVERLAY_LAYER"] = "1"
-                append_to_env_str(
-
                 utilities.add_vk_implicit_layer(
                     prepend_to_env_str,
                     self.env,
