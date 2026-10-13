@@ -34,6 +34,8 @@ apply_all_in_dir() {
     apply_patch "../patches/dxvk/assassins-creed-keep-fullscreen-on-focus-loss.patch"
     # Do not advertise HDR when Wine reports an SDR output, even with DXVK_HDR=1.
     apply_patch "../patches/dxvk/dxgi-respect-output-hdr-state.patch"
+    # Query the active output by default instead of requiring an HDR opt-in.
+    apply_patch "../patches/dxvk/dxgi-auto-detect-hdr.patch"
     # StarCraft II: avoid GPU hangs with D3D9 constant buffer streaming (#790).
     apply_patch "../patches/dxvk/starcraft2-disable-constant-buffer-streaming.patch"
     popd
