@@ -11,7 +11,7 @@ diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
 index e118cbee86a..77845d34216 100644
 --- a/dlls/ntdll/sync.c
 +++ b/dlls/ntdll/sync.c
-@@ -846,8 +846,24 @@ static struct futex_queue *get_futex_queue( const void *addr )
+@@ -849,8 +849,24 @@ static struct futex_queue *get_futex_queue( const void *addr )
  
  static void spin_lock( LONG *lock )
  {
@@ -54,7 +54,7 @@ diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
 index 77845d34216..c49bd5bd1a4 100644
 --- a/dlls/ntdll/sync.c
 +++ b/dlls/ntdll/sync.c
-@@ -835,7 +835,7 @@ struct futex_queue
+@@ -838,7 +838,7 @@ struct futex_queue
      LONG lock;
  };
  
@@ -81,7 +81,7 @@ diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
 index c49bd5bd1a4..c655e1e28e2 100644
 --- a/dlls/ntdll/sync.c
 +++ b/dlls/ntdll/sync.c
-@@ -839,9 +839,12 @@ static struct futex_queue futex_queues[1024];
+@@ -842,9 +842,12 @@ static struct futex_queue futex_queues[1024];
  
  static struct futex_queue *get_futex_queue( const void *addr )
  {
