@@ -43,8 +43,6 @@ apply_all_in_dir() {
     pushd d7vk
     git reset --hard HEAD
     git clean -xdf
-    # d7vk-allow-avx-with-clang.patch removed and fixed upstream
-    # apply_patch "../patches/d7vk/d7vk-allow-avx-with-clang.patch"
     popd
 
     pushd openvr
@@ -101,6 +99,7 @@ apply_all_in_dir() {
         lsteamclient/Makefile.in \
         lsteamclient/gen_wrapper.py \
         lsteamclient/steam_input_manual.c \
+        lsteamclient/steam_matchmaking_manual.c \
         lsteamclient/steamclient_main.c \
         lsteamclient/steamclient_private.h \
         lsteamclient/unix_private.h \
