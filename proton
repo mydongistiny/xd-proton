@@ -2116,12 +2116,17 @@ class CompatData:
                         link_debug=True,
                     )
 
-                # Try to detect known DLLs that ship with the NVIDIA Linux Driver
-                # and add them into the prefix
+                # Try to detect known DLLs and executables that ship with
+                # the NVIDIA Linux Driver and add them into the prefix
                 if g_session.nvidia_wine_dll_dir:
-                    for dll in ["_nvngx.dll", "nvngx.dll", "nvngx_dlssg.dll"]:
+                    for file in [
+                        "_nvngx.dll",
+                        "nvngx.dll",
+                        "nvngx_dlssg.dll",
+                        "nvngx_update.exe",
+                    ]:
                         try_copy(
-                            g_session.nvidia_wine_dll_dir + "/" + dll,
+                            g_session.nvidia_wine_dll_dir + "/" + file,
                             "drive_c/windows/system32",
                             optional=True,
                             prefix=self.prefix_dir,
