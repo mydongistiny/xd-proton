@@ -132,7 +132,7 @@ index 7e81c70a80218a9ed83a96d57b35a7321a7021b9..62738d99cd1760faf2b9be160af742e1
  
  dnl **** Check for ALSA 1.x ****
  AC_SUBST(ALSA_LIBS,"")
-@@ -3446,7 +3427,6 @@ WINE_CONFIG_MAKEFILE(dlls/winecoreaudio.drv)
+@@ -3450,7 +3431,6 @@ WINE_CONFIG_MAKEFILE(dlls/winecoreaudio.drv)
  WINE_CONFIG_MAKEFILE(dlls/winecrt0)
  WINE_CONFIG_MAKEFILE(dlls/wined3d)
  WINE_CONFIG_MAKEFILE(dlls/winedmo)
@@ -4874,7 +4874,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
              WARN("Failed to set presentation descriptor MF_PD_DURATION, hr %#lx\n", hr);
  
          for (i = 0; i < source->stream_count; ++i)
-@@ -1485,9 +1996,6 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
+@@ -1488,9 +1999,6 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
  
      TRACE("%p, %p, %p, %p.\n", iface, descriptor, time_format, position);
  
@@ -4884,7 +4884,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
      EnterCriticalSection(&source->cs);
  
      if (source->state == SOURCE_SHUTDOWN)
-@@ -1562,6 +2070,7 @@ static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
+@@ -1565,6 +2073,7 @@ static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
  static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
@@ -4892,7 +4892,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  
      TRACE("%p.\n", iface);
  
-@@ -1575,28 +2084,48 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+@@ -1578,28 +2087,48 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
  
      source->state = SOURCE_SHUTDOWN;
  
@@ -4948,7 +4948,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
      LeaveCriticalSection(&source->cs);
  
      MFUnlockWorkQueue(source->async_commands_queue);
-@@ -1621,30 +2150,37 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+@@ -1624,30 +2153,37 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
      media_source_Shutdown,
  };
  
@@ -4996,7 +4996,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
      unsigned int i;
      HRESULT hr;
  
-@@ -1655,6 +2191,7 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
+@@ -1658,6 +2194,7 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
      object->IMFGetService_iface.lpVtbl = &media_source_get_service_vtbl;
      object->IMFRateSupport_iface.lpVtbl = &media_source_rate_support_vtbl;
      object->IMFRateControl_iface.lpVtbl = &media_source_rate_control_vtbl;
@@ -5004,7 +5004,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
      object->async_commands_callback.lpVtbl = &source_async_commands_callback_vtbl;
      object->ref = 1;
      object->byte_stream = context->stream;
-@@ -1670,21 +2207,26 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
+@@ -1673,21 +2210,26 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
      if (FAILED(hr = MFAllocateWorkQueue(&object->async_commands_queue)))
          goto fail;
  
@@ -5041,7 +5041,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  
      if (!(object->descriptors = calloc(stream_count, sizeof(*object->descriptors)))
              || !(object->streams = calloc(stream_count, sizeof(*object->streams))))
-@@ -1693,54 +2235,65 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
+@@ -1696,54 +2238,65 @@ static HRESULT media_source_create(struct object_context *context, IMFMediaSourc
          goto fail;
      }
  
@@ -5137,7 +5137,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
      *out = &object->IMFMediaSource_iface;
      TRACE("Created IMFMediaSource %p\n", *out);
      return S_OK;
-@@ -1757,25 +2310,33 @@ fail:
+@@ -1760,25 +2313,33 @@ fail:
      free(object->descriptors);
      free(object->streams);
  
@@ -5179,7 +5179,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  struct result_entry
  {
      struct list entry;
-@@ -1809,6 +2370,10 @@ static void result_entry_destroy(struct result_entry *entry)
+@@ -1812,6 +2373,10 @@ static void result_entry_destroy(struct result_entry *entry)
      free(entry);
  }
  
@@ -5190,7 +5190,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  struct stream_handler
  {
      IMFByteStreamHandler IMFByteStreamHandler_iface;
-@@ -2078,7 +2643,7 @@ static const IMFAsyncCallbackVtbl stream_handler_callback_vtbl =
+@@ -2081,7 +2646,7 @@ static const IMFAsyncCallbackVtbl stream_handler_callback_vtbl =
      stream_handler_callback_Invoke,
  };
  
@@ -5199,7 +5199,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  {
      struct stream_handler *handler;
      HRESULT hr;
-@@ -2101,6 +2666,10 @@ HRESULT gstreamer_byte_stream_handler_create(REFIID riid, void **obj)
+@@ -2104,6 +2669,10 @@ HRESULT gstreamer_byte_stream_handler_create(REFIID riid, void **obj)
      return hr;
  }
  
@@ -5210,7 +5210,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
  struct scheme_handler
  {
      IMFSchemeHandler IMFSchemeHandler_iface;
-@@ -2201,7 +2770,15 @@ static HRESULT WINAPI scheme_handler_BeginCreateObject(IMFSchemeHandler *iface,
+@@ -2204,7 +2773,15 @@ static HRESULT WINAPI scheme_handler_BeginCreateObject(IMFSchemeHandler *iface,
      if (cancel_cookie)
          *cancel_cookie = NULL;
  
@@ -5227,7 +5227,7 @@ index 3b925c3d751a69e4911bd5f8d3a0d440f40d2a2a..35530e7f78d4b1b8176e3f3cc8e02030
          return hr;
  
      hr = MFCreateMFByteStreamOnStream(stream, &bytestream);
-@@ -2340,7 +2917,7 @@ static const IMFAsyncCallbackVtbl scheme_handler_callback_vtbl =
+@@ -2343,7 +2920,7 @@ static const IMFAsyncCallbackVtbl scheme_handler_callback_vtbl =
      scheme_handler_callback_Invoke,
  };
  
@@ -8337,7 +8337,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
              continue;
          }
  
-@@ -232,32 +574,37 @@ static void parse_mp4_streams_metadata( struct demuxer *demuxer )
+@@ -235,32 +577,37 @@ static void parse_mp4_streams_metadata( struct demuxer *demuxer )
  NTSTATUS demuxer_create( void *arg )
  {
      struct demuxer_create_params *params = arg;
@@ -8380,7 +8380,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      {
          if ((ret = avformat_find_stream_info( demuxer->ctx, NULL )) < 0)
          {
-@@ -297,13 +644,19 @@ NTSTATUS demuxer_create( void *arg )
+@@ -300,13 +647,19 @@ NTSTATUS demuxer_create( void *arg )
      return STATUS_SUCCESS;
  
  failed:
@@ -8402,7 +8402,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      free( demuxer->streams );
      free( demuxer );
  
-@@ -320,10 +673,12 @@ NTSTATUS demuxer_destroy( void *arg )
+@@ -323,10 +676,12 @@ NTSTATUS demuxer_destroy( void *arg )
      TRACE( "demuxer %p\n", demuxer );
  
      params->context = demuxer->stream_context;
@@ -8417,7 +8417,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      free( demuxer->streams );
      free( demuxer );
  
-@@ -384,7 +739,10 @@ NTSTATUS demuxer_read( void *arg )
+@@ -387,7 +742,10 @@ NTSTATUS demuxer_read( void *arg )
      struct demuxer_read_params *params = arg;
      struct demuxer *demuxer = get_demuxer( params->demuxer );
      struct sample *sample = &params->sample;
@@ -8428,7 +8428,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      AVStream *stream;
      AVPacket *packet;
      NTSTATUS status;
-@@ -393,19 +751,46 @@ NTSTATUS demuxer_read( void *arg )
+@@ -396,19 +754,46 @@ NTSTATUS demuxer_read( void *arg )
  
      if ((status = demuxer_filter_packet( demuxer, &packet ))) return status;
  
@@ -8479,7 +8479,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      params->stream = packet->stream_index;
      av_packet_free( &packet );
      demuxer->last_packet = NULL;
-@@ -422,7 +807,7 @@ NTSTATUS demuxer_seek( void *arg )
+@@ -425,7 +810,7 @@ NTSTATUS demuxer_seek( void *arg )
  
      TRACE( "demuxer %p, timestamp 0x%s\n", demuxer, wine_dbgstr_longlong( params->timestamp ) );
  
@@ -8488,7 +8488,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      {
          ERR( "Failed to seek demuxer %p, error %s.\n", demuxer, debugstr_averr(ret) );
          return STATUS_UNSUCCESSFUL;
-@@ -432,6 +817,11 @@ NTSTATUS demuxer_seek( void *arg )
+@@ -435,6 +820,11 @@ NTSTATUS demuxer_seek( void *arg )
      {
          av_bsf_flush( demuxer->streams[i].filter );
          demuxer->streams[i].eos = FALSE;
@@ -8500,7 +8500,7 @@ index 24681e2d5df521caa66ba398e4e89056259c088e..98562f2445728658c5af325d28768f10
      }
      av_packet_free( &demuxer->last_packet );
      demuxer->last_stream = NULL;
-@@ -478,11 +868,14 @@ NTSTATUS demuxer_stream_type( void *arg )
+@@ -481,11 +871,14 @@ NTSTATUS demuxer_stream_type( void *arg )
      struct demuxer *demuxer = get_demuxer( params->demuxer );
      AVStream *stream = demuxer->ctx->streams[params->stream];
      AVCodecParameters *par = demuxer->streams[params->stream].filter->par_out;
@@ -11425,15 +11425,12 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
 +    if (FAILED(hr = IMFMediaType_GetGUID(type, &MF_MT_SUBTYPE, &subtype)))
 +        return hr;
 +    fmt->guidFormat = subtype;
- 
--    if (decoder->wg_transform)
++
 +    if (SUCCEEDED(IMFMediaType_GetUINT64(type, &MF_MT_FRAME_SIZE, &frame_size)))
-     {
--        wg_transform_destroy(decoder->wg_transform);
--        decoder->wg_transform = 0;
++    {
 +        fmt->videoInfo.dwWidth  = frame_size >> 32;
 +        fmt->videoInfo.dwHeight = (UINT32)frame_size;
-     }
++    }
 +    if (SUCCEEDED(IMFMediaType_GetUINT64(type, &MF_MT_FRAME_RATE, &frame_rate)) && (UINT32)frame_rate)
 +    {
 +        fmt->videoInfo.FramesPerSecond.Numerator   = frame_rate >> 32;
@@ -11447,33 +11444,32 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
 +    UINT32 user_data_size = 0, size = sizeof(MFVIDEOFORMAT);
 +    union winedmo_format *fmt;
 +    HRESULT hr;
- 
--    if (SUCCEEDED(IMFAttributes_GetUINT32(decoder->attributes, &MF_LOW_LATENCY, &low_latency)))
--        decoder->wg_transform_attrs.low_latency = !!low_latency;
++
 +    if (SUCCEEDED(IMFMediaType_GetBlobSize(type, &MF_MT_USER_DATA, &user_data_size)))
 +        size += user_data_size;
- 
++
 +    if (!(fmt = calloc(1, size)))
 +        return E_OUTOFMEMORY;
 +
 +    hr = fill_mfvideoformat(type, &fmt->video);
 +    if (SUCCEEDED(hr))
-     {
--        const char *sgi;
--        if ((sgi = getenv("SteamGameId")) && (!strcmp(sgi, "2009100") || !strcmp(sgi, "2555360") || !strcmp(sgi, "1630110")))
--            decoder->wg_transform_attrs.low_latency = FALSE;
++    {
 +        fmt->video.dwSize = size;
 +        if (user_data_size)
 +            hr = IMFMediaType_GetBlob(type, &MF_MT_USER_DATA, (BYTE *)(fmt + 1), user_data_size, NULL);
-     }
++    }
  
--    return wg_transform_create_mf(decoder->input_type, output_type, &decoder->wg_transform_attrs, &decoder->wg_transform);
+-    if (decoder->wg_transform)
 +    if (FAILED(hr))
-+    {
+     {
+-        wg_transform_destroy(decoder->wg_transform);
+-        decoder->wg_transform = 0;
 +        free(fmt);
 +        return hr;
-+    }
-+
+     }
+
+-    if (SUCCEEDED(IMFAttributes_GetUINT32(decoder->attributes, &MF_LOW_LATENCY, &low_latency)))
+-        decoder->wg_transform_attrs.low_latency = !!low_latency;
 +    *format = fmt;
 +    *format_size = size;
 +    return S_OK;
@@ -11498,13 +11494,17 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
 +    UINT32 input_size, output_size;
 +    NTSTATUS status;
 +    HRESULT hr;
-+
+
 +    if (decoder->winedmo_transform.handle)
-+    {
+     {
+-        const char *sgi;
+-        if ((sgi = getenv("SteamGameId")) && (!strcmp(sgi, "2009100") || !strcmp(sgi, "2555360") || !strcmp(sgi, "1630110")))
+-            decoder->wg_transform_attrs.low_latency = FALSE;
 +        winedmo_transform_destroy(decoder->winedmo_transform);
 +        decoder->winedmo_transform.handle = 0;
-+    }
-+
+     }
+
+-    return wg_transform_create_mf(decoder->input_type, output_type, &decoder->wg_transform_attrs, &decoder->wg_transform);
 +    if (FAILED(hr = create_mfvideoformat(decoder->input_type, &input_fmt, &input_size)))
 +        goto done;
 +    if (FAILED(hr = create_mfvideoformat(output_type, &output_fmt, &output_size)))
@@ -11978,14 +11978,14 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
 -            }
 -        }
 -        if (!decoder->temp_buffer && FAILED(hr = MFCreateMemoryBuffer(sample_size, &decoder->temp_buffer)))
--            return hr;
++        if (FAILED(hr = create_decoder_output_sample(decoder, &subtype, frame_size, sample_size, &sample)))
+             return hr;
 -        if (FAILED(hr = MFCreateSample(&sample)))
 -            return hr;
 -        if (FAILED(hr = IMFSample_AddBuffer(sample, decoder->temp_buffer)))
 -        {
 -            IMFSample_Release(sample);
-+        if (FAILED(hr = create_decoder_output_sample(decoder, &subtype, frame_size, sample_size, &sample)))
-             return hr;
+-            return hr;
 -        }
 +        decode_sample = sample;
      }
@@ -12524,11 +12524,11 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
 +    out_size = max_size;
 +    ntstatus = winedmo_transform_get_output(decoder->winedmo_transform, data, &out_size,
 +            &pts, &duration, &out_flags);
-+
-+    if (!ntstatus && (out_flags & WINEDMO_SAMPLE_FLAG_FORMAT_CHANGED))
-+        goto retry;
  
 -    if (hr == MF_E_TRANSFORM_NEED_MORE_INPUT)
++    if (!ntstatus && (out_flags & WINEDMO_SAMPLE_FLAG_FORMAT_CHANGED))
++        goto retry;
++
 +    if (!ntstatus)
 +    {
 +        flip_bottom_up_rgb_rows(data, out_size, &decoder->dmo_output_type);
@@ -12571,14 +12571,21 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
  
      if (FAILED(hr = MFCreateMediaType(&decoder->stream_type)))
          goto failed;
-@@ -1681,24 +2289,13 @@ static HRESULT video_decoder_create_with_types(const GUID *const *input_types, U
+@@ -1681,31 +2289,13 @@ static HRESULT video_decoder_create_with_types(const GUID *const *input_types, U
                      &MFT_DECODER_EXPOSE_OUTPUT_TYPES_IN_NATIVE_ORDER, FALSE)))
          goto failed;
  
 -    {
 -        const char *sgi;
--        if ((sgi = getenv("SteamGameId")) && ((!strcmp(sgi, "2009100")) || (!strcmp(sgi, "2555360"))))
+-        if ((sgi = getenv("SteamGameId")) && (
+-                !strcmp(sgi, "2009100")
+-                || !strcmp(sgi, "2555360")
+-                || !strcmp(sgi, "4115450")
+-            ))
+-        {
+-            FIXME("HACK: setting MF_SA_D3D11_AWARE to FALSE.\n");
 -            IMFAttributes_SetUINT32(decoder->attributes, &MF_SA_D3D11_AWARE, FALSE);
+-        }
 -    }
 -
      if (FAILED(hr = MFCreateAttributes(&decoder->output_attributes, 0)))
@@ -12596,7 +12603,7 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
      *out = decoder;
      TRACE("Created decoder %p\n", decoder);
      return S_OK;
-@@ -1706,8 +2303,6 @@ static HRESULT video_decoder_create_with_types(const GUID *const *input_types, U
+@@ -1713,8 +2303,6 @@ static HRESULT video_decoder_create_with_types(const GUID *const *input_types, U
  failed:
      if (decoder->allocator)
          IMFVideoSampleAllocatorEx_Release(decoder->allocator);
@@ -12605,7 +12612,7 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
      if (decoder->output_attributes)
          IMFAttributes_Release(decoder->output_attributes);
      if (decoder->attributes)
-@@ -1718,38 +2313,40 @@ failed:
+@@ -1725,38 +2313,40 @@ failed:
      return hr;
  }
  
@@ -12666,7 +12673,7 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
          return hr;
  
      if (FAILED(hr = IMFAttributes_SetUINT32(decoder->attributes, &CODECAPI_AVDecVideoAcceleration_H264, TRUE)))
-@@ -1764,17 +2361,33 @@ HRESULT h264_decoder_create(REFIID riid, void **out)
+@@ -1771,17 +2361,33 @@ HRESULT h264_decoder_create(REFIID riid, void **out)
      decoder->output_info.dwFlags = MFT_OUTPUT_STREAM_WHOLE_SAMPLES | MFT_OUTPUT_STREAM_SINGLE_SAMPLE_PER_BUFFER
              | MFT_OUTPUT_STREAM_FIXED_SAMPLE_SIZE;
      decoder->output_info.cbSize = 1920 * 1088 * 2;
@@ -12703,7 +12710,7 @@ index df84fba2b43a31b09764cdb7431362f24a9ee9b1..a977b16cd6fc3d9ef98aafb4b71fbe1e
  extern GUID MFVideoFormat_IV50;
  static const GUID *const iv50_decoder_input_types[] =
  {
-@@ -1793,16 +2406,13 @@ static const GUID *const iv50_decoder_output_types[] =
+@@ -1800,16 +2406,13 @@ static const GUID *const iv50_decoder_output_types[] =
      &MFVideoFormat_RGB8,
  };
  
@@ -13412,7 +13419,8 @@ index 649cd4d044bdea1f35ff082654eaff97b751ea8f..7124ff0e446a61c42dbfe7772c70b615
 -};
 +    ID3D11Device *d3d11_device;
 +    HRESULT hr;
-+
+
+-static HRESULT init_d3d11_video_processor(const struct resource_desc *input_desc, ID3D11Resource *input,
 +    ID3D11Resource_GetDevice(input, &d3d11_device);
 +    if (processor_impl->d3d11_processor && processor_impl->d3d11_device == d3d11_device
 +            && processor_impl->d3d11_input_size == input_desc->frame_size
@@ -13458,8 +13466,7 @@ index 649cd4d044bdea1f35ff082654eaff97b751ea8f..7124ff0e446a61c42dbfe7772c70b615
 +    ID3D11VideoProcessor_AddRef(*processor);
 +    ID3D11Device_Release(d3d11_device);
 +    return S_OK;
- 
--static HRESULT init_d3d11_video_processor(const struct resource_desc *input_desc, ID3D11Resource *input,
++
 +failed:
 +    ID3D11Device_Release(d3d11_device);
 +    video_processor_clear_d3d11_cache(processor_impl);
@@ -19108,19 +19115,19 @@ index a1eb836599adf5bd5292ac4b4e1fd66ff694ed32..25dbf4009657872d9bfca865f6e08e36
 +        out_wfx->nBlockAlign = block_alignment;
 +        out_wfx->nAvgBytesPerSec = block_alignment * out_wfx->nSamplesPerSec;
 +        decoder->output_buf_size = max(8192, block_alignment * 1024);
-+    }
-+
+     }
+
+-    if (FAILED(hr = try_create_wg_transform(decoder)))
 +    if (decoder->winedmo_transform.handle)
 +    {
 +        WAVEFORMATEX *out_wfx = (WAVEFORMATEX *)decoder->output_type.pbFormat;
 +        winedmo_transform_set_output_format(decoder->winedmo_transform,
 +                (union winedmo_format *)out_wfx, sizeof(*out_wfx) + out_wfx->cbSize);
 +        hr = S_OK;
-     }
++    }
 +    else
 +        hr = try_create_winedmo_transform(decoder);
- 
--    if (FAILED(hr = try_create_wg_transform(decoder)))
++
 +    if (FAILED(hr))
          goto failed;
  
@@ -19274,11 +19281,11 @@ index a1eb836599adf5bd5292ac4b4e1fd66ff694ed32..25dbf4009657872d9bfca865f6e08e36
 +    }
 +
 +    size = info.cbSize;
- 
++
 +retry:
 +    ntstatus = winedmo_transform_get_output(decoder->winedmo_transform, data, &size,
 +            &pts, &duration, &out_flags);
-+
+
 +    if (!ntstatus && (out_flags & WINEDMO_SAMPLE_FLAG_FORMAT_CHANGED) && !retried_format_change)
 +    {
 +        union winedmo_format *new_format;
